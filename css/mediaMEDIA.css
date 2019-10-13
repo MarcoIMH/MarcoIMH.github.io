@@ -1,0 +1,21 @@
+/* SIZE: 740 - 1023 px */
+@media screen and (min-width:740px) and (max-width:1023px){
+	/* GENERAL SETTINGS */
+	body{width:80%;font-size:12px;}
+	img{border:3px solid white;border-radius:15px;}
+	h2{text-align:center;}
+	
+	/* SPECIFIC SETTINGS: MENU */
+	.menu ul {
+	width: 220px;				
+	top: 49px;}
+
+	/* SPECIFIC SETTINGS: ID */
+	#present{min-height:350px;}
+	#container{min-height:350px;}
+	#txt{min-height:350px;}
+	
+	/* SPECIFIC SETTINGS: CLASS */
+	.tdef{margin:5% 5% 0% 10%;width:30%;}
+	.info{margin:10% 0 5% 10%;width:35%;}	
+}

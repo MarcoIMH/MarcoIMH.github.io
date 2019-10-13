@@ -1,0 +1,31 @@
+/* SIZE: 200 - 740 px */ 
+@media screen and (min-width:200px) and (max-width:740px){
+	/* GENERAL SETTINGS */	
+	body{width:95%;font-size:11px;background-image: url("../img/fondo.jpg");}
+	img{border:2px solid white;border-radius:12px;}
+	h1{margin:8% 0% 8% 0%;}
+	h2{text-align:center;}
+
+	/* SPECIFIC SETTINGS: MENU */
+	.menu li{display: block;}
+	.menu li a{padding:5px 0px 5px 5px;}	
+	.menu ul{
+		width: 68%;				
+		top:-15px;				
+		left: 32%;}			
+		
+	.menu ul li a:hover{
+		padding-left:12px;
+		border-left:5px solid #7fb6d7;	
+		font-size:13px;}
+
+	/* SPECIFIC SETTINGS: ID */
+	#present{min-height:290px;}
+	#container{min-height:290px;}
+	#txt{min-height:290px;}
+	#nav{border-radius:0px;}
+
+	/* SPECIFIC SETTINGS: CLASS */		
+	.tdef{margin:10% 5% 0% 10%;width:30%;}
+	.info{margin:15% 0 5% 15%;width:30%;}				
+}

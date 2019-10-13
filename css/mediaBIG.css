@@ -1,0 +1,14 @@
+/* SIZE: 1024 - 1279 px */
+@media screen and (min-width:1024px) and (max-width:1279px){
+	/* GENERAL SETTINGS */
+	body{width:75%;font-size:13px;}
+	img{border-radius:18px;}
+
+	/* SPECIFIC SETTINGS: MENU */
+	.menu ul {width: 230px;}
+
+	/* SPECIFIC SETTINGS: ID */
+	#present{min-height:450px;}
+	#container{min-height:450px;}
+	#txt{min-height:450px;}		
+}
