@@ -4,7 +4,7 @@
         <title>TheWhoStudios</title>
     </HEAD>
     <BODY>
-        <h1 id="nombre">Nombre</h1>
+        <h1>Nombre</h1>
         <p>Un videojuego de <em>The Who Studios</em></p>
         <ul>
         <li>Género: Tower-Defense</li>
@@ -19,9 +19,8 @@
         </li>
         </ul>
         <p>El juego se desarrollará con JavaScript, HTML y CSS.</p>
-        <pre><code><span class="hljs-string">'Nombre'</span> es un videojuego *tower-defense* <span class="hljs-keyword">con</span> vista cenital <span class="hljs-number">2</span>D <span class="hljs-keyword">en</span> <span class="hljs-keyword">el</span> que <span class="hljs-keyword">el</span> jugador debe evitar que los enemigos lleguen <span class="hljs-keyword">a</span> un núcleo mediante <span class="hljs-keyword">la</span> construcción de distintos elementos defensivos.
-        </code></pre><hr>
-        <h2 id="pantallas-y-men-s-del-juego">Pantallas y menús del juego</h2>
+        <p>'Nombre' es un videojuego *tower-defense* con vista cenital 2D en el que el jugador debe evitar que los enemigos lleguen un núcleo mediante la construcción de distintos elementos defensivos.</p>
+        <h2>Pantallas y menús del juego</h2>
         <ul>
         <li><strong>Pantalla principal</strong>: será lo primero que se vea al iniciar el juego. En él aparecerán distribuidos a lo largo de un mapa todos los niveles de los que dispone el juego, que se irán desbloqueando según se avance en el mismo.<br>Dispondrá de una barra de menú en la parte inferior de la pantalla desde la que se podrá acceder a la <em>Tienda</em>, a <em>Habilidades</em> y a <em>Ajustes</em>.</li>
         </ul>
@@ -50,19 +49,23 @@
         </li>
         </ul>
         <hr>
-        <h2 id="jugabilidad">Jugabilidad</h2>
-        <h3 id="-mec-nicas-"><strong>Mecánicas</strong></h3>
+        <h2>Jugabilidad</h2>
+        <h3><strong>Mecánicas</strong></h3>
         <ul>
-        <li>Colocando el cursor del ratón en las zonas de construcción y pulsando el botón izquierdo de este, aparecerá la lista de opciones de defensas que se pueden crear. Al hacer doble click con el botón izquierdo del ratón encima de una de las opciones, esta se construirá. Para poder llevar a cabo esta acción es necesario tener el dinero correspondiente a la defensa. Si al final decidimos no construir una defensa, pulsando cualquier parte de la pantalla desaparecerá el desplegable de opciones.</li>
-        <li>De igual manera que las construimos se puede subir de nivel a una defensa ya presente en el mapa, pulsando dos veces con el botón izquierdo sobre esta. También será necesario disponer del dinero suficiente al nivel. Todas las defensas tienen un máximo de 3 niveles.</li>
-        <li>Para hacer uso de una habilidad habrá que hacer doble click sobre ella.</li>
+        <li> Al hacer doble click con el botón izquierdo del ratón encima de una zona de construcción del mapa se crea la torre base. Para poder construir una torre es necesario tener la cantidad de experiencia necesaria.</li>
+        <li>De igual manera que las construimos se puede subir de nivel a una torre ya presente en el mapa. Dispondremos de dos opciones a la hora de mejorar una torre por primera vez, que aparecerán encima de la torre cuando pulsemos dos veces con el botón izquierdo sobre esta. Para seleccionar una de las opciones habrá que hacer clik izquierdo sobre ella. También será necesario disponer de la experiencia suficiente para el nivel y el tipo de torre a elegir. Ambas opciones tienen un máximo de tres niveles.</li>
+        <li>Para hacer uso de los aliados de raza habrá que seleccionar el correspondiente en la lista de personajes que aparece en pantalla. Es necesario que el tiempo de recarga se haya completado. Una vez seleccionado comenzará a recargarse el siguiente personaje. El uso de estos aliados no requiere de ningún coste.</li>
         </ul>
-        <h3 id="-din-mica-"><strong>Dinámica</strong></h3>
-        <p>El objetivo del juego es defender un núcleo evitando que los enemigos lleguen a él. Cada vez que un enemigo alcanza el núcleo, este perderá una vida, teniendo un máximo de 3. La puntuación de cada nivel se medirá según el número de vidas perdidas, logrando un máximo de 3 estrellas. Si el núcleo pierde todas las vidas se perderá el nivel correspondiente y será necesario comenzarlo desde cero.</p>
-        <h3 id="-est-tica-"><strong>Estética</strong></h3>
+        <h3><strong>Dinámica</strong></h3>
+        <ul>
+        <li>El objetivo del juego es defender un núcleo evitando que los enemigos lleguen a él. Cada vez que un enemigo alcanza el núcleo, este perderá una cantidad de vida independiente al enemigo. Si el núcleo se queda sin vida se perderá el nivel correspondiente y será necesario comenzarlo desde cero.</li>
+        <li>De esta manera, si se acaba con todos los enemigos del nivel sin que el núcleo pierda toda la vida se completará el nivel correspondiente y se podrá acceder al siguiente.</li>
+        <li>El juego se completará cuando se pasen con éxito todos los niveles del mapa.</li>
+        </ul>
+        <h3><strong>Estética</strong></h3>
         <hr>
-        <h2 id="contenido">Contenido</h2>
-        <h3 id="-warzones-"><strong>Warzones</strong></h3>
+        <h2>Contenido</h2>
+        <h3><strong>Warzones</strong></h3>
         <p>El juego dispone de un mapa dividido en 3 zonas: Bosque, Desierto y Nieve. Cuando superas todos los niveles de la zona correspondiente se desbloquea el siguiente, en el orden en el que han sido nombrados. Cada zona tiene una raza diferente que se desbloquea según se avance en los niveles de dicha zona. Cada raza dispone de tres tipos de aliados, que pueden ser aéreos o terrestres.</p>
         <table>
         <thead>
@@ -98,9 +101,9 @@
         </tr>
         </tbody>
         </table>
-        <h3 id="razas"><a name = "Razas"></a><strong>Razas</strong></h3>
+        <h3><a name = "Razas"></a><strong>Razas</strong></h3>
         <p>[Explicar como funcionan las razas en el juego]</p>
-        <h4 id="-bosque-"><strong>Bosque</strong></h4>
+        <h4><strong>Bosque</strong></h4>
         <ul>
         <li><em>Hidra</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
         <li><em>Eolo</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
@@ -114,8 +117,16 @@
         <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
         <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
         </ul>
-        <h3 id="-torres-"><strong>Torres</strong></h3>
-        <p>Las torres solo podrán situarse en puntos específicos, que estarán debidamente marcados. Atacarán a los enemigos de manera automática cuando estos entren en su rango de acción. No pueden ser destruidos. Pueden subir de nivel hasta un total de nivel 3, empezando en 1 al ser creadas. Su coste estará medido con los puntos de experiencia que se consiguen derrotando enemigos.
+        <h3><strong>Torres</strong></h3>
+        <p>
+                Las torres solo podrán situarse en puntos específicos, que estarán debidamente marcados y atacarán a los enemigos de manera automática cuando estos entren en su rango de acción. Su coste estará medido con los puntos de experiencia que se consiguen derrotando enemigos.
+                <br/>
+                Se podrá subir de nivel a toda torre que ya esté presente en el mapa siempre que se tengan los puntos de experiencia correspondientes al tipo de torre y al nivel. Cada torre tiene un total de tres niveles.
+                <br/>
+                Ninguna torre podrá ser destruida.
+                <br/>
+                Al construir una torre nueva siempre se creará una torre base común, en cambio, al aumentarle el nivel la primera vez generará dos opciones para elegir. Esta elección no podrá modificarse más adelante para dicha torre. Las dos opciones de torre son las siguientes:
+        </p>
         <!-- - <a name = "def_melee"></a>*Defensa melee*: cada construcción contará con 3 defensores que atacarán a los enemigos uno a uno, con un rango de acción cuerpo a cuerpo, una fuerza media y una defensa alta. Sólo podrán frenar y agredir a los enemigos terrestres. Si un defensor es destruido se generará automáticamente otro al poco tiempo. Al aumentar su nivel aumentará su nivel de defensa así como su fuerza. --></p>
         <ul>
         <li><em>TorreA</em>: rango de acción alto, fuerza baja pero con gran cadencia de disparo. Al aumentar su nivel aumentará principalmente su rango de acción y/o su fuerza.</li>
