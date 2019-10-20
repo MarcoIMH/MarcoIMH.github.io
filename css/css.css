@@ -234,18 +234,18 @@ th{border:5px solid #3E4156;padding:3%;}
 	float:left;	
 	overflow:hidden;}
 	
-#present marquee img{z-index:-1;width:30%;height:auto;margin:8% 0% 1% 1%;border-radius:0px;}
+#present marquee img{z-index:-1;width:30%;height:auto;margin:5% 0% 1% 1%;border-radius:0px;}
 #present img:hover{
 	-webkit-transform: none;transform: none;}
 
 /* -------------------------------------- / TOWERDEFENSE */
 .tdef{
-	margin:20% 0% 0% 4%;
+	margin:5% 0% 0% 4%;
 	float:left;
 	width:20%;}
 
 /* -------------------------------------- / INFORMATION */
-.info{margin:15% 0 5% 15%;float:left;width:30%;}
+.info{margin:5% 0 5% 15%;float:left;width:30%;}
 
 /* -------------------------------------- / MILESTONES*/
 #tabMat{background:white;font-family:DC !important;}
