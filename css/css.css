@@ -188,13 +188,12 @@ th{border:5px solid #3E4156;padding:3%;}
 	margin-bottom:4%;
 	font-size:1.3em;
 	line-height:1.5em;
-	font-family:DC !important;
-	background:rgba(255,255,255,0.6);
+	font-family:DC !important;	
 	}
 	
 	#txt img{width:5%;height:auto;}
 
-
+#txtdiv{background:rgba(255,255,255,0.6);}
 
 /* -------------------------------------- / FOOT SECTIONs */
 #foot{
