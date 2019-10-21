@@ -10,6 +10,8 @@
 /* Personal fonts - Have been downloaded from: https://www.dafont.com */
 @font-face { font-family: "DL"; src: url('../fonts/28DaysLater.ttf'); }
 @font-face { font-family: "BC"; src: url('../fonts/Bleeding Cowboys.ttf'); }
+@font-face { font-family: "AP"; src: url('../fonts/AdmirationPains.ttf'); }
+
 
 
 /********************************************/
@@ -186,7 +188,8 @@ th{border:5px solid #3E4156;padding:3%;}
 	line-height:1.5em;
 	font-family:DC !important;}
 	
-	#txt img{width:5%;height:auto;}	
+	#txt img{width:5%;height:auto;}
+
 
 
 /* -------------------------------------- / FOOT SECTIONs */
@@ -250,6 +253,7 @@ th{border:5px solid #3E4156;padding:3%;}
 /* -------------------------------------- / MILESTONES*/
 #tabMat{background:white;font-family:DC !important;}
 .milestone{background:#7fb6d7;}
+.paulaMat{text-align: center; padding: 5%;}
 
 /* -------------------------------------- / CONTACT */
 #contact{
