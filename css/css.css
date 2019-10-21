@@ -35,6 +35,8 @@ body{
 	-webkit-text-size-adjust: 100%;
 	line-height:1;
 	width:70%;}
+#bodyText{background-image: url("../img/bgs/thewho4.jpg");}
+#bodyRaces{background-image: url("../img/bgs/races.jpg");}
 
 /* -------------------------------------- / Img's */
 img{	
@@ -56,7 +58,7 @@ h1{
 	font: 1.8em BC !important;
 	margin:4% 0% 4% 0%;
 	text-align:center;
-	color:#4AAF4C;}	
+	color:black;}	
 h2{margin:3% 0% 4% 0%;font-size:1.7em;}
 h3{margin:2% 0% 3% 0%;font-size:1.4em;}
 h4{margin:1% 0% 2% 0%;font-size:1.2em;}
@@ -73,7 +75,7 @@ a:hover{
 	transition:0.4s;}
 
 /* -------------------------------------- / Marquee's */
-marquee{margin-bottom:2%;font-style:italic;}
+marquee{margin-bottom:1%;font-style:italic;}
 
 /* -------------------------------------- / Table's */
 table{border-collapse:collapse;border:5px solid #3E4156;padding:1%;}
@@ -162,7 +164,7 @@ th{border:5px solid #3E4156;padding:3%;}
 #banner{width:100%;opacity:1;}
 	
 	/* Reset Styles*/
-	#banner img {border-radius:0px;border:0px;}
+	#banner img {border-radius:0px;border:0px;height: 20%;}
 	#banner img:hover{-webkit-transform: none;transform: none;} 
 
 
@@ -186,7 +188,9 @@ th{border:5px solid #3E4156;padding:3%;}
 	margin-bottom:4%;
 	font-size:1.3em;
 	line-height:1.5em;
-	font-family:DC !important;}
+	font-family:DC !important;
+	background:rgba(255,255,255,0.6);
+	}
 	
 	#txt img{width:5%;height:auto;}
 
@@ -237,7 +241,7 @@ th{border:5px solid #3E4156;padding:3%;}
 	float:left;	
 	overflow:hidden;}
 	
-#present marquee img{z-index:-1;width:30%;height:auto;margin:5% 0% 1% 1%;border-radius:0px;}
+#present marquee img{z-index:-1;width:30%;height:auto;margin:7% 0% 1% 1%;border-radius:15px;}
 #present img:hover{
 	-webkit-transform: none;transform: none;}
 
@@ -251,7 +255,7 @@ th{border:5px solid #3E4156;padding:3%;}
 .info{margin:5% 0 5% 15%;float:left;width:30%;}
 
 /* -------------------------------------- / MILESTONES*/
-#tabMat{background:white;font-family:DC !important;}
+#tabMat{background:white;font-family:DC !important;margin-bottom:3%;}
 .milestone{background:#7fb6d7;}
 .paulaMat{text-align: center; padding: 5%;}
 
@@ -274,6 +278,22 @@ th{border:5px solid #3E4156;padding:3%;}
 	width:30%;
 	margin-top:3%;
 	border-radius:1.2em;}
+
+#pvli{
+	width: 45%;
+	height: 10%;
+	margin-top:15%;
+}
+
+#showImg img {border-radius:0px;border:0px;height: auto%;width:100%;}
+#showImg img:hover{-webkit-transform: none;transform: none;} 
+
+#logo {
+	width: 15%;
+	height: 10%;
+	margin-top:2%;
+}
+
 
 /********************************************/
 /*										   */
