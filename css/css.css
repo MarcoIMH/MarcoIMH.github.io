@@ -254,9 +254,9 @@ th{border:5px solid #3E4156;padding:3%;}
 .info{margin:5% 0 5% 15%;float:left;width:30%;}
 
 /* -------------------------------------- / MILESTONES*/
-#tabMat{background:white;font-family:DC !important;margin-bottom:3%;}
+#tabMat{width:100%; background:white;font-family:DC !important;margin-bottom:3%;}
 .milestone{background:#7fb6d7;}
-.paulaMat{text-align: center; padding: 5%;}
+.paulaMat{background:rgb(255, 158, 123); text-align: center; padding: 2%;}
 
 /* -------------------------------------- / CONTACT */
 #contact{

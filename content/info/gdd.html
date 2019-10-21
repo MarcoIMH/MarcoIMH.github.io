@@ -10,147 +10,102 @@
             <h2>Nombre</h2>
             <p>Un videojuego de <em>The Who Studios</em></p>
             <ul>
-            <li>Género: Tower-Defense</li>
-            <li>Modos: Un jugador</li>
-            <li>Público objetivo: Jugador casual</li>
-            <li>Plataforma: PC con navegador</li>
-            <li>Hitos:<ul>
-            <li>Hito 1: 25/10/19</li>
-            <li>Hito 2: 22/11/19</li>
-            <li>Hito 3: 18/12/19</li>
-            </ul>
-            </li>
+                <li>Género: Tower-Defense</li>
+                <li>Modos: Un jugador</li>
+                <li>Público objetivo: Jugador casual</li>
+                <li>Plataforma: PC con navegador</li>
+                <li>Hitos:
+                   <ul>
+                       <li>Hito 1: 25/10/19</li>
+                       <li>Hito 2: 22/11/19</li>
+                       <li>Hito 3: 18/12/19</li>
+                    </ul>
+                </li>
             </ul>
             <p>El juego se desarrollará con JavaScript, HTML y CSS.</p>
             <p>'Nombre' es un videojuego *tower-defense* con vista cenital 2D en el que el jugador debe evitar que los enemigos lleguen un núcleo mediante la construcción de distintos elementos defensivos.</p>
             <h2>Pantallas y menús del juego</h2>
             <ul>
-            <li><strong>Pantalla principal</strong>: será lo primero que se vea al iniciar el juego. En él aparecerán distribuidos a lo largo de un mapa todos los niveles de los que dispone el juego, que se irán desbloqueando según se avance en el mismo.<br>Dispondrá de una barra de menú en la parte inferior de la pantalla desde la que se podrá acceder a la <em>Tienda</em>, a <em>Habilidades</em> y a <em>Ajustes</em>.</li>
+                <li><strong>Pantalla principal</strong>: será lo primero que se vea al iniciar el juego. En él aparecerán distribuidos a lo largo de un mapa todos los niveles de los que dispone el juego, que se irán desbloqueando según se avance en el mismo.<br>Dispondrá de una barra de menú en la parte inferior de la pantalla desde la que se podrá acceder a la <em>Tienda</em>, a <em>Habilidades</em> y a <em>Ajustes</em>.</li>
             </ul>
-            <!-- - **Tienda**: dispone de distintas mejoras que el usuario puede comprar con el objetivo de mejorar su equipo, sólo se podrán comprar una vez y durarán para siempre:
-                - *Linceo*: aumenta el alcance de todas las [defensas de tiro](#def_tiro).
-                - *Medusa*: otorga la posibilidad de petrificar a los enemigos a todas las [defensas de área](#def_area).
-                - *Talos*: aumenta la resistencia de las [defensas melee](#def_melee).
-                - *Moiras*: aumenta la vida del núcleo a defender.   
-
-            - <a name = "habilidades"></a>**Habilidades**:
-                - *Crono*: ralentiza a los enemigos por un periodo de tiempo.
-                - *Eolo*: desata un viento que hace retroceder a la mayoría de los enemigos.
-                - *Hefesto*: lanza magma de manera aleatoria por el mapa causando un gran daño a los enemigos que hubiese en el lugar.
-                - *Hidra*: genera una atmósfera venenosa que daña a los enemigos durante un tiempo. -->
             <ul>
-            <li><p><strong>Ajustes</strong>: en el menú de ajustes encontraremos una tecla <em>Controles</em> para acceder a los controles del juego; y otra para activar y desactivar el sonido.</p>
-            </li>
-            <li><p><strong>Pantalla de nivel</strong>: una vez iniciado un nivel (seleccionándolo en la pantalla de niveles) aparecerá en pantalla el mapa correspondiente a dicho nivel, en el que se verá el camino por el que van los enemigos, así como los sitios en los que se pueden construir las diversas defensas. Uno de los extremos de la pantalla marcará el punto de entrada al núcleo que hay que defender.<br>Dispondremos de un botón de <em>Pausa</em>, que al pulsarlo parará inmediatamente la partida ofreciéndonos tres opciones: <em>Continuar</em>, <em>Reiniciar</em> y <em>Abandonar</em>.<br>En el HUD del nivel tendremos:</p>
-            <!-- - *Iconos de habilidades*: cuatro iconos correspondientes a las distintas habilidades, así como la cantidad en número de las que poseen de cada una de ellas. Ver [Habilidades](#habilidades). -->
-            <ul>
-            <li><em>Personajes de raza</em>: <!-- No se que nombre darle xD --> Aliados de cada raza que se recargan aleatoriamente con el tiempo correspondiente al aliado a generar (dentro de la selección de aliados del jugador). Ver <a href="#razas">Razas</a>.</li>
-            <li><em>Puntos de experiencia</em>: cantidad de experiencia de la que se dispone, necesaria para construir torres. Se consiguen al derrotar enemigos.</li>
-            <li><em>Número de oleada</em>: tanto la actual como el total de ellas.</li>
-            <li><em>Vida enemigos</em>: cada enemigo dispondrá de una barra de salud encima suya.</li>
-            </ul>
-            </li>
+                <li><p><strong>Ajustes</strong>: en el menú de ajustes encontraremos una tecla <em>Controles</em> para acceder a los controles del juego; y otra para activar y desactivar el sonido.</p>
+                </li>
+                <li><p><strong>Pantalla de nivel</strong>: una vez iniciado un nivel (seleccionándolo en la pantalla de niveles) aparecerá en pantalla el mapa correspondiente a dicho nivel, en el que se verá el camino por el que van los enemigos, así como los sitios en los que se pueden construir las diversas defensas. Uno de los extremos de la pantalla marcará el punto de entrada al núcleo que hay que defender.<br>Dispondremos de un botón de <em>Pausa</em>, que al pulsarlo parará inmediatamente la partida ofreciéndonos tres opciones: <em>Continuar</em>, <em>Reiniciar</em> y <em>Abandonar</em>.<br>En el HUD del nivel tendremos:</p>
+                <ul>
+                    <li><em>Personajes de raza</em>: <!-- No se que nombre darle xD --> Aliados de cada raza que se recargan aleatoriamente con el tiempo correspondiente al aliado a generar (dentro de la selección de aliados del jugador). Ver <a href="#razas">Razas</a>.</li>
+                    <li><em>Puntos de experiencia</em>: cantidad de experiencia de la que se dispone, necesaria para construir torres. Se consiguen al derrotar enemigos.</li>
+                    <li><em>Número de oleada</em>: tanto la actual como el total de ellas.</li>
+                    <li><em>Vida enemigos</em>: cada enemigo dispondrá de una barra de salud encima suya.</li>
+                </ul>
+                </li>
             </ul>
             <hr>
             <h2>Jugabilidad</h2>
             <h3><strong>Mecánicas</strong></h3>
             <ul>
-            <li> Al hacer doble click con el botón izquierdo del ratón encima de una zona de construcción del mapa se crea la torre base. Para poder construir una torre es necesario tener la cantidad de experiencia necesaria.</li>
-            <li>De igual manera que las construimos se puede subir de nivel a una torre ya presente en el mapa. Dispondremos de dos opciones a la hora de mejorar una torre por primera vez, que aparecerán encima de la torre cuando pulsemos dos veces con el botón izquierdo sobre esta. Para seleccionar una de las opciones habrá que hacer clik izquierdo sobre ella. También será necesario disponer de la experiencia suficiente para el nivel y el tipo de torre a elegir. Ambas opciones tienen un máximo de tres niveles.</li>
-            <li>Para hacer uso de los aliados de raza habrá que seleccionar el correspondiente en la lista de personajes que aparece en pantalla. Es necesario que el tiempo de recarga se haya completado. Una vez seleccionado comenzará a recargarse el siguiente personaje. El uso de estos aliados no requiere de ningún coste.</li>
+                <li> Al hacer doble click con el botón izquierdo del ratón encima de una zona de construcción del mapa se crea la torre base. Para poder construir una torre es necesario tener la cantidad de experiencia necesaria.</li>
+                <li>De igual manera que las construimos se puede subir de nivel a una torre ya presente en el mapa. Dispondremos de dos opciones a la hora de mejorar una torre por primera vez, que aparecerán encima de la torre cuando pulsemos dos veces con el botón izquierdo sobre esta. Para seleccionar una de las opciones habrá que hacer clik izquierdo sobre ella. También será necesario disponer de la experiencia suficiente para el nivel y el tipo de torre a elegir. Ambas opciones tienen un máximo de tres niveles.</li>
+                <li>Para hacer uso de los aliados de raza habrá que seleccionar el correspondiente en la lista de personajes que aparece en pantalla. Es necesario que el tiempo de recarga se haya completado. Una vez seleccionado comenzará a recargarse el siguiente personaje. El uso de estos aliados no requiere de ningún coste.</li>
             </ul>
             <h3><strong>Dinámica</strong></h3>
             <ul>
-            <li>El objetivo del juego es defender un núcleo evitando que los enemigos lleguen a él. Cada vez que un enemigo alcanza el núcleo, este perderá una cantidad de vida independiente al enemigo. Si el núcleo se queda sin vida se perderá el nivel correspondiente y será necesario comenzarlo desde cero.</li>
-            <li>De esta manera, si se acaba con todos los enemigos del nivel sin que el núcleo pierda toda la vida se completará el nivel correspondiente y se podrá acceder al siguiente.</li>
-            <li>El juego se completará cuando se pasen con éxito todos los niveles del mapa.</li>
+                <li>El objetivo del juego es defender un núcleo evitando que los enemigos lleguen a él. Cada vez que un enemigo alcanza el núcleo, este perderá una cantidad de vida independiente al enemigo. Si el núcleo se queda sin vida se perderá el nivel correspondiente y será necesario comenzarlo desde cero.</li>
+                <li>De esta manera, si se acaba con todos los enemigos del nivel sin que el núcleo pierda toda la vida se completará el nivel correspondiente y se podrá acceder al siguiente.</li>
+                <li>El juego se completará cuando se pasen con éxito todos los niveles del mapa.</li>
             </ul>
             <h3><strong>Estética</strong></h3>
             <hr>
             <h2>Contenido</h2>
             <h3><strong>Warzones</strong></h3>
             <p>El juego dispone de un mapa dividido en 3 zonas: Bosque, Desierto y Nieve. Cuando superas todos los niveles de la zona correspondiente se desbloquea el siguiente, en el orden en el que han sido nombrados. Cada zona tiene una raza diferente que se desbloquea según se avance en los niveles de dicha zona. Cada raza dispone de tres tipos de aliados, que pueden ser aéreos o terrestres.</p>
-
+        </br></br></br>
             <TABLE id="tabMat">
                 <tr>
-                    <th class="paulaMat">Fecha o plazo</th>
-                    <th class="paulaMat">Información</th>
-                    <th class="paulaMat">Información</th>
-                    <th class="paulaMat">Información</th>
-                    <th class="paulaMat">Información</th>
+                    <th class="paulaMat">Zona</th>
+                    <th class="paulaMat">Nº de niveles</th>
+                    <th class="paulaMat">1er aliado</th>
+                    <th class="paulaMat">2o aliado</th>
+                    <th class="paulaMat">3er aliado</th>
                 </tr>  
                 <tr>
-                    <th>asdfasdfasd</th>
-                    <th>asdfasdf</th>
-                    <th>asdfasdfasdf</th>
-                    <th>asdfasdfasdfasdfasdf</th>
-                    <th>asdfasdfasdfasdf</th>
+                    <th>Bosque</th>
+                    <th>2</th>
+                    <th>Hidra (aéreo)</th>
+                    <th>Eolo (aéreo)</th>
+                    <th>(?) (terrestre)</th>
                 </tr>           
                 <tr>
-                    <th>asdfasdf</th>
-                    <th>asdfasdf</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Desierto</th>
+                    <th>3</th>
+                    <th>(Hefesto) (terrestre)</th>
+                    <th>(?) (terrestre)</th>
+                    <th>(?) (terrestre)</th>
                 </tr>
                 <tr>
-                    <th>asdfasd</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Nieve</th>
+                    <th>2</th>
+                    <th>Crono (aéreo)</th>
+                    <th>(?) (terrestre)</th>
+                    <th>(?) (terrestre)</th>
                 </tr>
             </TABLE>
 
-            <table>
-            <thead>
-            <tr>
-            <th style="text-align:center">Zona</th>
-            <th style="text-align:center">Nº de niveles</th>
-            <th style="text-align:center">1er aliado</th>
-            <th style="text-align:center">2o aliado</th>
-            <th style="text-align:center">3er aliado</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-            <td style="text-align:center"><strong>Bosque</strong></td>
-            <td style="text-align:center">2</td>
-            <td style="text-align:center">Hidra (aéreo)</td>
-            <td style="text-align:center">Eolo (aéreo)</td>
-            <td style="text-align:center">(?) (terrestre)</td>
-            </tr>
-            <tr>
-            <td style="text-align:center"><strong>Desierto</strong></td>
-            <td style="text-align:center">3</td>
-            <td style="text-align:center">Hefesto (terrestre)</td>
-            <td style="text-align:center">(?) (terrestre)</td>
-            <td style="text-align:center">(?) (terrestre)</td>
-            </tr>
-            <tr>
-            <td style="text-align:center"><strong>Nieve</strong></td>
-            <td style="text-align:center">2</td>
-            <td style="text-align:center">Crono (aéreo)</td>
-            <td style="text-align:center">(?) (terrestre)</td>
-            <td style="text-align:center">(?) (terrestre)</td>
-            </tr>
-            </tbody>
-            </table>
-            <h3><a name = "Razas"></a><strong>Razas</strong></h3>
+            <h3><a name = "razas"></a><strong>Razas</strong></h3>
             <p>[Explicar como funcionan las razas en el juego]</p>
             <h4><strong>Bosque</strong></h4>
             <ul>
-            <li><em>Hidra</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>Eolo</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]<h4 id="-desierto-"><strong>Desierto</strong></h4>
-            </li>
-            <li><em>Hefesto</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]<h4 id="-nieve-"><strong>Nieve</strong></h4>
-            </li>
-            <li><em>Crono</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
-            <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>Hidra</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>Eolo</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]<h4 id="-desierto-"><strong>Desierto</strong></h4>
+                </li>
+                <li><em>Hefesto</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]<h4 id="-nieve-"><strong>Nieve</strong></h4>
+                </li>
+                <li><em>Crono</em>: tipo: aéreo. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
+                <li><em>?</em>: tipo: terrestre. Nivel de desbloqueo; tiempo de recarga; coste [...]</li>
             </ul>
             <h3><strong>Torres</strong></h3>
             <p>
@@ -162,17 +117,10 @@
                     <br/>
                     Al construir una torre nueva siempre se creará una torre base común, en cambio, al aumentarle el nivel la primera vez generará dos opciones para elegir. Esta elección no podrá modificarse más adelante para dicha torre. Las dos opciones de torre son las siguientes:
             </p>
-            <!-- - <a name = "def_melee"></a>*Defensa melee*: cada construcción contará con 3 defensores que atacarán a los enemigos uno a uno, con un rango de acción cuerpo a cuerpo, una fuerza media y una defensa alta. Sólo podrán frenar y agredir a los enemigos terrestres. Si un defensor es destruido se generará automáticamente otro al poco tiempo. Al aumentar su nivel aumentará su nivel de defensa así como su fuerza. --></p>
             <ul>
-            <li><em>TorreA</em>: rango de acción alto, fuerza baja pero con gran cadencia de disparo. Al aumentar su nivel aumentará principalmente su rango de acción y/o su fuerza.</li>
-            <li><em>TorreB</em>: rango de acción medio-alto, fuerza muy alta pero con baja cadencia. Al aumentar su nivel aumentará principalmente su rango de acción y/o su cadencia.</li>
+                <li><em>TorreA</em>: rango de acción alto, fuerza baja pero con gran cadencia de disparo. Al aumentar su nivel aumentará principalmente su rango de acción y/o su fuerza.</li>
+                <li><em>TorreB</em>: rango de acción medio-alto, fuerza muy alta pero con baja cadencia. Al aumentar su nivel aumentará principalmente su rango de acción y/o su cadencia.</li>
             </ul>
-            <!-- |Nombre|Rango|Fuerza|Cadencia|Defensa|Coste base|Coste mejora|Nivel 2|Nivel 3|
-            |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-            |**Melee**|Cuerpo a cuerpo|40|1|150|90|70|+50 defensa|+15 fuerza|
-            |**Tiro**|50|15|0.5|x|70|60|+20 rango|+10 fuerza|
-            |**Área**|30|70|3|x|120|90|+15 rango|-0.5 cadencia| -->
-            <!-- Falta añadir las unidades de la tabla -->
         </div> 
     </BODY>
 </HTML>
