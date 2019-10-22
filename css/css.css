@@ -59,7 +59,7 @@ h1{
 	margin:4% 0% 4% 0%;
 	text-align:center;
 	color:black;}	
-h2{margin:3% 0% 4% 0%;font-size:1.7em;}
+h2{margin:3% 0% 1% 0%;font-size:1.6em;}
 h3{margin:2% 0% 3% 0%;font-size:1.4em;}
 h4{margin:1% 0% 2% 0%;font-size:1.2em;}
 
@@ -286,6 +286,8 @@ th{border:5px solid #3E4156;padding:3%;}
 
 #showImg img {border-radius:0px;border:0px;height: auto%;width:100%;}
 #showImg img:hover{-webkit-transform: none;transform: none;} 
+
+#beast img{border-radius:0px;border:0px;height: auto%;width:33%;}
 
 #logo {
 	width: 15%;
