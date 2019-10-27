@@ -225,6 +225,15 @@ th{border:5px solid #3E4156;padding:3%;}
 		color:black;
 		font-weight:bold;}
 
+/* -------------------------------------- / Game */	
+#game{
+	width:100%;
+	min-height:70px;
+	height:auto;
+	float:left;
+	overflow:hidden;
+}
+
 /********************************************/
 /*										   */
 /*           SPECIFIC ITEMS IN .HTML      */
