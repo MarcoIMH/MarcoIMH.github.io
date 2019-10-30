@@ -1,5 +1,6 @@
 import Torre from './src/torre.js';
 import Base from './src/base.js';
+import Enemigo from './src/enemigo.js';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -10,6 +11,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("base", "./assets/circulo_base.png");
     this.load.image("torre", "./assets/arquero1.png");
     this.load.image("torreA", "./assets/torreA.png");
+    this.load.image("enemigo", "./assets/favicon.png");
   }
 
   Pool(scene, entities){
@@ -32,9 +34,9 @@ export default class Game extends Phaser.Scene {
     //this.base = new Base(this, 800, 400, "base");
 
     //POSICIONAMIENTO DE TODAS LAS BASES DEL NIVEL
-    bases.add(new Base(this, 400, 500, "base"));
-    bases.add(new Base(this, 600, 200, "base"));
-    bases.add(new Base(this, 1200, 600, "base"));
+    bases.add(new Base(this, 600, 450, "base"));
+    bases.add(new Base(this, 250, 400, "base"));
+    bases.add(new Base(this, 1000, 150, "base"));
     //console.log(bases.getChildren());
 
     //CREACIÓN DE TORRES
@@ -52,8 +54,11 @@ export default class Game extends Phaser.Scene {
         //console.log(torresA.getChildren());
       });
     });
-  }
-  update(time, delta) {    
 
+    //CREACIÓN ENEMIGO
+    this.enem = new Enemigo(this, 100, 100, "enemigo");
+  }
+  update(time, delta) {   
+    this.enem.movEnem();
   }
 }
