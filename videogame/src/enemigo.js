@@ -5,8 +5,8 @@ export default class Enemigo extends Phaser.GameObjects.Sprite {
         super(scene, x, y, type);
         scene.add.existing(this);
         this.setScale(1.5);
+        //scene.physics.world.enable(this);
         //VARIABLES DE LOS ENEMIGOS 
-        //var x = 0;
         this.t = 0;
     }
 

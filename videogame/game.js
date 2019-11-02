@@ -1,7 +1,11 @@
 import Torre from './src/torre.js';
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
+import Nucleo from './src/nucleo.js';
 
+//const c = this.matter.world.nextCategory();
+
+//Por alguna extraña razón no me coge las colisiones, ni con arcade ni con matter :'(
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
@@ -12,6 +16,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("torre", "./assets/arquero1.png");
     this.load.image("torreA", "./assets/torreA.png");
     this.load.image("enemigo", "./assets/favicon.png");
+    this.load.image("nucleo", "./assets/nucleo.png");
   }
 
   Pool(scene, entities){
@@ -32,6 +37,9 @@ export default class Game extends Phaser.Scene {
     this.input.mouse.disableContextMenu();
     //this.sprite = this.add.sprite(600, 400, "base").setInteractive();
     //this.base = new Base(this, 800, 400, "base");
+
+    //CREACIÓN DEL NÚCLEO
+    this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
 
     //POSICIONAMIENTO DE TODAS LAS BASES DEL NIVEL
     bases.add(new Base(this, 600, 450, "base"));
@@ -57,8 +65,24 @@ export default class Game extends Phaser.Scene {
 
     //CREACIÓN ENEMIGO
     this.enem = new Enemigo(this, 100, 100, "enemigo");
+
+    //SITUAMOS EL NÚCLEO DELANTE DEL TODO
+    this.children.bringToTop(this.nucleo);
+
+    //this.nucleo.pierdeVidaNucleo(1);
+
+    //COLISIONES
+    //this.physics.add.collider(this.enem, this.nucleo, this.pierdeVidaNucleo(5));
   }
+  pierdeVidaNucleo(daño){
+    console.log(daño);
+}
   update(time, delta) {   
     this.enem.movEnem();
+    // this.physics.add.collider(this.enem, this.nucleo, this.nucleo.pierdeVidaNucleo(5), null, this);
+    // if(this.physics.overlap(this.enem, this.nucleo)) {
+    //   //textInfo.text = "Hay colisión";
+    //   console.log("Hay colisión");
+    // }
   }
 }
