@@ -40,6 +40,7 @@ export default class Game extends Phaser.Scene {
 
     //CREACIÓN DEL NÚCLEO
     this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
+    this.vidaNucleo = 1000;
 
     //POSICIONAMIENTO DE TODAS LAS BASES DEL NIVEL
     bases.add(new Base(this, 600, 450, "base"));
@@ -69,20 +70,10 @@ export default class Game extends Phaser.Scene {
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
 
-    //this.nucleo.pierdeVidaNucleo(1);
-
-    //COLISIONES
-    //this.physics.add.collider(this.enem, this.nucleo, this.pierdeVidaNucleo(5));
+    //COLISIONES -- EL PRIMER OBJETO RECIBE EL DAÑO DEL SEGUNDO
+    this.physics.add.collider(this.nucleo, this.enem, this.enem.atEnem, null, this);
   }
-  pierdeVidaNucleo(daño){
-    console.log(daño);
-}
   update(time, delta) {   
     this.enem.movEnem();
-    // this.physics.add.collider(this.enem, this.nucleo, this.nucleo.pierdeVidaNucleo(5), null, this);
-    // if(this.physics.overlap(this.enem, this.nucleo)) {
-    //   //textInfo.text = "Hay colisión";
-    //   console.log("Hay colisión");
-    // }
   }
 }
