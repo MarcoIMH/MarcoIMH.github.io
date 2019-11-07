@@ -1,4 +1,4 @@
-const cadencia = 2000;
+const cadencia = 2000;   //2 segundos
 
 export default class Enemigo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, type){
@@ -11,7 +11,8 @@ export default class Enemigo extends Phaser.GameObjects.Sprite {
         this.t = 0;
         this.ataque = 50;
         this.pausa = false;
-        this.i = 0;   //2 segundos
+        this.i = 0;
+        this.vida = 100;
     }
 
     //MOVIMIENTO DEL ENEMIGO
@@ -27,7 +28,7 @@ export default class Enemigo extends Phaser.GameObjects.Sprite {
         obj2.pausa = true;
         if (obj2.i <= 0){
             obj1.vida -= obj2.ataque;
-            console.log(obj1.vida);
+            console.log("Vida núcleo: " + obj1.vida);
             obj2.i = cadencia;
         }
         else {

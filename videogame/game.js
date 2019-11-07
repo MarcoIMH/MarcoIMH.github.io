@@ -30,9 +30,9 @@ export default class Game extends Phaser.Scene {
 
   create() {
     let pointer = this.input.activePointer;
-    let bases = this.add.group();
-    let torres = this.add.group();
-    let torresA = this.add.group();
+    this.bases = this.add.group();
+    this.torres = this.add.group();
+    this.torresA = this.add.group();
 
     this.input.mouse.disableContextMenu();
     //this.sprite = this.add.sprite(600, 400, "base").setInteractive();
@@ -42,25 +42,18 @@ export default class Game extends Phaser.Scene {
     this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
     this.vidaNucleo = 1000;
 
-    //POSICIONAMIENTO DE TODAS LAS BASES DEL NIVEL
-    bases.add(new Base(this, 600, 450, "base"));
-    bases.add(new Base(this, 250, 400, "base"));
-    bases.add(new Base(this, 1000, 150, "base"));
-    //console.log(bases.getChildren());
+    //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
+    this.bases.add(new Base(this, 600, 450, "base"));
+    this.bases.add(new Base(this, 250, 400, "base"));
+    this.bases.add(new Base(this, 1000, 150, "base"));
+    //console.log(this.bases.getChildren());
 
     //CREACIÓN DE TORRES
-    bases.children.iterate(item => {
+    this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
-        torres.add(new Torre(this, item.x, item.y - 55, "torre"));
-        //console.log(torres.getChildren());
-      });
-    });
-
-    //AUMENTO DE NIVEL DE LA TORRE BASE -- NO FUNCIONA
-    torres.children.iterate(item => {
-      item.on('pointerdown', pointer => {
-        torresA.add(new Torre(this, item.x, item.y, "torreA"));
-        //console.log(torresA.getChildren());
+        this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
+        //Destruimos la base para que no pueda seguir creando torres
+        item.destroy();
       });
     });
 
@@ -75,5 +68,23 @@ export default class Game extends Phaser.Scene {
   }
   update(time, delta) {   
     this.enem.movEnem();
+
+    if (this.torres != undefined) {
+      this.torres.children.iterate(item => {
+        //AUMENTO DE NIVEL DE LA TORRE BASE A TORRE_A
+        item.on('pointerdown', pointer => {
+          this.torresA.add(new Torre(this, item.x, item.y, "torreA"));
+          //Destruimos la torre anterior
+          item.destroy();
+        });
+        
+        //ATAQUE TORRE->ENEMIGO
+        if (this.enem.x > item.x - item.rango && this.enem.x < item.x + item.rango && this.enem.y > item.y - item.rango && this.enem.y < item.y + item.rango) {
+          item.atTorre(this.enem, item);
+          //Si el enemigo se queda sin vida lo destruimos
+          if (this.enem.vida <= 0) { this.enem.destroy(); }
+        }
+      });
+    }
   }
 }
