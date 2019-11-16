@@ -1,0 +1,47 @@
+Cada vez que se complete un nivel dentro del juego se desbloqueará una unidad nueva. El conjunto de unidades de una misma zona se denomina raza.
+Estas unidades ayudarán a las torres en el trabajo de defensa y el jugador podrá elegir un máximo de 3 (en el caso de que sea posible) antes de 
+empezar una nueva partida. Una vez comienza el juego se podrán identificar fácilmente los círculos de invocación. Cada círculo de invocación
+solo puede estar ocupado por una unidad, una vez liberado podrá ser ocupado de nuevo.
+
+A continuación se detallan las características visibles para el jugador: 
+
+ATACK
+Las unidades atacan reproduciendo sus magias (fuego, rayo, veneno, frio), forma en la que inflinge daño la criatura. 
+El alcance del ataque estará definido por el alcance de la magia que pueda invocar la unidad (revisar magias).
+
+TIME
+Cantidad de tiempo que penaliza al invocarla. Durante este tiempo el jugador no podrá volver a invocar ninguna otra unidadad.
+
+TIPOS
+Unidades ligeras, medias y pesadas. Todas las razas cuentan con 1 unidad de cada tipo.
+El tipo ofrece resistencia en combate, es decir, las unidades ligeras estarán un tiempo menor invocadas mientras que las
+pesadas permanecerán más tiempo dentro del combate, se podría equiparar al "tiempo que estará invocada antes de desaparecer".
+
+
+RESISTENCIA DE COMBATE
+Unidad ligera: 30
+Unidad media:  45
+Unidad pesada: 60
+
+RAZA DEL BOSQUE
+			Daño 	Magia 	Tiempo
+Unidad ligera:		7	V	12
+Unidad media:		14	R	24
+Unidad pesada:		25	V	38
+
+RAZA DEL DESIERTO
+			Daño 	Magia 	Tiempo
+Unidad ligera:		8	R	14
+Unidad media:		13	FU	22
+Unidad pesada:		25	FU	38
+
+RAZA DEL HIELO
+			Daño 	Magia 	Tiempo
+Unidad ligera:		6	FR	10
+Unidad media:		15	R	25
+Unidad pesada:		25	FR	38
+
+Siendo V = Veneno, FR = Frio, FU = Fuego, R= Rayo.
+
+(DEJAMOS LO DE "TERRESTRE/AEREO, ETC", SOLO NOS COMPLICA LA VIDA Y NO APORTA MUCHO VALOR).
+
