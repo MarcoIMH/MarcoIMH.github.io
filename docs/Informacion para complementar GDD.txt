@@ -1,3 +1,5 @@
+///////////////////////// RAZAS ////////////////////////////////////////////
+
 Cada vez que se complete un nivel dentro del juego se desbloqueará una unidad nueva. El conjunto de unidades de una misma zona se denomina raza.
 Estas unidades ayudarán a las torres en el trabajo de defensa y el jugador podrá elegir un máximo de 3 (en el caso de que sea posible) antes de 
 empezar una nueva partida. Una vez comienza el juego se podrán identificar fácilmente los círculos de invocación. Cada círculo de invocación
@@ -45,3 +47,19 @@ Siendo V = Veneno, FR = Frio, FU = Fuego, R= Rayo.
 
 (DEJAMOS LO DE "TERRESTRE/AEREO, ETC", SOLO NOS COMPLICA LA VIDA Y NO APORTA MUCHO VALOR).
 
+
+///////////////////////// TORRES ////////////////////////////////////////////
+
+Se conoce como coste de evolución, a la experiencia en muertes de enemigos que el jugador debe obtener
+para poder evolucionar cualquier tipo de torre. El tiempo de construcción será el tiempo que necesite
+la torre para evolucionar, durante este tiempo la torre no estará disponible, es decir, no atacará.
+
+			Daño		Alcance	  	Cadencia  	Coste Evolución   	Tiempo Construcción
+Torre base: 		35		10	     	1.2		25			1
+Torre base-evo:		45		12	     	1		50			5
+	
+Torre A:		55		18	     	0.9		80			10
+Torre A-evo:		70		25		0.7		120			20
+
+Torre B:	       	65		14		1.5		80 			10
+Torre B-evo:		90		16		1.75		120			20
