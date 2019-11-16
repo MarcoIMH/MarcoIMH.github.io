@@ -1,3 +1,19 @@
+///////////////////////// TORRES ////////////////////////////////////////////
+
+Se conoce como coste de evolución, a la experiencia en muertes de enemigos que el jugador debe obtener
+para poder evolucionar cualquier tipo de torre. El tiempo de construcción será el tiempo que necesite
+la torre para evolucionar, durante este tiempo la torre no estará disponible, es decir, no atacará.
+
+			Daño		Alcance	  	Cadencia  	Coste Evolución   	Tiempo Construcción
+Torre base: 		35		10	     	1.2		25			1
+Torre base-evo:		45		12	     	1		50			5
+	
+Torre A:		55		18	     	0.9		80			10
+Torre A-evo:		70		25		0.7		120			20
+
+Torre B:	       	65		14		1.5		80 			10
+Torre B-evo:		90		16		1.75		120			20
+
 ///////////////////////// RAZAS/INVOCACIONES ////////////////////////////////////////////
 
 Cada vez que se complete un nivel dentro del juego se desbloqueará una unidad nueva. La primera fase de cada zona desbloquea la unidad ligera, la siguiente
@@ -10,7 +26,7 @@ A continuación se detallan las características visibles para el jugador:
 
 DAÑO
 Las unidades atacan reproduciendo sus magias (V = Viento, FR = Frio, FU = Fuego, R= Rayo), forma en la que inflinge daño la criatura. 
-El alcance del ataque estará definido por el alcance de la magia que pueda invocar la unidad (revisar magias).
+El alcance del ataque estará definido por el alcance de la magia que pueda invocar la unidad, véase magias.
 
 TIEMPO
 Cantidad de tiempo que penaliza al invocarla. Durante este tiempo el jugador no podrá volver a invocar ninguna otra unidadad.
@@ -48,53 +64,35 @@ Siendo V = Viento, FR = Frio, FU = Fuego, R= Rayo.
 
 (DEJAMOS LO DE "TERRESTRE/AEREO, ETC", SOLO NOS COMPLICA LA VIDA Y NO APORTA MUCHO VALOR).
 
+///////////////////////// MAGIAS ////////////////////////////////////////////
 
-///////////////////////// TORRES ////////////////////////////////////////////
+Las magias son los diferentes ataques que utilizan las razas/invocaciones para destruir a los enemigos. 
+Cada magia ejerce un efecto diferente sobre las unidades y la unidad enemiga lo sufrirá incondicionalmente. Sin embargo,
+el daño que aportan las magias lo determinan las propias invocaciones, véase "Razas".
 
-Se conoce como coste de evolución, a la experiencia en muertes de enemigos que el jugador debe obtener
-para poder evolucionar cualquier tipo de torre. El tiempo de construcción será el tiempo que necesite
-la torre para evolucionar, durante este tiempo la torre no estará disponible, es decir, no atacará.
+VIENTO
+La magia de viento hace retroceder a los enemigos invirtiéndoles la dirección de movimiento durante 3 segundos, tras ese periodo reduce su velocidad de movimiento
+un 75% durante 4 segundos.
 
-			Daño		Alcance	  	Cadencia  	Coste Evolución   	Tiempo Construcción
-Torre base: 		35		10	     	1.2		25			1
-Torre base-evo:		45		12	     	1		50			5
-	
-Torre A:		55		18	     	0.9		80			10
-Torre A-evo:		70		25		0.7		120			20
+FRIO
+La magia de frío congela a los enemigos durante 5 segundos.
+ 
+FUEGO
+La magia de fuego tiene una probabilidad de eliminar a los enemigos en el impacto. Además aumenta el daño que reciben los enemigos un 50% durante 4 segundos.
+Probabilidad muerte unidad ligera: 	25%
+Probabilidad muerte unidad media:	10%
+Probabilidad muerte unidad pesada:	5%
 
-Torre B:	       	65		14		1.5		80 			10
-Torre B-evo:		90		16		1.75		120			20
+RAYO
+La magia de rayo paraliza a los enemigos durante 3 segundos. Además reduce el daño que las unidades enemigas hacen al núcleo durante 5 segundos.
+Reducción daño unidad ligera: 	5%
+Reducción daño unidad media:	10%
+Reducción daño unidad pesada:	25%
 
+El rango y la cadencia de todas las magias es el mismo.
 
-
-///////////////////////// HUD ////////////////////////////////////////////
-
-Dentro del HUD ingame podemos diferenciar los siguientes elementos (se pueden observar en el boceto para mayor apreciación):
-
-CONTADOR DE MUERTES
-Este go mostrará la cantidad de experiencia de muertes que posee el jugador. Esta experiencia se obtendrá
-en función del tipo de unidad que se mate.
-
-Unidad ligera: 2
-Unidad media:  4
-Unidad pesada: 10
-
-TIEMPO
-Mostrará en segundos el tiempo restante que queda para que finalice la partida(oleada?).
-
-VIDA NÚCLEO
-Indicador de la vida restante en función de la total que le queda al núcleo que el jugador debe defender. Se muestra por unidades.
-
-BARRA INVOCACIÓN
-Diferentes unidades que puede invocar el jugador. Se generarán de forma aleatoria. En el rectángulo blanco dentro de la barra de invocación
-se mostrará información sobre el tiempo que resta para que el jugador pueda volver a invocar otra unidad. El rectángulo con fondo rojo
-representa la siguiente unidad que entrará en el pool de unidades.
-
-BOTÓN CERRAR
-Abre una advertencia para preguntar al jugador si de verdad quiere salir. En caso afirmativo se cargará el menú, en caso negativo la partida 
-continuará su curso.
-
-
+Rango:		100
+Cadencia:	15 segundos
 
 ///////////////////////// ENEMIGOS ////////////////////////////////////////////
 
@@ -203,3 +201,32 @@ Resistencias:	V	FR	FU	R
 Unidad ligera:  INM	INM	0	INM
 Unidad media:   0	INM	0	INM
 Unidad pesada:  0	-500	INM	INM
+
+
+///////////////////////// HUD ////////////////////////////////////////////
+
+Dentro del HUD ingame podemos diferenciar los siguientes elementos (se pueden observar en el boceto para mayor apreciación):
+
+CONTADOR DE MUERTES
+Este go mostrará la cantidad de experiencia de muertes que posee el jugador. Esta experiencia se obtendrá
+en función del tipo de unidad que se mate.
+
+Unidad ligera: 2
+Unidad media:  4
+Unidad pesada: 10
+
+TIEMPO
+Mostrará en segundos el tiempo restante que queda para que finalice la partida(oleada?).
+
+VIDA NÚCLEO
+Indicador de la vida restante en función de la total que le queda al núcleo que el jugador debe defender. Se muestra por unidades.
+
+BARRA INVOCACIÓN
+Diferentes unidades que puede invocar el jugador. Se generarán de forma aleatoria. En el rectángulo blanco dentro de la barra de invocación
+se mostrará información sobre el tiempo que resta para que el jugador pueda volver a invocar otra unidad. El rectángulo con fondo rojo
+representa la siguiente unidad que entrará en el pool de unidades.
+
+BOTÓN CERRAR
+Abre una advertencia para preguntar al jugador si de verdad quiere salir. En caso afirmativo se cargará el menú, en caso negativo la partida 
+continuará su curso.
+
