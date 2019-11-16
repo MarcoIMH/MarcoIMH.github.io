@@ -63,3 +63,33 @@ Torre A-evo:		70		25		0.7		120			20
 
 Torre B:	       	65		14		1.5		80 			10
 Torre B-evo:		90		16		1.75		120			20
+
+
+
+///////////////////////// HUD ////////////////////////////////////////////
+
+Dentro del HUD ingame podemos diferenciar los siguientes elementos (se pueden observar en el boceto para mayor apreciación):
+
+CONTADOR DE MUERTES
+Este go mostrará la cantidad de experiencia de muertes que posee el jugador. Esta experiencia se obtendrá
+en función del tipo de unidad que se mate.
+
+Unidad ligera: 2
+Unidad media:  4
+Unidad pesada: 10
+
+TIEMPO
+Mostrará en segundos el tiempo restante que queda para que finalice la partida.
+
+VIDA NÚCLEO
+Indicador de la vida restante en función de la total que le queda al núcleo que el jugador debe defender. Se muestra por unidades.
+
+BARRA INVOCACIÓN
+Diferentes unidades que puede invocar el jugador. Se generarán de forma aleatoria. En el rectángulo blanco dentro de la barra de invocación
+se mostrará información sobre el tiempo que resta para que el jugador pueda volver a invocar otra unidad. El rectángulo con fondo rojo
+representa la siguiente unidad que entrará en el pool de unidades.
+
+BOTÓN CERRAR
+Abre una advertencia para preguntar al jugador si de verdad quiere salir. En caso afirmativo se cargará el menú, en caso negativo la partida 
+continuará su curso.
+
