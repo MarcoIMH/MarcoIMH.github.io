@@ -1,26 +1,27 @@
-///////////////////////// RAZAS ////////////////////////////////////////////
+///////////////////////// RAZAS/INVOCACIONES ////////////////////////////////////////////
 
-Cada vez que se complete un nivel dentro del juego se desbloqueará una unidad nueva. El conjunto de unidades de una misma zona se denomina raza.
+Cada vez que se complete un nivel dentro del juego se desbloqueará una unidad nueva. La primera fase de cada zona desbloquea la unidad ligera, la siguiente
+la media y la última la unidad pesada. El conjunto de unidades de una misma zona se denomina raza.
 Estas unidades ayudarán a las torres en el trabajo de defensa y el jugador podrá elegir un máximo de 3 (en el caso de que sea posible) antes de 
 empezar una nueva partida. Una vez comienza el juego se podrán identificar fácilmente los círculos de invocación. Cada círculo de invocación
 solo puede estar ocupado por una unidad, una vez liberado podrá ser ocupado de nuevo.
 
 A continuación se detallan las características visibles para el jugador: 
 
-ATACK
-Las unidades atacan reproduciendo sus magias (fuego, rayo, veneno, frio), forma en la que inflinge daño la criatura. 
+DAÑO
+Las unidades atacan reproduciendo sus magias (V = Viento, FR = Frio, FU = Fuego, R= Rayo), forma en la que inflinge daño la criatura. 
 El alcance del ataque estará definido por el alcance de la magia que pueda invocar la unidad (revisar magias).
 
-TIME
+TIEMPO
 Cantidad de tiempo que penaliza al invocarla. Durante este tiempo el jugador no podrá volver a invocar ninguna otra unidadad.
 
 TIPOS
 Unidades ligeras, medias y pesadas. Todas las razas cuentan con 1 unidad de cada tipo.
-El tipo ofrece resistencia en combate, es decir, las unidades ligeras estarán un tiempo menor invocadas mientras que las
+El tipo ofrece aguante en combate, es decir, las unidades ligeras estarán un tiempo menor invocadas mientras que las
 pesadas permanecerán más tiempo dentro del combate, se podría equiparar al "tiempo que estará invocada antes de desaparecer".
 
 
-RESISTENCIA DE COMBATE
+AGUANTE DE COMBATE
 Unidad ligera: 30
 Unidad media:  45
 Unidad pesada: 60
@@ -33,7 +34,7 @@ Unidad pesada:		25	V	38
 
 RAZA DEL DESIERTO
 			Daño 	Magia 	Tiempo
-Unidad ligera:		8	R	14
+Unidad ligera:		8	FU	14
 Unidad media:		13	FU	22
 Unidad pesada:		25	FU	38
 
@@ -43,7 +44,7 @@ Unidad ligera:		6	FR	10
 Unidad media:		15	R	25
 Unidad pesada:		25	FR	38
 
-Siendo V = Veneno, FR = Frio, FU = Fuego, R= Rayo.
+Siendo V = Viento, FR = Frio, FU = Fuego, R= Rayo.
 
 (DEJAMOS LO DE "TERRESTRE/AEREO, ETC", SOLO NOS COMPLICA LA VIDA Y NO APORTA MUCHO VALOR).
 
@@ -79,7 +80,7 @@ Unidad media:  4
 Unidad pesada: 10
 
 TIEMPO
-Mostrará en segundos el tiempo restante que queda para que finalice la partida.
+Mostrará en segundos el tiempo restante que queda para que finalice la partida(oleada?).
 
 VIDA NÚCLEO
 Indicador de la vida restante en función de la total que le queda al núcleo que el jugador debe defender. Se muestra por unidades.
@@ -93,3 +94,112 @@ BOTÓN CERRAR
 Abre una advertencia para preguntar al jugador si de verdad quiere salir. En caso afirmativo se cargará el menú, en caso negativo la partida 
 continuará su curso.
 
+
+
+///////////////////////// ENEMIGOS ////////////////////////////////////////////
+
+Los enemigos en general se comportan de la misma forma, tienen la misma velocidad y siguen las mismas rutas. La velocidad de movimiento es igual
+en todos ellos. El tipo engloba los diferentes enemigos haciendo referencia al total de aguante en combate
+y el daño por segundo al núcleo.
+
+ENEMIGOS DEL BOSQUE
+STAGE1		Ataque   Vida
+Unidad ligera:  1        100
+Unidad media:   2        250
+Unidad pesada:  4	 500
+STAGE2		Ataque   Vida
+Unidad ligera:  2        150
+Unidad media:   4        350
+Unidad pesada:  8	 800
+STAGE3		Ataque   Vida
+Unidad ligera:  4        200
+Unidad media:   8        400
+Unidad pesada:  16	 850
+
+ENEMIGOS DEL DESIERTO
+STAGE1		Ataque   Vida
+Unidad ligera:  1        200
+Unidad media:   2        350
+Unidad pesada:  4	 600
+STAGE2		Ataque   Vida
+Unidad ligera:  2        250
+Unidad media:   4        450
+Unidad pesada:  8	 700
+STAGE3		Ataque   Vida
+Unidad ligera:  4        300
+Unidad media:   8        500
+Unidad pesada:  16	 950
+
+ENEMIGOS DEL HIELO
+STAGE1		Ataque   Vida
+Unidad ligera:  1        300
+Unidad media:   2        450
+Unidad pesada:  4	 700
+STAGE2		Ataque   Vida
+Unidad ligera:  2        350
+Unidad media:   4        550
+Unidad pesada:  8	 800
+STAGE3		Ataque   Vida
+Unidad ligera:  4        400
+Unidad media:   8        600
+Unidad pesada:  16	 1100
+
+Además el entorno en el que se encuentren les ofrece un determinado tipo de resistencia hacia las magias. La resistencia
+produce un efecto reductor en el daño de las magias que hacen las invocaciones, absorviendo en cada ataque el total de la resistencia al daño que sufriría
+la unidad. 
+
+Ejemplo: Ataque magia de veneno de 50 de daño, la unidad enemiga tiene 10 de resistencia al veneno y un total de 100 de vida,
+tras sufrir UN ataque se quedaría con 60 de vida. 
+
+Tabla de resistencias de enemigos, siendo V = Viento, FR = Frio, FU = Fuego, R= Rayo, INM = Inmune:
+
+ENEMIGOS DEL BOSQUE
+STAGE1
+Resistencias:	V	FR	FU	R
+Unidad ligera:  0	0	0	0
+Unidad media:  	5	0	0	10
+Unidad pesada:  10	0	0	20
+STAGE2
+Resistencias:	V	FR	FU	R
+Unidad ligera:  5	0	0	10
+Unidad media:  	10	0	0	20
+Unidad pesada:  15	0	0	30 
+STAGE3
+Resistencias:	V	FR	FU	R
+Unidad ligera:  10	0	0	20
+Unidad media:  	15	0	0	30
+Unidad pesada:  20	0	0	40 
+
+ENEMIGOS DEL DESIERTO 
+STAGE1
+Resistencias:	V	FR	FU	R
+Unidad ligera:  5	0	0	0
+Unidad media:   10	0	0	10
+Unidad pesada:  15	0	0	20
+STAGE2
+Resistencias:	V	FR	FU	R
+Unidad ligera:  10	0	0	10
+Unidad media:  	15	0	0	20
+Unidad pesada:  20	0	0	30
+STAGE3
+Resistencias:	V	FR	FU	R
+Unidad ligera:  15	0	40	20
+Unidad media:   20	0	50	30
+Unidad pesada:  25	0	60	40
+
+ENEMIGOS DEL HIELO 
+STAGE1
+Resistencias:	V	FR	FU	R
+Unidad ligera:  INM	INM	0	10
+Unidad media:   INM	INM	0	20
+Unidad pesada:  INM	INM	0	30
+STAGE2
+Resistencias:	V	FR	FU	R
+Unidad ligera:  0	INM	INM	10
+Unidad media:   0	INM	INM	20
+Unidad pesada:  0	INM	INM	30
+STAGE3
+Resistencias:	V	FR	FU	R
+Unidad ligera:  INM	INM	0	INM
+Unidad media:   0	INM	0	INM
+Unidad pesada:  0	-500	INM	INM
