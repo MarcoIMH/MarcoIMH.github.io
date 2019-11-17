@@ -3,6 +3,7 @@ import GameObjectsGO from "./gameObjects.js";
 export default class Enemigo extends GameObjectsGO {
     constructor(scene, x, y, type){ 
         super(scene, 20, x, y, 2000, type);
+        this.game = scene;
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.setScale(1.5);
@@ -12,6 +13,7 @@ export default class Enemigo extends GameObjectsGO {
         this.pausa = false;
         this.vida = 100;
         this.unidad;
+        this.exp = 50;
     }
 
     //MOVIMIENTO DEL ENEMIGO
@@ -32,9 +34,12 @@ export default class Enemigo extends GameObjectsGO {
         }
     }
 
+    //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UN ENEMIGO
     onDestroy(){
         if(this.unidad != undefined){
             this.unidad.pausa = false;
         }
+        this.game.ptosExp += this.exp;
+        console.log("Puntos de experiencia: " + this.game.ptosExp);
     }
 }

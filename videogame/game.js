@@ -29,6 +29,14 @@ export default class Game extends Phaser.Scene {
 
   create() {
     let pointer = this.input.activePointer;
+    //VARIABLES DE LOS PUNTOS DE EXPERIENCIA
+    this.ptosExp = 250; //PUNTOS ACTUALES DEL JUGADOR
+    this.costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
+    this.costeTorreA = 150; //COSTE DE AUMENTAR A TORRE_A
+    this.costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
+    this.costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
+    this.costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
+    console.log("Puntos de experiencia iniciales: " + this.ptosExp);
     this.bases = this.add.group();
     this.torres = this.add.group();
     //this.torres;
@@ -51,10 +59,14 @@ export default class Game extends Phaser.Scene {
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
-        this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
-        //this.torres.add(new Torre(this));
-        //Destruimos la base para que no pueda seguir creando torres
-        item.destroy();
+        if (this.ptosExp >= this.costeTorreBase) {
+          this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
+          this.ptosExp -= this.costeTorreBase;
+          console.log("Puntos de experiencia: " + this.ptosExp);
+          //DESTRUIMOS LA BASE PARA QUE NO SIGA CREANDO TORRES
+          item.destroy();
+        }
+        else { console.log("No dispone de los puntos de experiencia suficientes"); }
       });
     });
 
@@ -72,10 +84,10 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(this.unidad, this.enem, this.unidad.ataque, null, this);
     this.physics.add.collider(this.enem, this.unidad, this.enem.ataque, null, this);
   }
+
   update(time, delta) {   
     this.enem.movEnem();
     this.unidad.mov();
-
     if (this.torres != undefined) {
       this.torres.children.iterate(item => {        
         //ATAQUE TORRE->ENEMIGO

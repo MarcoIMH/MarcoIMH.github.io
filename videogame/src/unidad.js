@@ -33,6 +33,7 @@ export default class Unidad extends GameObjectsGO {
         }
     }
 
+    //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UNA UNIDAD
     onDestroy(){
         if(this.enemigo != undefined){
             this.enemigo.pausa = false;
