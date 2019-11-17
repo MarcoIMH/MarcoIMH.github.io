@@ -2,10 +2,8 @@ import Torre from './src/torre.js';
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
+import Unidad from './src/unidad.js';
 
-//const c = this.matter.world.nextCategory();
-
-//Por alguna extraña razón no me coge las colisiones, ni con arcade ni con matter :'(
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
@@ -16,6 +14,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("torre", "./assets/arquero1.png");
     this.load.image("torreA", "./assets/torreA.png");
     this.load.image("enemigo", "./assets/favicon.png");
+    this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleo.png");
   }
 
@@ -32,6 +31,7 @@ export default class Game extends Phaser.Scene {
     let pointer = this.input.activePointer;
     this.bases = this.add.group();
     this.torres = this.add.group();
+    //this.torres;
     this.torresA = this.add.group();
 
     this.input.mouse.disableContextMenu();
@@ -52,6 +52,7 @@ export default class Game extends Phaser.Scene {
     this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
         this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
+        //this.torres.add(new Torre(this));
         //Destruimos la base para que no pueda seguir creando torres
         item.destroy();
       });
@@ -60,31 +61,44 @@ export default class Game extends Phaser.Scene {
     //CREACIÓN ENEMIGO
     this.enem = new Enemigo(this, 100, 100, "enemigo");
 
+    //CREACIÓN UNIDAD
+    this.unidad = new Unidad(this, 1100, 350, "unidad");
+
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
 
-    //COLISIONES -- EL PRIMER OBJETO RECIBE EL DAÑO DEL SEGUNDO
-    this.physics.add.collider(this.nucleo, this.enem, this.enem.atEnem, null, this);
+    //COLISIONES -- EL PRIMER OBJETO ATACA AL SEGUNDO
+    this.physics.add.collider(this.enem, this.nucleo, this.enem.ataque, null, this);
+    this.physics.add.collider(this.unidad, this.enem, this.unidad.ataque, null, this);
+    this.physics.add.collider(this.enem, this.unidad, this.enem.ataque, null, this);
   }
   update(time, delta) {   
     this.enem.movEnem();
+    this.unidad.mov();
 
     if (this.torres != undefined) {
-      this.torres.children.iterate(item => {
-        //AUMENTO DE NIVEL DE LA TORRE BASE A TORRE_A
-        item.on('pointerdown', pointer => {
-          this.torresA.add(new Torre(this, item.x, item.y, "torreA"));
-          //Destruimos la torre anterior
-          item.destroy();
-        });
-        
+      this.torres.children.iterate(item => {        
         //ATAQUE TORRE->ENEMIGO
         if (this.enem.x > item.x - item.rango && this.enem.x < item.x + item.rango && this.enem.y > item.y - item.rango && this.enem.y < item.y + item.rango) {
-          item.atTorre(this.enem, item);
-          //Si el enemigo se queda sin vida lo destruimos
-          if (this.enem.vida <= 0) { this.enem.destroy(); }
+          item.ataque(item, this.enem);
         }
       });
     }
   }
 }
+
+// this.torres.children.iterate(item => {
+//   //AUMENTO DE NIVEL DE LA TORRE BASE A TORRE_A
+//   item.on('pointerdown', pointer => {
+//     this.torresA.add(new Torre(this, item.x, item.y, "torreA"));
+//     //Destruimos la torre anterior
+//     item.destroy();
+//   });
+  
+//   //ATAQUE TORRE->ENEMIGO
+//   if (this.enem.x > item.x - item.rango && this.enem.x < item.x + item.rango && this.enem.y > item.y - item.rango && this.enem.y < item.y + item.rango) {
+//     item.atTorre(this.enem, item);
+//     //Si el enemigo se queda sin vida lo destruimos
+//     if (this.enem.vida <= 0) { this.enem.destroy(); }
+//   }
+// });

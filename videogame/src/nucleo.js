@@ -7,4 +7,8 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
         this.setScale(3);
         this.vida = 1000;
     }
+
+    onDestroy(){
+        //Finalizar la partida blabla
+    }
 }
