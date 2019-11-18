@@ -14,5 +14,11 @@ export default class Torre extends GameObjectsGO {
     //ATAQUE DE LA TORRE
     ataque(torre, enemigo) { 
         if (enemigo.active == true) super.ataque(torre, enemigo);
+
+        //SI EL ENEMIGO SE QUEDA SIN VIDA LO DESTRUIMOS
+        if (enemigo.vida <= 0) {
+            enemigo.onDestroy(enemigo.unidad);
+            enemigo.destroy();
+        }
     }
 }

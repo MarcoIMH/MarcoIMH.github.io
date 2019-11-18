@@ -18,11 +18,5 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
         else {
             obj1.cadenciaAux -= 1;
         }
-
-        //SI OBJ2 SE QUEDA SIN VIDA LO DESTRUIMOS
-        if (obj2.vida <= 0) {
-            obj2.onDestroy(obj1);
-            obj2.destroy();
-        }
     }
 }

@@ -37,6 +37,16 @@ export default class Unidad extends GameObjectsGO {
         }   //FALTARÍA AJUSTAR EL ATAQUE PQ ASÍ ATACAN A LOS QUE PASAN A SUS LADOS TB         //********//
         super.ataque(obj1, obj2);
         super.ataque(obj2, obj1);
+
+        //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
+        if (obj1.vida <= 0) {
+            obj1.onDestroy(obj2);
+            obj1.destroy();
+        }
+        if (obj2.vida <= 0) {
+            obj2.onDestroy(obj1);
+            obj2.destroy();
+        }
     }
 
     //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UNA UNIDAD
