@@ -4,6 +4,14 @@ import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
 import Unidad from './src/unidad.js';
 
+//VARIABLES CONSTANTES
+const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
+const costeTorreA = 150; //COSTE DE AUMENTAR A TORRE_A
+const costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
+const costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
+const costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
+const tiempoEnem = 1000;  //TIEMPO ENTRE UN ENEMIGO Y EL SIGUIENTE, YA SE CAMBIARÁ         //********//
+
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
@@ -29,22 +37,19 @@ export default class Game extends Phaser.Scene {
 
   create() {
     let pointer = this.input.activePointer;
-    //VARIABLES DE LOS PUNTOS DE EXPERIENCIA
+    this.input.mouse.disableContextMenu();
+
     this.ptosExp = 250; //PUNTOS ACTUALES DEL JUGADOR
-    this.costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
-    this.costeTorreA = 150; //COSTE DE AUMENTAR A TORRE_A
-    this.costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
-    this.costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
-    this.costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
+    this.derrota = false;
+    this.tiempoUltEnem;
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
+
+    //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
     this.torres = this.add.group();
-    //this.torres;
     this.torresA = this.add.group();
-
-    this.input.mouse.disableContextMenu();
-    //this.sprite = this.add.sprite(600, 400, "base").setInteractive();
-    //this.base = new Base(this, 800, 400, "base");
+    this.unidades = this.add.group();
+    this.enemigos = this.add.group();
 
     //CREACIÓN DEL NÚCLEO
     this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
@@ -54,14 +59,13 @@ export default class Game extends Phaser.Scene {
     this.bases.add(new Base(this, 600, 450, "base"));
     this.bases.add(new Base(this, 250, 400, "base"));
     this.bases.add(new Base(this, 1000, 150, "base"));
-    //console.log(this.bases.getChildren());
 
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
-        if (this.ptosExp >= this.costeTorreBase) {
+        if (this.ptosExp >= costeTorreBase) {
           this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
-          this.ptosExp -= this.costeTorreBase;
+          this.ptosExp -= costeTorreBase;
           console.log("Puntos de experiencia: " + this.ptosExp);
           //DESTRUIMOS LA BASE PARA QUE NO SIGA CREANDO TORRES
           item.destroy();
@@ -70,32 +74,72 @@ export default class Game extends Phaser.Scene {
       });
     });
 
-    //CREACIÓN ENEMIGO
-    this.enem = new Enemigo(this, 100, 100, "enemigo");
+    //CREACIÓN DE UNIDADES
+    this.nucleo.on('pointerdown', pointer => {
+      this.pepito = this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
+    });
 
-    //CREACIÓN UNIDAD
-    this.unidad = new Unidad(this, 1100, 350, "unidad");
+    //CREACIÓN DE UN PRIMER ENEMIGO
+    //this.enem = new Enemigo(this, 0, 350, "enemigo");
+    this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
+    this.tiempoUltEnem = 0;
 
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
-
-    //COLISIONES -- EL PRIMER OBJETO ATACA AL SEGUNDO
-    this.physics.add.collider(this.enem, this.nucleo, this.enem.ataque, null, this);
-    this.physics.add.collider(this.unidad, this.enem, this.unidad.ataque, null, this);
-    this.physics.add.collider(this.enem, this.unidad, this.enem.ataque, null, this);
   }
 
-  update(time, delta) {   
-    this.enem.movEnem();
-    this.unidad.mov();
-    if (this.torres != undefined) {
-      this.torres.children.iterate(item => {        
-        //ATAQUE TORRE->ENEMIGO
-        if (this.enem.x > item.x - item.rango && this.enem.x < item.x + item.rango && this.enem.y > item.y - item.rango && this.enem.y < item.y + item.rango) {
-          item.ataque(item, this.enem);
+  update(time, delta) { 
+    if (this.derrota == true) {
+      this.scene.start("Derrota");
+    }  
+
+    //COLISIONES -- PROBAR A FUSIONAR LAS DOS CON UN ÚNICO RECORRIDO DE LOS ENEMIGOS         //********//
+    //SI HAY TORRES EN EL MAPA
+    if (this.enemigos != undefined && this.torres != undefined) {
+      this.enemigos.children.iterate(enem => {    
+        if (enem != undefined) { 
+            this.torres.children.iterate(item => {        
+              //ATAQUE TORRE->ENEMIGO
+              if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
+                item.ataque(item, enem);
+              }
+            });
+        }
+        else { this.enemigos.remove(enem); }
+      });
+    }
+    //SI HAY UNIDADES EN EL MAPA
+    if (this.unidades != undefined && this.enemigos != undefined) {
+      this.unidades.children.iterate(unid => {
+        this.enemigos.children.iterate(enem => {
+          this.physics.add.collider(unid, enem, unid.ataque, null, this);
+        });
+      });
+    }
+
+    //MOVIMIENTO
+    if (this.enemigos != undefined) {
+      this.enemigos.children.iterate(enem => {    
+        if (enem != undefined) { 
+          enem.movEnem();
+          this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);  //MOVER A COLISIONES CUANDO SE FUSIONEN         //********//
         }
       });
     }
+    if (this.unidades != undefined) {
+      this.unidades.children.iterate(item => {
+        if (item != undefined) {
+          item.mov();
+        }
+      });
+    }
+
+    //GENERACIÓN DE ENEMIGOS -- HACER ALEATORIA (POSICIÓN Y TIEMPO)         //********//
+    if (this.tiempoUltEnem >= tiempoEnem) {
+      this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
+      this.tiempoUltEnem = 0;
+    }
+    else { this.tiempoUltEnem += 5; }
   }
 }
 

@@ -4,10 +4,8 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
 
         //VARIABLES
         this.daño = daño;
-        // this.posicion = (x, y);
         this.cadencia = cad;
         this.cadenciaAux = 0;
-        this.sprite = type;
     }
 
     //ATAQUE: OBJ1 -> OBJ2
@@ -18,11 +16,12 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
             obj1.cadenciaAux = obj1.cadencia;
         }
         else {
-            obj1.cadenciaAux -= 20;
+            obj1.cadenciaAux -= 1;
         }
-        //Si obj2 se queda sin vida lo destruimos
+
+        //SI OBJ2 SE QUEDA SIN VIDA LO DESTRUIMOS
         if (obj2.vida <= 0) {
-            obj2.onDestroy();
+            obj2.onDestroy(obj1);
             obj2.destroy();
         }
     }
