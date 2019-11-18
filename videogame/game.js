@@ -10,7 +10,6 @@ const costeTorreA = 150; //COSTE DE AUMENTAR A TORRE_A
 const costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
-const tiempoEnem = 1000;  //TIEMPO ENTRE UN ENEMIGO Y EL SIGUIENTE, YA SE CAMBIARÁ         //********//
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -41,7 +40,8 @@ export default class Game extends Phaser.Scene {
 
     this.ptosExp = 250; //PUNTOS ACTUALES DEL JUGADOR
     this.derrota = false;
-    this.tiempoUltEnem;
+    this.tiempoUltEnem; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
+    this.tiempoEnem = Phaser.Math.Between(10, 600); //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (CAMBIA DE MANERA ALEATORIA)
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
 
     //ARRAYS DE OBJETOS DEL JUEGO
@@ -76,7 +76,7 @@ export default class Game extends Phaser.Scene {
 
     //CREACIÓN DE UNIDADES
     this.nucleo.on('pointerdown', pointer => {
-      this.pepito = this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
+      this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
     });
 
     //CREACIÓN DE UN PRIMER ENEMIGO
@@ -86,6 +86,11 @@ export default class Game extends Phaser.Scene {
 
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
+
+    //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
+    let graphics = this.add.graphics();
+    graphics.fillStyle(0xA9A9A9, 1);
+    graphics.fillRect(1170, 180, 150, 20);
   }
 
   update(time, delta) { 
@@ -135,9 +140,10 @@ export default class Game extends Phaser.Scene {
     }
 
     //GENERACIÓN DE ENEMIGOS -- HACER ALEATORIA (POSICIÓN Y TIEMPO)         //********//
-    if (this.tiempoUltEnem >= tiempoEnem) {
+    if (this.tiempoUltEnem >= this.tiempoEnem) {
       this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
       this.tiempoUltEnem = 0;
+      this.tiempoEnem = Phaser.Math.Between(10, 600);
     }
     else { this.tiempoUltEnem += 5; }
   }

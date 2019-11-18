@@ -40,21 +40,21 @@ export default class Unidad extends GameObjectsGO {
 
         //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
         if (obj1.vida <= 0) {
-            obj1.onDestroy(obj2);
+            obj1.onDestroy();
             obj1.destroy();
         }
         if (obj2.vida <= 0) {
-            obj2.onDestroy(obj1);
+            obj2.onDestroy();
             obj2.destroy();
         }
     }
 
     //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UNA UNIDAD
-    onDestroy(enem){
-        if(enem != undefined){
-            enem.pausa = false;
-            enem.unidad = undefined;
-            enem.cadenciaAux = 0;
+    onDestroy(){
+        if(this.enemigo != undefined){
+            this.enemigo.pausa = false;
+            this.enemigo.unidad = undefined;
+            this.enemigo.cadenciaAux = 0;
         }
     }
 }

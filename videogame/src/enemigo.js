@@ -31,15 +31,16 @@ export default class Enemigo extends GameObjectsGO {
     ataqueNucleo(obj1, obj2) {
         super.ataque(obj1, obj2);
         obj1.destroy();
+        //ACTUALIZAMOS LA BARRA DE VIDA DEL NÚCLEO          //********//
         if (obj2.vida <= 0) obj2.onDestroy();
     }
 
     //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UN ENEMIGO
-    onDestroy(unid){
-        if(unid != undefined){
-            unid.pausa = false;
-            unid.enemigo = undefined;
-            unid.cadenciaAux = 0;
+    onDestroy(){
+        if(this.unidad != undefined){
+            this.unidad.pausa = false;
+            this.unidad.enemigo = undefined;
+            this.unidad.cadenciaAux = 0;
         }
         this.game.ptosExp += this.exp;
         console.log("Puntos de experiencia: " + this.game.ptosExp);
