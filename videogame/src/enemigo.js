@@ -31,7 +31,8 @@ export default class Enemigo extends GameObjectsGO {
     ataqueNucleo(obj1, obj2) {
         super.ataque(obj1, obj2);
         obj1.destroy();
-        //ACTUALIZAMOS LA BARRA DE VIDA DEL NÚCLEO          //********//
+        //ACTUALIZAMOS LA BARRA DE VIDA DEL NÚCLEO
+        obj2.barraSalud();
         if (obj2.vida <= 0) obj2.onDestroy();
     }
 

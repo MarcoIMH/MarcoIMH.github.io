@@ -80,7 +80,6 @@ export default class Game extends Phaser.Scene {
     });
 
     //CREACIÓN DE UN PRIMER ENEMIGO
-    //this.enem = new Enemigo(this, 0, 350, "enemigo");
     this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
     this.tiempoUltEnem = 0;
 
@@ -89,7 +88,7 @@ export default class Game extends Phaser.Scene {
 
     //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
     let graphics = this.add.graphics();
-    graphics.fillStyle(0xA9A9A9, 1);
+    graphics.fillStyle(0xFF0000, 1);
     graphics.fillRect(1170, 180, 150, 20);
   }
 
@@ -139,7 +138,7 @@ export default class Game extends Phaser.Scene {
       });
     }
 
-    //GENERACIÓN DE ENEMIGOS -- HACER ALEATORIA (POSICIÓN Y TIEMPO)         //********//
+    //GENERACIÓN DE ENEMIGOS
     if (this.tiempoUltEnem >= this.tiempoEnem) {
       this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
       this.tiempoUltEnem = 0;

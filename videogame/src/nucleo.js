@@ -1,5 +1,3 @@
-const vidaTotal = 100;
-
 export default class Nucleo extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, type){
         super(scene, x, y, type);
@@ -9,7 +7,9 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
         this.body.immovable = true;
         this.setScale(3);
         this.setInteractive();
-        this.vida = vidaTotal;
+        this.vidaTotal = 100;
+        this.vida = 100;
+        this.tamBarra = 150;
     }
 
     onDestroy() {
@@ -19,9 +19,9 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
     //BARRA QUE REPRESENTA LA SALUD DEL NÚCLEO
     barraSalud() {
         //CALCULAMOS LA VIDA PROPORCIONAL PARA SABER LA LONGITUD DE LA BARRA DE SALUD
-        let barra = (this.vida * 150) / this.vidaTotal;
-        let graphics = this.add.graphics();
-        graphics.fillStyle(0xFF0000, 1);
-        graphics.fillRect(1170, 180, barra, 20);
+        let barra = 150 - ((this.vida * 150) / this.vidaTotal);
+        let graphics = this.game.add.graphics();
+        graphics.fillStyle(0xA9A9A9, 1);
+        graphics.fillRect(1320 - barra, 180, barra, 20);
     }
 }
