@@ -57,8 +57,8 @@ export default class Game extends Phaser.Scene {
 
     //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
     this.bases.add(new Base(this, 600, 450, "base"));
-    this.bases.add(new Base(this, 250, 400, "base"));
-    this.bases.add(new Base(this, 1000, 150, "base"));
+    this.bases.add(new Base(this, 250, 375, "base"));
+    this.bases.add(new Base(this, 1000, 145, "base"));
 
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
@@ -99,9 +99,11 @@ export default class Game extends Phaser.Scene {
 
     //COLISIONES -- PROBAR A FUSIONAR LAS DOS CON UN ÚNICO RECORRIDO DE LOS ENEMIGOS         //********//
     //SI HAY TORRES EN EL MAPA
-    if (this.enemigos != undefined && this.torres != undefined) {
+    if (this.enemigos != undefined) {
       this.enemigos.children.iterate(enem => {    
         if (enem != undefined) { 
+            //COLISIÓN CON NÚCLEO
+            this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
             this.torres.children.iterate(item => {        
               //ATAQUE TORRE->ENEMIGO
               if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
@@ -118,23 +120,6 @@ export default class Game extends Phaser.Scene {
         this.enemigos.children.iterate(enem => {
           this.physics.add.collider(unid, enem, unid.ataque, null, this);
         });
-      });
-    }
-
-    //MOVIMIENTO
-    if (this.enemigos != undefined) {
-      this.enemigos.children.iterate(enem => {    
-        if (enem != undefined) { 
-          enem.movEnem();
-          this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);  //MOVER A COLISIONES CUANDO SE FUSIONEN         //********//
-        }
-      });
-    }
-    if (this.unidades != undefined) {
-      this.unidades.children.iterate(item => {
-        if (item != undefined) {
-          item.mov();
-        }
       });
     }
 

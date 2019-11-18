@@ -46,4 +46,8 @@ export default class Enemigo extends GameObjectsGO {
         this.game.ptosExp += this.exp;
         console.log("Puntos de experiencia: " + this.game.ptosExp);
     }
+
+    preUpdate() {
+        this.movEnem();
+    }
 }

@@ -57,4 +57,8 @@ export default class Unidad extends GameObjectsGO {
             this.enemigo.cadenciaAux = 0;
         }
     }
+
+    preUpdate(time, delta) {
+        this.mov();
+    }
 }
