@@ -29,6 +29,8 @@ export default class Enemigo extends GameObjectsGO {
 
     //ATAQUE DEL ENEMIGO AL NÚCLEO, ATACA UNA VEZ Y SE DESTRUYE
     ataqueNucleo(obj1, obj2) {
+        //TENEMOS QUE ASEGURARNOS QUE ATACARÁ (CADENCIAAUX = 0)
+        obj1.cadenciaAux = 0;
         super.ataque(obj1, obj2);
         obj1.destroy();
         //ACTUALIZAMOS LA BARRA DE VIDA DEL NÚCLEO
@@ -43,7 +45,8 @@ export default class Enemigo extends GameObjectsGO {
             this.unidad.enemigo = undefined;
             this.unidad.cadenciaAux = 0;
         }
-        this.game.ptosExp += this.exp;
+        this.game.ptosExp += this.exp;  //SUMAMOS LOS PTOS DE EXP DEL ENEMIGO
+        super.muestraPtos(this.game.ptosExp);    //ACTUALIZAMOS LOS PTOS DE EXP
         console.log("Puntos de experiencia: " + this.game.ptosExp);
     }
 

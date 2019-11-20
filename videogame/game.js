@@ -42,6 +42,9 @@ export default class Game extends Phaser.Scene {
     this.derrota = false;
     this.tiempoUltEnem; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
     this.tiempoEnem = Phaser.Math.Between(10, 600); //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (CAMBIA DE MANERA ALEATORIA)
+    this.unidCargada = true;  //MARCA SI SE PUEDE INVOCAR LA UNIDAD CORRESPONDIENTE O NO
+    this.tiempoUltUnid; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
+    this.tiempoUnid;  //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (DEPENDERÁ SEGÚN EL ÚLTIMO ENEMIGO CREADO)
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
 
     //ARRAYS DE OBJETOS DEL JUEGO
@@ -76,7 +79,11 @@ export default class Game extends Phaser.Scene {
 
     //CREACIÓN DE UNIDADES
     this.nucleo.on('pointerdown', pointer => {
-      this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
+      if (this.unidCargada) {
+        this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
+        this.tiempoUltUnid = 0;
+        this.unidCargada = false;
+      }
     });
 
     //CREACIÓN DE UN PRIMER ENEMIGO
@@ -90,6 +97,10 @@ export default class Game extends Phaser.Scene {
     let graphics = this.add.graphics();
     graphics.fillStyle(0xFF0000, 1);
     graphics.fillRect(1170, 180, 150, 20);
+
+    //FONDO PTOS DE EXP
+    // graphics.fillStyle(0x000000, 1);
+    // graphics.fillRect(50, 50, 150, 80);
   }
 
   update(time, delta) { 
@@ -129,7 +140,12 @@ export default class Game extends Phaser.Scene {
       this.tiempoUltEnem = 0;
       this.tiempoEnem = Phaser.Math.Between(10, 600);
     }
-    else { this.tiempoUltEnem += 5; }
+    else {  this.tiempoUltEnem += delta/5;  }
+    //GENERACIÓN DE UNIDADES
+    if (!this.unidCargada) {
+      if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }
+      else {  this.tiempoUltUnid += delta;  }
+    }
   }
 }
 

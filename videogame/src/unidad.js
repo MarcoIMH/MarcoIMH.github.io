@@ -3,6 +3,7 @@ import GameObjectsGO from "./gameObjects.js";
 export default class Unidad extends GameObjectsGO {
     constructor(scene, x, y, type){ 
         super(scene, 15, x, y, 20000, type);
+        this.game = scene;
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.setScale(0.1);
@@ -13,6 +14,7 @@ export default class Unidad extends GameObjectsGO {
         this.pausa = false;
         this.vida = 110;
         this.enemigo = undefined;
+        this.game.tiempoUnid = 5000;    //ACTUALIZAMOS EL VALOR EN GAME.JS
 
         scene.children.moveDown(this);
     }
