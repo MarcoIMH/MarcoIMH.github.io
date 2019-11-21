@@ -23,6 +23,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("enemigo", "./assets/favicon.png");
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleo.png");
+    this.load.image("background", "./assets/MapaV2.png");
   }
 
   Pool(scene, entities){
@@ -47,6 +48,8 @@ export default class Game extends Phaser.Scene {
     this.tiempoUnid;  //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (DEPENDERÁ SEGÚN EL ÚLTIMO ENEMIGO CREADO)
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
 
+    this.add.image(0, 0, "background").setOrigin(0);
+
     //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
     this.torres = this.add.group();
@@ -70,6 +73,7 @@ export default class Game extends Phaser.Scene {
           this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
           this.ptosExp -= costeTorreBase;
           console.log("Puntos de experiencia: " + this.ptosExp);
+          item.muestraPtos("Ptos Exp: " + this.ptosExp);
           //DESTRUIMOS LA BASE PARA QUE NO SIGA CREANDO TORRES
           item.destroy();
         }
@@ -99,8 +103,9 @@ export default class Game extends Phaser.Scene {
     graphics.fillRect(1170, 180, 150, 20);
 
     //FONDO PTOS DE EXP
-    // graphics.fillStyle(0x000000, 1);
-    // graphics.fillRect(50, 50, 150, 80);
+    graphics.fillStyle(0x696969, 1);
+    graphics.fillRect(50, 50, 550, 80);
+    this.add.text(75, 65, "Ptos Exp: " + this.ptosExp, { font: "60px Courier", fill: "#FFFFFF"});
   }
 
   update(time, delta) { 

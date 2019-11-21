@@ -8,10 +8,6 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
         this.cadenciaAux = 0;
     }
 
-    // create() {
-    //     this.graphics = this.add.graphics();
-    // }
-
     preload() {
         this.w = this.sys.game.config.width / 2;
         this.h = this.sys.game.config.height / 2;
@@ -30,9 +26,9 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
     }
 
     muestraPtos(ptos) {
-        let graphics = this.add.graphics();
-        //graphics.fillStyle(0x000000, 1);
-        //graphics.fillRect(50, 50, 150, 80);
-        this.game.add.text(50, 50, ptos, { font: "60px Courier", fill: "#FFFFFF"});
+        let graphics = this.game.add.graphics();
+        graphics.fillStyle(0x696969, 1);
+        graphics.fillRect(50, 50, 550, 80);
+        this.game.add.text(75, 65, ptos, { font: "60px Courier", fill: "#FFFFFF"});
     }
 }

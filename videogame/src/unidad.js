@@ -10,7 +10,7 @@ export default class Unidad extends GameObjectsGO {
         
         //VARIABLES AUXILIARES
         this.t = x / 25;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
-        this.n = y + Phaser.Math.Between(-60, 60);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
+        this.n = y + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
         this.pausa = false;
         this.vida = 110;
         this.enemigo = undefined;

@@ -10,7 +10,7 @@ export default class Enemigo extends GameObjectsGO {
         
         //VARIABLES AUXILIARES
         this.t = x;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
-        this.n = y + Phaser.Math.Between(-60, 60);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
+        this.n = y + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
         this.pausa = false;
         this.vida = 100;
         this.unidad = undefined;
@@ -46,7 +46,7 @@ export default class Enemigo extends GameObjectsGO {
             this.unidad.cadenciaAux = 0;
         }
         this.game.ptosExp += this.exp;  //SUMAMOS LOS PTOS DE EXP DEL ENEMIGO
-        super.muestraPtos(this.game.ptosExp);    //ACTUALIZAMOS LOS PTOS DE EXP
+        super.muestraPtos("Ptos Exp: " + this.game.ptosExp);    //ACTUALIZAMOS LOS PTOS DE EXP
         console.log("Puntos de experiencia: " + this.game.ptosExp);
     }
 
