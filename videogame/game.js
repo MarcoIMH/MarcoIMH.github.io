@@ -33,6 +33,17 @@ export default class Game extends Phaser.Scene {
       c.setAlive(false);
       c.setVisible(false);
     });
+
+    Pool.prototype.spawn = function (x, y) {
+      var entity = this._group.getFirstDead();
+      if (entity) {
+        entity.x = x;
+        entity.y = y;
+        entity.setAlive(true);
+        entity.setVisible(true);
+      }
+      return entity;
+    }
   }
 
   create() {
@@ -81,6 +92,21 @@ export default class Game extends Phaser.Scene {
       });
     });
 
+    // //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
+    // this.torres.children.iterate(item => {
+    //   item.on('pointerdown', pointer => {
+    //     if (this.ptosExp >= costeTorreA) {
+    //       this.torresA.add(new Torre(this, item.x, item.y - 55, "torreA"));
+    //       this.ptosExp -= costeTorreA;
+    //       console.log("Puntos de experiencia: " + this.ptosExp);
+    //       item.muestraPtos("Ptos Exp: " + this.ptosExp);
+    //       //DESTRUIMOS LA TORRE ANTERIOR
+    //       item.destroy();
+    //     }
+    //     else { console.log("No dispone de los puntos de experiencia suficientes"); }
+    //   });
+    // });
+
     //CREACIÓN DE UNIDADES
     this.nucleo.on('pointerdown', pointer => {
       if (this.unidCargada) {
@@ -113,29 +139,27 @@ export default class Game extends Phaser.Scene {
       this.scene.start("Derrota");
     }  
 
-    //COLISIONES -- PROBAR A FUSIONAR LAS DOS CON UN ÚNICO RECORRIDO DE LOS ENEMIGOS         //********//
+    //COLISIONES
     //SI HAY TORRES EN EL MAPA
     if (this.enemigos != undefined) {
       this.enemigos.children.iterate(enem => {    
         if (enem != undefined) { 
-            //COLISIÓN CON NÚCLEO
-            this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
-            this.torres.children.iterate(item => {        
-              //ATAQUE TORRE->ENEMIGO
-              if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
-                item.ataque(item, enem);
-              }
+          //COLISIÓN CON NÚCLEO
+          this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
+          this.torres.children.iterate(item => {        
+            //ATAQUE TORRE->ENEMIGO
+            if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
+              item.ataque(item, enem);
+            }
+          });
+          //SI HAY UNIDADES EN EL MAPA
+          if (this.enemigos != undefined) {
+            this.unidades.children.iterate(unid => {
+              this.physics.add.collider(unid, enem, unid.ataque, null, this);
             });
+          }
         }
         else { this.enemigos.remove(enem); }
-      });
-    }
-    //SI HAY UNIDADES EN EL MAPA
-    if (this.unidades != undefined && this.enemigos != undefined) {
-      this.unidades.children.iterate(unid => {
-        this.enemigos.children.iterate(enem => {
-          this.physics.add.collider(unid, enem, unid.ataque, null, this);
-        });
       });
     }
 
@@ -143,9 +167,9 @@ export default class Game extends Phaser.Scene {
     if (this.tiempoUltEnem >= this.tiempoEnem) {
       this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
       this.tiempoUltEnem = 0;
-      this.tiempoEnem = Phaser.Math.Between(10, 600);
+      this.tiempoEnem = Phaser.Math.Between(100, 3000);
     }
-    else {  this.tiempoUltEnem += delta/5;  }
+    else {  this.tiempoUltEnem += delta;  }
     //GENERACIÓN DE UNIDADES
     if (!this.unidCargada) {
       if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }

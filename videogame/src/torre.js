@@ -10,6 +10,23 @@ export default class Torre extends GameObjectsGO {
 
         //VARIABLES AUXILIARES
         this.rango = 450;
+        this.costeTorreA = 150;
+    }
+
+    //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
+    mejora() {
+        this.on('pointerdown', pointer => {
+          if (this.game.ptosExp >= this.costeTorreA) {
+        //     this.game.torresA.add(new Torre(this, item.x, item.y - 55, "torreA"));
+        //     this.game.ptosExp -= this.costeTorreA;
+        //     console.log("Puntos de experiencia: " + this.game.ptosExp);
+        //     this.muestraPtos("Ptos Exp: " + this.game.ptosExp);
+        //     //DESTRUIMOS LA TORRE ANTERIOR
+        //     this.destroy();
+        //   }
+        //   else { console.log("No dispone de los puntos de experiencia suficientes"); }
+        }
+      });
     }
 
     //ATAQUE DE LA TORRE
