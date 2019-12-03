@@ -20,6 +20,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("base", "./assets/circulo_base.png");
     this.load.image("torre", "./assets/arquero1.png");
     this.load.image("torreA", "./assets/torreA.png");
+    this.load.image("torreB", "./assets/torreB.png");
     this.load.image("enemigo", "./assets/favicon.png");
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleo.png");
@@ -57,6 +58,8 @@ export default class Game extends Phaser.Scene {
     this.unidCargada = true;  //MARCA SI SE PUEDE INVOCAR LA UNIDAD CORRESPONDIENTE O NO
     this.tiempoUltUnid; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
     this.tiempoUnid;  //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (DEPENDERÁ SEGÚN EL ÚLTIMO ENEMIGO CREADO)
+    this.opcionA;
+    this.opcionB;
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
 
     this.add.image(0, 0, "background").setOrigin(0);
@@ -64,7 +67,6 @@ export default class Game extends Phaser.Scene {
     //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
     this.torres = this.add.group();
-    this.torresA = this.add.group();
     this.unidades = this.add.group();
     this.enemigos = this.add.group();
 
@@ -81,7 +83,7 @@ export default class Game extends Phaser.Scene {
     this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
         if (this.ptosExp >= costeTorreBase) {
-          this.torres.add(new Torre(this, item.x, item.y - 55, "torre"));
+          this.torres.add(new Torre(this, item.x, item.y - 55, 'O', "torre"));
           this.ptosExp -= costeTorreBase;
           console.log("Puntos de experiencia: " + this.ptosExp);
           item.muestraPtos("Ptos Exp: " + this.ptosExp);
@@ -96,7 +98,7 @@ export default class Game extends Phaser.Scene {
     // this.torres.children.iterate(item => {
     //   item.on('pointerdown', pointer => {
     //     if (this.ptosExp >= costeTorreA) {
-    //       this.torresA.add(new Torre(this, item.x, item.y - 55, "torreA"));
+    //       this.torres.add(new Torre(this, item.x, item.y - 55, "torreA"));
     //       this.ptosExp -= costeTorreA;
     //       console.log("Puntos de experiencia: " + this.ptosExp);
     //       item.muestraPtos("Ptos Exp: " + this.ptosExp);
@@ -176,12 +178,53 @@ export default class Game extends Phaser.Scene {
       else {  this.tiempoUltUnid += delta;  }
     }
   }
+  mejoraTorre(p, q, object) {
+    console.log("Mejora");
+    switch (object.level) {
+      case 'O':
+          this.ops = this.add.image(p, q - 50, "opciones");
+          this.opcionA = this.add.image(p - 70, q - 70, "torreA").setScale(0.5);
+          this.opcionB = this.add.image(p + 70, q - 70, "torreB").setScale(0.3);
+          this.opcionA.on('pointerdown', pointer => {
+            this.torres.add(new Torre(this, p, q, 'A', "torreA"));
+            this.torres.remove(object);
+            object.destroy();
+            this.ops.delete();
+            this.opcionA.delete();
+            this.opcionB.delete();
+          });
+          this.opcionB.on('pointerdown', pointer => {
+            this.torres.add(new Torre(this, p, q, 'B', "torreB"));
+            this.torres.remove(object);
+            object.destroy();
+            this.ops.delete();
+            this.opcionA.delete();
+            this.opcionB.delete();
+          });
+          setTimeout(() => {
+            this.ops.delete();
+            this.opcionA.delete();
+            this.opcionB.delete();
+          }, 2500);
+          break;
+      case 'A':
+          this.torres.add(new Torre(this, p, q, 'AA', "torreAA"));
+          this.torres.remove(object);
+          object.destroy();
+          break;
+      case 'B':
+          this.torres.add(new Torre(this, p, q, 'BB', "torreBB"));
+          this.torres.remove(object);
+          object.destroy();
+          break;
+    }
+  }
 }
 
 // this.torres.children.iterate(item => {
 //   //AUMENTO DE NIVEL DE LA TORRE BASE A TORRE_A
 //   item.on('pointerdown', pointer => {
-//     this.torresA.add(new Torre(this, item.x, item.y, "torreA"));
+//     this.torres.add(new Torre(this, item.x, item.y, "torreA"));
 //     //Destruimos la torre anterior
 //     item.destroy();
 //   });
