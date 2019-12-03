@@ -36,9 +36,10 @@ export default class Unidad extends GameObjectsGO {
             obj2.pausa = true;
             obj1.enemigo = obj2;
             obj2.unidad = obj1;
-        }   //FALTARÍA AJUSTAR EL ATAQUE PQ ASÍ ATACAN A LOS QUE PASAN A SUS LADOS TB         //********//
-        super.ataque(obj1, obj2);
-        super.ataque(obj2, obj1);
+        }
+        //NOS ASEGURAMOS QUE EL ATAQUE ES UNO A UNO
+        if (obj1.enemigo == obj2)   super.ataque(obj1, obj2);
+        if (obj2.unidad == obj1)   super.ataque(obj2, obj1);
 
         //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
         if (obj1.vida <= 0) {

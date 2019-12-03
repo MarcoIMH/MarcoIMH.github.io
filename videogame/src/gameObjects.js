@@ -17,7 +17,6 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
     ataque(obj1, obj2) {
         if (obj1.cadenciaAux <= 0){
             obj2.vida -= obj1.daño;
-            console.log("Vida: " + obj2.vida);
             obj1.cadenciaAux = obj1.cadencia;
         }
         else {

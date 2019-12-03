@@ -4,41 +4,52 @@ export default class Torre extends GameObjectsGO {
     constructor(scene, x, y, level, type){ 
         super(scene, 10, x, y, 50, type);
         this.game = scene;
+        this.level = level;
         scene.add.existing(this);
-        this.setScale(0.85);
         this.setInteractive();
         this.mejora(x, y, level);
-
-        //VARIABLES AUXILIARES
-        this.rango = 450;
-        this.costeTorreA = 50;
-        this.level = level;
     }
 
     //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
     mejora(p, q) {
-        this.on('pointerdown', pointer => {
-            if (this.game.ptosExp >= this.costeTorreA) {
+        //MODIFICAMOS LOS VALORES DE LA TORRE SEGÚN SU NIVEL
+        switch (this.level) {
+            case 'O':
+                this.setScale(0.85);
+                this.rango = 400;
+                break;
+            case 'A':
+                this.setScale(0.8);
+                this.rango = 600;
+                this.daño = this.daño + 5;
+                this.cadencia = this.cadencia - 20;
+                break;
+            case 'B':
+                this.setScale(0.2);
+                this.rango = 450;
+                this.daño = this.daño + 15;
+                this.cadencia = this.cadencia + 20;
+                break;
+            case 'AA':
+                this.setScale(1);
+                this.rango = 700;
+                this.daño = this.daño + 15;
+                this.cadencia = this.cadencia - 30;
+                break;
+            case 'BB':
+                this.setScale(1);
+                this.rango = 500;
+                this.daño = this.daño + 30;
+                this.cadencia = this.cadencia + 40;
+                break;
+        }
+
+        //ACTIVAMOS LA POSIBILIDAD DE MEJORAR NUESTRA TORRE (SI SE PUEDE)
+        if (this.level != 'AA' && this.level != 'BB') {
+            this.on('pointerdown', pointer => {
                 this.game.mejoraTorre(p, q, this);
-                this.game.ptosExp -= this.costeTorreA;
-                //this.destroy();
-                switch (this.level) {
-                    case 'O':
-                        this.game.mejoraTorre(p, q, this);
-                        break;
-                    case 'A':
-                        console.log("Hello");
-                        break;
-                    case 'B':
-                        break;
-                    default:
-                        break;
-                }
-                console.log("Puntos de experiencia: " + this.game.ptosExp);
-                this.muestraPtos("Ptos Exp: " + this.game.ptosExp);
-            }
-            else { console.log("No dispone de los puntos de experiencia suficientes"); }
-        });
+            });
+        }
     }
 
     //ATAQUE DE LA TORRE

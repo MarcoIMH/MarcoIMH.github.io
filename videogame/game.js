@@ -6,7 +6,7 @@ import Unidad from './src/unidad.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
-const costeTorreA = 150; //COSTE DE AUMENTAR A TORRE_A
+const costeTorreA = 15; //COSTE DE AUMENTAR A TORRE_A
 const costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
@@ -58,6 +58,7 @@ export default class Game extends Phaser.Scene {
     this.unidCargada = true;  //MARCA SI SE PUEDE INVOCAR LA UNIDAD CORRESPONDIENTE O NO
     this.tiempoUltUnid; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
     this.tiempoUnid;  //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (DEPENDERÁ SEGÚN EL ÚLTIMO ENEMIGO CREADO)
+    this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
     console.log("Puntos de experiencia iniciales: " + this.ptosExp);
@@ -85,7 +86,6 @@ export default class Game extends Phaser.Scene {
         if (this.ptosExp >= costeTorreBase) {
           this.torres.add(new Torre(this, item.x, item.y - 55, 'O', "torre"));
           this.ptosExp -= costeTorreBase;
-          console.log("Puntos de experiencia: " + this.ptosExp);
           item.muestraPtos("Ptos Exp: " + this.ptosExp);
           //DESTRUIMOS LA BASE PARA QUE NO SIGA CREANDO TORRES
           item.destroy();
@@ -93,21 +93,6 @@ export default class Game extends Phaser.Scene {
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
       });
     });
-
-    // //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
-    // this.torres.children.iterate(item => {
-    //   item.on('pointerdown', pointer => {
-    //     if (this.ptosExp >= costeTorreA) {
-    //       this.torres.add(new Torre(this, item.x, item.y - 55, "torreA"));
-    //       this.ptosExp -= costeTorreA;
-    //       console.log("Puntos de experiencia: " + this.ptosExp);
-    //       item.muestraPtos("Ptos Exp: " + this.ptosExp);
-    //       //DESTRUIMOS LA TORRE ANTERIOR
-    //       item.destroy();
-    //     }
-    //     else { console.log("No dispone de los puntos de experiencia suficientes"); }
-    //   });
-    // });
 
     //CREACIÓN DE UNIDADES
     this.nucleo.on('pointerdown', pointer => {
@@ -157,6 +142,7 @@ export default class Game extends Phaser.Scene {
           //SI HAY UNIDADES EN EL MAPA
           if (this.enemigos != undefined) {
             this.unidades.children.iterate(unid => {
+              //ATAQUE UNIDAD <-> ENEMIGO
               this.physics.add.collider(unid, enem, unid.ataque, null, this);
             });
           }
@@ -179,60 +165,70 @@ export default class Game extends Phaser.Scene {
     }
   }
   mejoraTorre(p, q, object) {
-    console.log("Mejora");
     switch (object.level) {
       case 'O':
-          this.ops = this.add.image(p, q - 50, "opciones");
-          this.opcionA = this.add.image(p - 70, q - 70, "torreA").setScale(0.5);
-          this.opcionB = this.add.image(p + 70, q - 70, "torreB").setScale(0.3);
-          this.opcionA.on('pointerdown', pointer => {
-            this.torres.add(new Torre(this, p, q, 'A', "torreA"));
-            this.torres.remove(object);
-            object.destroy();
-            this.ops.delete();
-            this.opcionA.delete();
-            this.opcionB.delete();
+        let ops, opcionA, opcionB;
+        if (!this.panelOpciones) {
+          ops = this.add.image(p, q - 50, "opciones");
+          opcionA = this.add.image(p - 70, q - 70, "torreA").setScale(0.5).setInteractive();
+          opcionB = this.add.image(p + 70, q - 70, "torreB").setScale(0.3).setInteractive();
+          this.panelOpciones = true;
+          opcionA.on('pointerdown', pointer => {
+            ops.destroy();
+            opcionA.destroy();
+            opcionB.destroy();
+            this.panelOpciones = false;
+            if (this.ptosExp >= costeTorreA) {
+              this.torres.remove(object);
+              object.destroy();
+              this.torres.add(new Torre(this, p, q, 'A', "torreA"));
+              this.ptosExp -= costeTorreA;
+              object.muestraPtos("Ptos Exp: " + this.ptosExp);
+            }
+            else { console.log("No dispone de los puntos de experiencia suficientes"); }
           });
-          this.opcionB.on('pointerdown', pointer => {
-            this.torres.add(new Torre(this, p, q, 'B', "torreB"));
-            this.torres.remove(object);
-            object.destroy();
-            this.ops.delete();
-            this.opcionA.delete();
-            this.opcionB.delete();
+          opcionB.on('pointerdown', pointer => {
+            ops.destroy();
+            opcionA.destroy();
+            opcionB.destroy();
+            this.panelOpciones = false;
+            if (this.ptosExp >= costeTorreB){
+              this.torres.remove(object);
+              object.destroy();
+              this.torres.add(new Torre(this, p, q, 'B', "torreB"));
+              this.ptosExp -= costeTorreB;
+              object.muestraPtos("Ptos Exp: " + this.ptosExp);
+            }
+            else { console.log("No dispone de los puntos de experiencia suficientes"); }
           });
           setTimeout(() => {
-            this.ops.delete();
-            this.opcionA.delete();
-            this.opcionB.delete();
-          }, 2500);
-          break;
+            ops.destroy();
+            opcionA.destroy();
+            opcionB.destroy();
+            this.panelOpciones = false;
+          }, 2000);
+        }
+        break;
       case 'A':
+        if (this.ptosExp >= costeTorreAA){
+          this.torres.remove(object);
+          object.destroy();
           this.torres.add(new Torre(this, p, q, 'AA', "torreAA"));
-          this.torres.remove(object);
-          object.destroy();
-          break;
+          this.ptosExp -= costeTorreAA;
+          object.muestraPtos("Ptos Exp: " + this.ptosExp);
+        }
+        else { console.log("No dispone de los puntos de experiencia suficientes"); }
+        break;
       case 'B':
-          this.torres.add(new Torre(this, p, q, 'BB', "torreBB"));
+        if (this.ptosExp >= costeTorreB){
           this.torres.remove(object);
           object.destroy();
-          break;
+          this.torres.add(new Torre(this, p, q, 'BB', "torreBB"));
+          this.ptosExp -= costeTorreBk;
+          object.muestraPtos("Ptos Exp: " + this.ptosExp);
+        }
+        else { console.log("No dispone de los puntos de experiencia suficientes"); }
+        break;
     }
   }
 }
-
-// this.torres.children.iterate(item => {
-//   //AUMENTO DE NIVEL DE LA TORRE BASE A TORRE_A
-//   item.on('pointerdown', pointer => {
-//     this.torres.add(new Torre(this, item.x, item.y, "torreA"));
-//     //Destruimos la torre anterior
-//     item.destroy();
-//   });
-  
-//   //ATAQUE TORRE->ENEMIGO
-//   if (this.enem.x > item.x - item.rango && this.enem.x < item.x + item.rango && this.enem.y > item.y - item.rango && this.enem.y < item.y + item.rango) {
-//     item.atTorre(this.enem, item);
-//     //Si el enemigo se queda sin vida lo destruimos
-//     if (this.enem.vida <= 0) { this.enem.destroy(); }
-//   }
-// });
