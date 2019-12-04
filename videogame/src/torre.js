@@ -15,7 +15,7 @@ export default class Torre extends GameObjectsGO {
         //MODIFICAMOS LOS VALORES DE LA TORRE SEGÚN SU NIVEL
         switch (this.level) {
             case 'O':
-                this.setScale(0.85);
+                this.setScale(0.25);
                 this.rango = 400;
                 break;
             case 'A':

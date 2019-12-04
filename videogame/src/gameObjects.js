@@ -25,9 +25,13 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
     }
 
     muestraPtos(ptos) {
-        let graphics = this.game.add.graphics();
-        graphics.fillStyle(0x696969, 1);
-        graphics.fillRect(50, 50, 550, 80);
-        this.game.add.text(75, 65, ptos, { font: "60px Courier", fill: "#FFFFFF"});
+        let posPtosX;
+        let graphics = this.game.add.graphics();        
+        this.game.ptos.destroy();
+        if (this.game.ptosExp < 10)    posPtosX = 360;
+        else if (this.game.ptosExp < 100)    posPtosX = 355;
+        else if (this.game.ptosExp < 1000)    posPtosX = 340;
+        else    posPtosX = 330;
+        this.game.ptos = this.game.add.text(posPtosX, 50, this.game.ptosExp, { font: "40px Courier", fill: "#FFFFFF"});
     }
 }

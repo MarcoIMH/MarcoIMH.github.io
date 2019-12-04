@@ -18,13 +18,15 @@ export default class Game extends Phaser.Scene {
   preload() {  
     this.load.on("complete", () => { this.scene.start("main"); });
     this.load.image("base", "./assets/circulo_base.png");
-    this.load.image("torre", "./assets/arquero1.png");
+    this.load.image("torre", "./assets/torreBase.png");
     this.load.image("torreA", "./assets/torreA.png");
     this.load.image("torreB", "./assets/torreB.png");
     this.load.image("enemigo", "./assets/favicon.png");
     this.load.image("unidad", "./assets/esqueleto.png");
-    this.load.image("nucleo", "./assets/nucleo.png");
+    this.load.image("nucleo", "./assets/nucleoColor.png");
     this.load.image("background", "./assets/MapaV2.png");
+    this.load.image("barraExp", "./assets/BarraExp.png");
+    this.load.image("barraOleada", "./assets/BarraOleada.png");
   }
 
   Pool(scene, entities){
@@ -61,7 +63,6 @@ export default class Game extends Phaser.Scene {
     this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
-    console.log("Puntos de experiencia iniciales: " + this.ptosExp);
 
     this.add.image(0, 0, "background").setOrigin(0);
 
@@ -84,9 +85,9 @@ export default class Game extends Phaser.Scene {
     this.bases.children.iterate(item => {
       item.on('pointerdown', pointer => {
         if (this.ptosExp >= costeTorreBase) {
-          this.torres.add(new Torre(this, item.x, item.y - 55, 'O', "torre"));
+          this.torres.add(new Torre(this, item.x, item.y - 45, 'O', "torre"));
           this.ptosExp -= costeTorreBase;
-          item.muestraPtos("Ptos Exp: " + this.ptosExp);
+          item.muestraPtos(this.ptosExp);
           //DESTRUIMOS LA BASE PARA QUE NO SIGA CREANDO TORRES
           item.destroy();
         }
@@ -115,10 +116,11 @@ export default class Game extends Phaser.Scene {
     graphics.fillStyle(0xFF0000, 1);
     graphics.fillRect(1170, 180, 150, 20);
 
-    //FONDO PTOS DE EXP
-    graphics.fillStyle(0x696969, 1);
-    graphics.fillRect(50, 50, 550, 80);
-    this.add.text(75, 65, "Ptos Exp: " + this.ptosExp, { font: "60px Courier", fill: "#FFFFFF"});
+    //PTOS DE EXP Y OLEADAS
+    this.add.image(350, 65, "barraExp").setScale(1.2);
+    this.ptos = this.add.text(340, 50, this.ptosExp, { font: "40px Courier", fill: "#FFFFFF"});
+    this.add.image(120, 65, "barraOleada").setScale(1.15);
+    this.add.text(122, 50, "1/4", { font: "40px Courier", fill: "#FFFFFF"});
   }
 
   update(time, delta) { 
@@ -183,7 +185,7 @@ export default class Game extends Phaser.Scene {
               object.destroy();
               this.torres.add(new Torre(this, p, q, 'A', "torreA"));
               this.ptosExp -= costeTorreA;
-              object.muestraPtos("Ptos Exp: " + this.ptosExp);
+              object.muestraPtos(this.ptosExp);
             }
             else { console.log("No dispone de los puntos de experiencia suficientes"); }
           });
@@ -197,7 +199,7 @@ export default class Game extends Phaser.Scene {
               object.destroy();
               this.torres.add(new Torre(this, p, q, 'B', "torreB"));
               this.ptosExp -= costeTorreB;
-              object.muestraPtos("Ptos Exp: " + this.ptosExp);
+              object.muestraPtos(this.ptosExp);
             }
             else { console.log("No dispone de los puntos de experiencia suficientes"); }
           });
@@ -215,7 +217,7 @@ export default class Game extends Phaser.Scene {
           object.destroy();
           this.torres.add(new Torre(this, p, q, 'AA', "torreAA"));
           this.ptosExp -= costeTorreAA;
-          object.muestraPtos("Ptos Exp: " + this.ptosExp);
+          object.muestraPtos(this.ptosExp);
         }
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
         break;
@@ -225,7 +227,7 @@ export default class Game extends Phaser.Scene {
           object.destroy();
           this.torres.add(new Torre(this, p, q, 'BB', "torreBB"));
           this.ptosExp -= costeTorreBk;
-          object.muestraPtos("Ptos Exp: " + this.ptosExp);
+          object.muestraPtos(this.ptosExp);
         }
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
         break;

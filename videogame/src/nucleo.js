@@ -5,7 +5,6 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.body.immovable = true;
-        this.setScale(3);
         this.setInteractive();
         this.vidaTotal = 100;
         this.vida = 100;
