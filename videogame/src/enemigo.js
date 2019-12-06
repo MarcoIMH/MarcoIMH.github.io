@@ -46,7 +46,7 @@ export default class Enemigo extends GameObjectsGO {
             this.unidad.cadenciaAux = 0;
         }
         this.game.ptosExp += this.exp;  //SUMAMOS LOS PTOS DE EXP DEL ENEMIGO
-        super.muestraPtos("Ptos Exp: " + this.game.ptosExp);    //ACTUALIZAMOS LOS PTOS DE EXP
+        super.muestraPtos();    //ACTUALIZAMOS LOS PTOS DE EXP
     }
 
     preUpdate() {

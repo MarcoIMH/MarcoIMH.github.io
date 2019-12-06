@@ -21,12 +21,14 @@ export default class Game extends Phaser.Scene {
     this.load.image("torre", "./assets/torreBase.png");
     this.load.image("torreA", "./assets/torreA.png");
     this.load.image("torreB", "./assets/torreB.png");
+    this.load.image("opciones", "./assets/opciones.png");
     this.load.image("enemigo", "./assets/favicon.png");
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleoColor.png");
     this.load.image("background", "./assets/MapaV2.png");
     this.load.image("barraExp", "./assets/BarraExp.png");
     this.load.image("barraOleada", "./assets/BarraOleada.png");
+    this.load.image("barraUnidades", "./assets/BarraUnid.png");
   }
 
   Pool(scene, entities){
@@ -64,6 +66,15 @@ export default class Game extends Phaser.Scene {
     this.opcionA;
     this.opcionB;
 
+    //MOVER A UNA CLASE DE NIVELES                //**********//
+    this.pausaOleada = false;
+    this.numEnems = 0;
+    this.numOleada = 1;
+    this.oleada1 = 10;
+    this.oleada2 = 15;
+    this.oleada3 = 20;
+    this.oleada4 = 25;
+
     this.add.image(0, 0, "background").setOrigin(0);
 
     //ARRAYS DE OBJETOS DEL JUEGO
@@ -77,8 +88,8 @@ export default class Game extends Phaser.Scene {
     this.vidaNucleo = 1000;
 
     //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
+    this.bases.add(new Base(this, 270, 375, "base"));
     this.bases.add(new Base(this, 600, 450, "base"));
-    this.bases.add(new Base(this, 250, 375, "base"));
     this.bases.add(new Base(this, 1000, 145, "base"));
 
     //CREACIÓN DE TORRES
@@ -94,6 +105,8 @@ export default class Game extends Phaser.Scene {
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
       });
     });
+    
+    let graphics = this.add.graphics();
 
     //CREACIÓN DE UNIDADES
     this.nucleo.on('pointerdown', pointer => {
@@ -104,15 +117,22 @@ export default class Game extends Phaser.Scene {
       }
     });
 
+    //BARRA DE UNIDADES
+    graphics.fillStyle(0x668AD8, 1);
+    this.add.image(85, 710, "barraUnidades").setScale(1.5);
+    this.add.image(220, 710, "barraUnidades").setScale(1.5);
+    this.add.image(355, 710, "barraUnidades").setScale(1.5);
+    graphics.fillRect(435, 638, 22, 145);
+
     //CREACIÓN DE UN PRIMER ENEMIGO
     this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
     this.tiempoUltEnem = 0;
+    this.numEnems++;
 
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
 
     //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
-    let graphics = this.add.graphics();
     graphics.fillStyle(0xFF0000, 1);
     graphics.fillRect(1170, 180, 150, 20);
 
@@ -120,7 +140,7 @@ export default class Game extends Phaser.Scene {
     this.add.image(350, 65, "barraExp").setScale(1.2);
     this.ptos = this.add.text(340, 50, this.ptosExp, { font: "40px Courier", fill: "#FFFFFF"});
     this.add.image(120, 65, "barraOleada").setScale(1.15);
-    this.add.text(122, 50, "1/4", { font: "40px Courier", fill: "#FFFFFF"});
+    this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
   }
 
   update(time, delta) { 
@@ -154,26 +174,94 @@ export default class Game extends Phaser.Scene {
     }
 
     //GENERACIÓN DE ENEMIGOS
-    if (this.tiempoUltEnem >= this.tiempoEnem) {
-      this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
-      this.tiempoUltEnem = 0;
-      this.tiempoEnem = Phaser.Math.Between(100, 3000);
+    if (this.tiempoUltEnem >= this.tiempoEnem && !this.pausaOleada) {
+      let creaEnem = false;
+      switch (this.numOleada)
+      {
+        case 1:
+          if (this.numEnems < this.oleada1) creaEnem = true;
+          else {
+            this.pausaOleada = true;
+            this.numOleada++;
+            this.numEnems = 0;
+            setTimeout(() => {
+              this.pausaOleada = false;
+              this.oled.destroy();
+              this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+            }, 5000);
+          }
+          break;
+        case 2:
+            if (this.numEnems < this.oleada2) creaEnem = true;
+            else {
+              this.pausaOleada = true;
+              this.numOleada++;
+              this.numEnems = 0;
+              setTimeout(() => {
+                this.pausaOleada = false;
+                this.oled.destroy();
+                this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+              }, 5000);
+            }
+          break;
+        case 3:
+            if (this.numEnems < this.oleada3) creaEnem = true;
+            else {
+              this.pausaOleada = true;
+              this.numOleada++;
+              this.numEnems = 0;
+              setTimeout(() => {
+                this.pausaOleada = false;
+                this.oled.destroy();
+                this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+              }, 5000);
+            }
+          break;
+        case 4:
+            if (this.numEnems < this.oleada4) creaEnem = true;
+            else //FIN__VICTORIA
+          break;
+      }
+      if (creaEnem) {
+        this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
+        this.tiempoUltEnem = 0;
+        this.numEnems++;
+        this.tiempoEnem = Phaser.Math.Between(100, 3000);
+      }
     }
     else {  this.tiempoUltEnem += delta;  }
+
     //GENERACIÓN DE UNIDADES
     if (!this.unidCargada) {
       if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }
       else {  this.tiempoUltUnid += delta;  }
+      this.barraUnid();
     }
   }
+
+  //BARRA DE TIEMPO DE LAS UNIDADES
+  barraUnid() {
+      //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
+      let graphics = this.add.graphics();
+      graphics.fillStyle(0xA9A9A9, 1);
+      graphics.fillRect(435, 638, 22, 145);
+      graphics.fillStyle(0x668AD8, 1);
+      if (this.tiempoUltUnid <= this.tiempoUnid) {
+          let barra = (145 * this.tiempoUltUnid) / this.tiempoUnid;
+          graphics.fillRect(435, 783, 22, -barra);
+      }
+      else graphics.fillRect(435, 783, 22, -145);
+  }
+
+  //GESTIONA EL CAMBIO DE TORRE LLAMADO DESDE LA CLASE DE LA TORRE CORRESPONDIENTE
   mejoraTorre(p, q, object) {
     switch (object.level) {
       case 'O':
         let ops, opcionA, opcionB;
         if (!this.panelOpciones) {
-          ops = this.add.image(p, q - 50, "opciones");
-          opcionA = this.add.image(p - 70, q - 70, "torreA").setScale(0.5).setInteractive();
-          opcionB = this.add.image(p + 70, q - 70, "torreB").setScale(0.3).setInteractive();
+          ops = this.add.image(p, q - 150, "opciones").setScale(1.5);
+          opcionA = this.add.image(p - 50, q - 155, "torreA").setScale(0.35).setInteractive();
+          opcionB = this.add.image(p + 50, q - 157, "torreB").setScale(0.17).setInteractive();
           this.panelOpciones = true;
           opcionA.on('pointerdown', pointer => {
             ops.destroy();
@@ -222,11 +310,11 @@ export default class Game extends Phaser.Scene {
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
         break;
       case 'B':
-        if (this.ptosExp >= costeTorreB){
+        if (this.ptosExp >= costeTorreBB){
           this.torres.remove(object);
           object.destroy();
           this.torres.add(new Torre(this, p, q, 'BB', "torreBB"));
-          this.ptosExp -= costeTorreBk;
+          this.ptosExp -= costeTorreBB;
           object.muestraPtos(this.ptosExp);
         }
         else { console.log("No dispone de los puntos de experiencia suficientes"); }

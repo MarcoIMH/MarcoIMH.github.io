@@ -24,7 +24,7 @@ export default class GameObjectsGO extends Phaser.GameObjects.Sprite {
         }
     }
 
-    muestraPtos(ptos) {
+    muestraPtos() {
         let posPtosX;
         let graphics = this.game.add.graphics();        
         this.game.ptos.destroy();
