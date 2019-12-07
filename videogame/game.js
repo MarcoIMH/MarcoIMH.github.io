@@ -2,7 +2,7 @@ import Torre from './src/torre.js';
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
-import Unidad from './src/unidad.js';
+import Lelanto from './src/unidades/lelanto.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
@@ -68,7 +68,7 @@ export default class Game extends Phaser.Scene {
     this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
-    this.unid0;
+    this.nivel = 1;
 
     //MOVER A UNA CLASE DE NIVELES                //**********//
     this.pausaOleada = false;
@@ -119,15 +119,7 @@ export default class Game extends Phaser.Scene {
     this.add.image(355, 710, "barraUnidades").setScale(1.5);
     graphics.fillRect(435, 638, 22, 145);
 
-    //CREACIÓN DE UNIDADES
-    this.unid0 = this.add.image(88, 698, "unidad").setScale(0.12).setInteractive();
-    this.unid0.on('pointerdown', pointer => {
-      if (this.unidCargada) {
-        this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
-        this.tiempoUltUnid = 0;
-        this.unidCargada = false;
-      }
-    });
+    this.barraUnidades();
 
     //CREACIÓN DE UN PRIMER ENEMIGO
     this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
@@ -243,12 +235,12 @@ export default class Game extends Phaser.Scene {
     if (!this.unidCargada) {
       if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }
       else {  this.tiempoUltUnid += delta;  }
-      this.barraUnid();
+      this.barraTiempoUnid();
     }
   }
 
   //BARRA DE TIEMPO DE LAS UNIDADES
-  barraUnid() {
+  barraTiempoUnid() {
       //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
       let graphics = this.add.graphics();
       graphics.fillStyle(0xA9A9A9, 1);
@@ -259,6 +251,64 @@ export default class Game extends Phaser.Scene {
           graphics.fillRect(435, 783, 22, -barra);
       }
       else graphics.fillRect(435, 783, 22, -145);
+  }
+
+  //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES
+  //TIPOS:  0: LELANTO, 1: HYDRA, 2: EOLO
+  barraUnidades() {
+    //DISPONEMOS DE TRES CASILLAS
+    for (let i = 0; i < 3; i++) {
+      let tipo = Phaser.Math.Between(0, this.nivel - 1);
+      switch (tipo) {
+        //CREACIÓN DE UNIDADES
+        case 0:
+          this.casillaUnidad(i, "unidad");
+          break;
+        case 1:
+          this.casillaUnidad(i, "hydra");
+          break;
+        case 2:
+          this.casillaUnidad(i, "eolo");
+          break;
+      }
+    }
+  }
+    
+  //CREA LA CASILLA DE LA UNIDAD DICHA
+  casillaUnidad(casilla, tipo) {
+    switch (casilla) {
+      case 0:
+        this.unid0 = this.add.image(88, 698, tipo).setScale(0.12).setInteractive();
+        this.seleccUnidad(this.unid0, tipo);
+        break;
+      case 1:
+        this.unid1 = this.add.image(223, 698, tipo).setScale(0.12).setInteractive();;
+        this.seleccUnidad(this.unid1, tipo);
+        break;
+      case 2:
+        this.unid2 = this.add.image(358, 698, tipo).setScale(0.12).setInteractive();;;
+        this.seleccUnidad(this.unid2, tipo);
+        break;
+    }
+  }
+  
+  //SELECCIONA UNIDAD
+  seleccUnidad(unidX, tipo) {
+    unidX.on('pointerdown', pointer => {
+      if (this.unidCargada) {
+        switch (tipo) {
+          case "unidad":
+            this.unidades.add(new Lelanto(this, 1100, 350));
+            break;
+          case "hydra":
+            break;
+          case "eolo":
+            break;
+        }
+        this.tiempoUltUnid = 0;
+        this.unidCargada = false;
+      }
+    });
   }
 
   //GESTIONA EL CAMBIO DE TORRE LLAMADO DESDE LA CLASE DE LA TORRE CORRESPONDIENTE

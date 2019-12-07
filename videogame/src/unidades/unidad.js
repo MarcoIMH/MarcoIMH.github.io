@@ -1,8 +1,8 @@
-import GameObjectsGO from "./gameObjects.js";
+import GameObjectsGO from "../gameObjects.js";
 
 export default class Unidad extends GameObjectsGO {
-    constructor(scene, x, y, type){ 
-        super(scene, 15, x, y, 20000, type);
+    constructor(scene, daño, x, y, cad, type){ 
+        super(scene, daño, x, y, cad, type);
         this.game = scene;
         scene.add.existing(this);
         scene.physics.world.enable(this);
@@ -12,9 +12,8 @@ export default class Unidad extends GameObjectsGO {
         this.t = x / 25;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
         this.n = y + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
         this.pausa = false;
-        this.vida = 110;
+        this.vida;
         this.enemigo = undefined;
-        this.game.tiempoUnid = 5000;    //ACTUALIZAMOS EL VALOR EN GAME.JS
 
         scene.children.moveDown(this);
     }
