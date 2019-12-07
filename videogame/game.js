@@ -6,15 +6,16 @@ import Unidad from './src/unidad.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
-const costeTorreA = 15; //COSTE DE AUMENTAR A TORRE_A
-const costeTorreB = 180; //COSTE DE AUMENTAR A TORRE_B
-const costeTorreAA = 100; //COSTE DE MEJORAR LA TORRE_A
-const costeTorreBB = 110; //COSTE DE MEJORAR LA TORRE_B
+const costeTorreA = 180; //COSTE DE AUMENTAR A TORRE_A
+const costeTorreB = 200; //COSTE DE AUMENTAR A TORRE_B
+const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
+const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
   }
+
   preload() {  
     this.load.on("complete", () => { this.scene.start("main"); });
     this.load.image("base", "./assets/circulo_base.png");
@@ -26,6 +27,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleoColor.png");
     this.load.image("background", "./assets/MapaV2.png");
+    this.load.image("fondoCols", "./assets/FondoColumnas.png");
     this.load.image("barraExp", "./assets/BarraExp.png");
     this.load.image("barraOleada", "./assets/BarraOleada.png");
     this.load.image("barraUnidades", "./assets/BarraUnid.png");
@@ -57,6 +59,7 @@ export default class Game extends Phaser.Scene {
 
     this.ptosExp = 250; //PUNTOS ACTUALES DEL JUGADOR
     this.derrota = false;
+    this.victoria = false;
     this.tiempoUltEnem; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
     this.tiempoEnem = Phaser.Math.Between(10, 600); //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (CAMBIA DE MANERA ALEATORIA)
     this.unidCargada = true;  //MARCA SI SE PUEDE INVOCAR LA UNIDAD CORRESPONDIENTE O NO
@@ -65,6 +68,7 @@ export default class Game extends Phaser.Scene {
     this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
+    this.unid0;
 
     //MOVER A UNA CLASE DE NIVELES                //**********//
     this.pausaOleada = false;
@@ -108,21 +112,22 @@ export default class Game extends Phaser.Scene {
     
     let graphics = this.add.graphics();
 
-    //CREACIÓN DE UNIDADES
-    this.nucleo.on('pointerdown', pointer => {
-      if (this.unidCargada) {
-        this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
-        this.tiempoUltUnid = 0;
-        this.unidCargada = false;
-      }
-    });
-
     //BARRA DE UNIDADES
     graphics.fillStyle(0x668AD8, 1);
     this.add.image(85, 710, "barraUnidades").setScale(1.5);
     this.add.image(220, 710, "barraUnidades").setScale(1.5);
     this.add.image(355, 710, "barraUnidades").setScale(1.5);
     graphics.fillRect(435, 638, 22, 145);
+
+    //CREACIÓN DE UNIDADES
+    this.unid0 = this.add.image(88, 698, "unidad").setScale(0.12).setInteractive();
+    this.unid0.on('pointerdown', pointer => {
+      if (this.unidCargada) {
+        this.unidades.add(new Unidad(this, 1100, 350, "unidad"));
+        this.tiempoUltUnid = 0;
+        this.unidCargada = false;
+      }
+    });
 
     //CREACIÓN DE UN PRIMER ENEMIGO
     this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
@@ -146,6 +151,9 @@ export default class Game extends Phaser.Scene {
   update(time, delta) { 
     if (this.derrota == true) {
       this.scene.start("Derrota");
+    }  
+    if (this.victoria == true) {
+      this.scene.start("Victoria");
     }  
 
     //COLISIONES
@@ -219,7 +227,7 @@ export default class Game extends Phaser.Scene {
           break;
         case 4:
             if (this.numEnems < this.oleada4) creaEnem = true;
-            else //FIN__VICTORIA
+            else this.victoria = true;  //FIN__VICTORIA
           break;
       }
       if (creaEnem) {

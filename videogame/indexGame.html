@@ -43,6 +43,7 @@
             <script type="module">
                     import Game from './game.js';
                     import Derrota from './src/derrota.js';
+                    import Victoria from './src/victoria.js';
             
                     var config = {
                         type: Phaser.AUTO,
@@ -57,7 +58,7 @@
                             mode: Phaser.Scale.FIT,
                             // autoCenter: Phaser.Scale.CENTER_BOTH
                         },
-                        scene: [ Game, Derrota ],
+                        scene: [ Game, Derrota, Victoria ],
                         physics: { default: 'arcade', arcade: { debug: false } }
                     };
                     new Phaser.Game(config);

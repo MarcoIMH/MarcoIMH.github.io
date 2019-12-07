@@ -29,7 +29,7 @@ export default class Enemigo extends GameObjectsGO {
 
     //ATAQUE DEL ENEMIGO AL NÚCLEO, ATACA UNA VEZ Y SE DESTRUYE
     ataqueNucleo(obj1, obj2) {
-        //TENEMOS QUE ASEGURARNOS QUE ATACARÁ (CADENCIAAUX = 0)
+        //TENEMOS QUE ASEGURARNOS QUE ATACARÁ (CADENCIA_AUX = 0)
         obj1.cadenciaAux = 0;
         super.ataque(obj1, obj2);
         obj1.destroy();
