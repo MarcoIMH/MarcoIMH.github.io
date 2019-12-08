@@ -3,6 +3,8 @@ import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
 import Lelanto from './src/unidades/lelanto.js';
+import Derrota from './src/derrota.js';
+import Victoria from './src/victoria.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
@@ -12,8 +14,10 @@ const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
 export default class Game extends Phaser.Scene {
-  constructor() {
+  constructor(numNivel) {
     super({ key: 'main' });
+    if (numNivel == undefined) this.nivel = 1;
+    else this.nivel = numNivel;
   }
 
   preload() {  
@@ -26,7 +30,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("enemigo", "./assets/favicon.png");
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleoColor.png");
-    this.load.image("background", "./assets/MapaV2.png");
+    this.load.image("fondo1", "./assets/MapaV2.png");
     this.load.image("fondoCols", "./assets/FondoColumnas.png");
     this.load.image("barraExp", "./assets/BarraExp.png");
     this.load.image("barraOleada", "./assets/BarraOleada.png");
@@ -68,18 +72,9 @@ export default class Game extends Phaser.Scene {
     this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
-    this.nivel = 1;
-
-    //MOVER A UNA CLASE DE NIVELES                //**********//
-    this.pausaOleada = false;
-    this.numEnems = 0;
-    this.numOleada = 1;
-    this.oleada1 = 10;
-    this.oleada2 = 15;
-    this.oleada3 = 20;
-    this.oleada4 = 25;
-
-    this.add.image(0, 0, "background").setOrigin(0);
+    this.pausaOleada = false; //MARCA SI ESTAMOS ENTRE UNA OLEADA Y LA SIGUIENTE
+    this.numEnems = 0;  //LLEVA EL RECUENTO DE LOS ENEMIGOS DE CADA OLEADA QUE VAN APARECIENDO
+    this.numOleada = 1; //OLEADA ACTUAL
 
     //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
@@ -87,14 +82,9 @@ export default class Game extends Phaser.Scene {
     this.unidades = this.add.group();
     this.enemigos = this.add.group();
 
-    //CREACIÓN DEL NÚCLEO
-    this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
     this.vidaNucleo = 1000;
 
-    //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
-    this.bases.add(new Base(this, 270, 375, "base"));
-    this.bases.add(new Base(this, 600, 450, "base"));
-    this.bases.add(new Base(this, 1000, 145, "base"));
+    this.cargaNivel();  //CARGA LOS DATOS SEGÚN EL NIVEL A JUGAR
 
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
@@ -129,24 +119,20 @@ export default class Game extends Phaser.Scene {
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
 
-    //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
-    graphics.fillStyle(0xFF0000, 1);
-    graphics.fillRect(1170, 180, 150, 20);
-
     //PTOS DE EXP Y OLEADAS
     this.add.image(350, 65, "barraExp").setScale(1.2);
     this.ptos = this.add.text(340, 50, this.ptosExp, { font: "40px Courier", fill: "#FFFFFF"});
     this.add.image(120, 65, "barraOleada").setScale(1.15);
     this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
-  }
-
+   }
+  
   update(time, delta) { 
     if (this.derrota == true) {
-      this.scene.start("Derrota");
+      this.scene.start("Derrota", new Derrota(this.nivel));
     }  
     if (this.victoria == true) {
-      this.scene.start("Victoria");
-    }  
+      this.scene.start("Victoria", new Victoria(this.nivel));
+    }
 
     //COLISIONES
     //SI HAY TORRES EN EL MAPA
@@ -241,16 +227,16 @@ export default class Game extends Phaser.Scene {
 
   //BARRA DE TIEMPO DE LAS UNIDADES
   barraTiempoUnid() {
-      //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
-      let graphics = this.add.graphics();
-      graphics.fillStyle(0xA9A9A9, 1);
-      graphics.fillRect(435, 638, 22, 145);
-      graphics.fillStyle(0x668AD8, 1);
-      if (this.tiempoUltUnid <= this.tiempoUnid) {
-          let barra = (145 * this.tiempoUltUnid) / this.tiempoUnid;
-          graphics.fillRect(435, 783, 22, -barra);
-      }
-      else graphics.fillRect(435, 783, 22, -145);
+    //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
+    let graphics = this.add.graphics();
+    graphics.fillStyle(0xA9A9A9, 1);
+    graphics.fillRect(435, 638, 22, 145);
+    graphics.fillStyle(0x668AD8, 1);
+    if (this.tiempoUltUnid <= this.tiempoUnid) {
+        let barra = (145 * this.tiempoUltUnid) / this.tiempoUnid;
+        graphics.fillRect(435, 783, 22, -barra);
+    }
+    else graphics.fillRect(435, 783, 22, -145);
   }
 
   //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES
@@ -376,6 +362,32 @@ export default class Game extends Phaser.Scene {
           object.muestraPtos(this.ptosExp);
         }
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
+        break;
+    }
+  }
+
+  cargaNivel() {
+    switch (this.nivel) {
+      case 1:
+        this.oleada1 = 10;
+        this.oleada2 = 15;
+        this.oleada3 = 20;
+        this.oleada4 = 25;
+
+        this.add.image(0, 0, "fondo1").setOrigin(0);
+        
+        //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
+        this.bases.add(new Base(this, 270, 375, "base"));
+        this.bases.add(new Base(this, 600, 450, "base"));
+        this.bases.add(new Base(this, 1000, 145, "base"));
+
+        //CREACIÓN DEL NÚCLEO
+        this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
+        
+        //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
+        let graphics = this.add.graphics();
+        graphics.fillStyle(0xFF0000, 1);
+        graphics.fillRect(1170, 180, 150, 20);
         break;
     }
   }

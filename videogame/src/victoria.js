@@ -1,6 +1,11 @@
+import Mapa from "./mapa.js";
+import Game from "../game.js";
+
 export default class Victoria extends Phaser.Scene {
-    constructor() {
+    constructor(n) {
         super({ key: "Victoria" });
+        if (n != undefined) this.nivel = n;
+        else this.nivel = 1;
     }
 
     preload() {
@@ -34,7 +39,7 @@ export default class Victoria extends Phaser.Scene {
             this.boton1.on('pointerdown', pointer => {
                 this.boton1.destroy();
                 this.boton1 = this.add.image(515, 380, "siguiente2").setScale(0.7).setInteractive();
-                this.boton1.on('pointerup', pointer => { this.scene.start("main"); });
+                this.boton1.on('pointerup', pointer => { this.scene.start("main", new Game(++this.nivel)); });
             });
         });
         this.boton2.on('pointerover', pointer => {
@@ -45,7 +50,7 @@ export default class Victoria extends Phaser.Scene {
             this.boton2.on('pointerdown', pointer => {
                 this.boton2.destroy();
                 this.boton2 = this.add.image(885, 380, "volver2").setScale(0.7).setInteractive();
-                this.boton2.on('pointerup', pointer => { this.scene.start("main"); });
+                this.boton2.on('pointerup', pointer => { this.scene.start("Mapa", new Mapa(++this.nivel)); });
             });
         });
     }

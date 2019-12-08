@@ -22,8 +22,12 @@ export default class Enemigo extends GameObjectsGO {
     //MOVIMIENTO DEL ENEMIGO
     movEnem(){
         if (!this.pausa) {
-            this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
-            this.t += 0.1;
+            switch (this.game.nivel) {
+                case 1:
+                    this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
+                    this.t += 0.1;
+                    break;
+            }
         }
     }
 
