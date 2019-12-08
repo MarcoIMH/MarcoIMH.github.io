@@ -6,7 +6,7 @@ let nivelMax;
 export default class Mapa extends Phaser.Scene {
     constructor() {
       super({ key: 'Mapa' });
-      nivelMax = 2;
+      nivelMax = 7;
     }
     
     preload() {  
@@ -65,8 +65,11 @@ export default class Mapa extends Phaser.Scene {
 }
 
 //ACTUALIZA EL NIVEL
-export function setNivel(niv) {
-    nivel = niv;
+export function sigNivelActual() {
+    nivel++;
+}
+export function sigNivelMax() {
+    nivelMax++;
 }
 //DEVUELVE EL NIVEL QUE SE QUIERE CARGAR
 export function getNivelActual() {

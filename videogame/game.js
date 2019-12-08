@@ -3,9 +3,7 @@ import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
 import Lelanto from './src/unidades/lelanto.js';
-import Derrota from './src/derrota.js';
-import Victoria from './src/victoria.js';
-import {setNivel, getNivelActual} from './src/mapa.js';
+import {getNivelActual} from './src/mapa.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
@@ -14,11 +12,8 @@ const costeTorreB = 200; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
-
-
 export default class Game extends Phaser.Scene {
   constructor() {
-    console.log("jj");
     super({ key: 'main' });
     this.nivel = 1;
   }
@@ -35,6 +30,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("unidad", "./assets/esqueleto.png");
     this.load.image("nucleo", "./assets/nucleoColor.png");
     this.load.image("fondo1", "./assets/MapaV2.png");
+    this.load.image("fondo2", "./assets/MapaV3.png");
     this.load.image("fondoCols", "./assets/FondoColumnas.png");
     this.load.image("barraExp", "./assets/BarraExp.png");
     this.load.image("barraOleada", "./assets/BarraOleada.png");
@@ -68,7 +64,7 @@ export default class Game extends Phaser.Scene {
     this.ptosExp = 250; //PUNTOS ACTUALES DEL JUGADOR
     this.derrota = false;
     this.victoria = false;
-    this.tiempoUltEnem; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
+    this.tiempoUltEnem = 0; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
     this.tiempoEnem = Phaser.Math.Between(10, 600); //TIEMPO PARA LA CREACIÓN DEL SIGUIENTE ENEMIGO (CAMBIA DE MANERA ALEATORIA)
     this.unidCargada = true;  //MARCA SI SE PUEDE INVOCAR LA UNIDAD CORRESPONDIENTE O NO
     this.tiempoUltUnid; //MARCA EL TIEMPO RELATIVO DESDE LA ÚLTIMA CREACIÓN
@@ -76,6 +72,8 @@ export default class Game extends Phaser.Scene {
     this.panelOpciones = false;
     this.opcionA;
     this.opcionB;
+    this.posXEnem;
+    this.posYEnem;
     this.pausaOleada = false; //MARCA SI ESTAMOS ENTRE UNA OLEADA Y LA SIGUIENTE
     this.numEnems = 0;  //LLEVA EL RECUENTO DE LOS ENEMIGOS DE CADA OLEADA QUE VAN APARECIENDO
     this.numOleada = 1; //OLEADA ACTUAL
@@ -115,11 +113,6 @@ export default class Game extends Phaser.Scene {
 
     this.barraUnidades();
 
-    //CREACIÓN DE UN PRIMER ENEMIGO
-    this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
-    this.tiempoUltEnem = 0;
-    this.numEnems++;
-
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
 
@@ -132,10 +125,10 @@ export default class Game extends Phaser.Scene {
   
   update(time, delta) { 
     if (this.derrota == true) {
-      this.scene.start("Derrota", new Derrota(this.nivel));
+      this.scene.start("Derrota");
     }  
     if (this.victoria == true) {
-      this.scene.start("Victoria", new Victoria(this.nivel));
+      this.scene.start("Victoria");
     }
 
     //COLISIONES
@@ -213,7 +206,7 @@ export default class Game extends Phaser.Scene {
           break;
       }
       if (creaEnem) {
-        this.enemigos.add(new Enemigo(this, 0, 350, "enemigo"));
+        this.enemigos.add(new Enemigo(this, this.posXEnem, this.posYEnem, "enemigo"));
         this.tiempoUltEnem = 0;
         this.numEnems++;
         this.tiempoEnem = Phaser.Math.Between(100, 3000);
@@ -371,31 +364,55 @@ export default class Game extends Phaser.Scene {
   }
 
   cargaNivel() {
+    let graphics;
     switch (this.nivel) {
       case 1:
-        this.oleada1 = 10;
-        this.oleada2 = 15;
-        this.oleada3 = 20;
-        this.oleada4 = 25;
-
+        this.posXEnem = 0;
+        this.posYEnem = 350;
+        this.oleada1 = 5;
+        this.oleada2 = 8;
+        this.oleada3 = 12;
+        this.oleada4 = 18;
+        
         this.add.image(0, 0, "fondo1").setOrigin(0);
         
         //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
         this.bases.add(new Base(this, 270, 375, "base"));
         this.bases.add(new Base(this, 600, 450, "base"));
         this.bases.add(new Base(this, 1000, 145, "base"));
-
+        
         //CREACIÓN DEL NÚCLEO
         this.nucleo = new Nucleo(this, 1250, 350, "nucleo");
         
+        graphics = this.add.graphics();
         //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
-        let graphics = this.add.graphics();
         graphics.fillStyle(0xFF0000, 1);
         graphics.fillRect(1170, 180, 150, 20);
-        console.log(this.nivel);
         break;
       case 2:
-          console.log("ff" + this.nivel);
+        this.posXEnem = 700;
+        this.posYEnem = 300;
+        this.oleada1 = 10;
+        this.oleada2 = 15;
+        this.oleada3 = 20;
+        this.oleada4 = 25;
+
+        this.add.image(0, 0, "fondo2").setOrigin(0);
+        
+        //POSICIONAMIENTO DE TODAS LAS this.BASES DEL NIVEL
+        this.bases.add(new Base(this, 220, 510, "base"));
+        this.bases.add(new Base(this, 510, 320, "base"));
+        this.bases.add(new Base(this, 700, 580, "base"));
+        this.bases.add(new Base(this, 890, 320, "base"));
+        this.bases.add(new Base(this, 1160, 510, "base"));
+
+        //CREACIÓN DEL NÚCLEO
+        this.nucleo = new Nucleo(this, 710, 190, "nucleo");
+        
+        graphics = this.add.graphics();
+        //FONDO DE LA BARRA DE VIDA DEL NÚCLEO
+        graphics.fillStyle(0xFF0000, 1);
+        graphics.fillRect(620, 20, 150, 20);
         break;
     }
   }

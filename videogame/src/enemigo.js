@@ -2,19 +2,23 @@ import GameObjectsGO from './gameObjects.js';
 
 export default class Enemigo extends GameObjectsGO {
     constructor(scene, x, y, type){ 
-        super(scene, 20, x, y, 20000, type);
+        super(scene, 20, -50, -50, 20000, type);
         this.game = scene;
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.setScale(1.5);
         
         //VARIABLES AUXILIARES
-        this.t = x;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
+        this.t = 0;    //REPRESENTA EL MOVIMIENTO RELATIVO EN EL EJE X
+        this.r = y;
+        this.m = x + Phaser.Math.Between(-50, 50);    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
         this.n = y + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
+        this.dir = Phaser.Math.Between(0, 1);
         this.pausa = false;
         this.vida = 100;
         this.unidad = undefined;
         this.exp = 50;
+        this.funcion = 0;
 
         scene.children.moveDown(this);
     }
@@ -25,7 +29,33 @@ export default class Enemigo extends GameObjectsGO {
             switch (this.game.nivel) {
                 case 1:
                     this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
-                    this.t += 0.1;
+                    this.t += 0.05;
+                    break;
+                case 2:
+                    //DISPONEMOS DE 2 CAMINOS EN ESTE NIVEL (DIR)
+                    //CADA CAMINO ESTÁ FORMADO POR 2 FUNCIONES CADA UNO
+                    if (this.funcion == 0) {
+                        let y0 = -2.5 * Math.sqrt(1 - Math.sqrt(Math.abs(this.t/7) / 2));
+                        if (!isNaN(y0)) {
+                            this.setPosition(this.m + this.t * 25, this.r - 200 * y0);
+                        }
+                        else { 
+                            if (this.dir == 0) this.m += (this.t + 0.05) * 25;
+                            if (this.dir == 1) this.m += (this.t - 0.05) * 25;
+                            this.t = 0;
+                            this.funcion = 1;
+                        }
+                        if (this.dir == 0) this.t -= 0.05;
+                        if (this.dir == 1) this.t += 0.05;
+                    }
+                    if (this.funcion == 1) {
+                        let y1 = Math.sqrt(1 - (Math.pow(Math.abs(this.t/7) - 1, 2)));
+                        if (!isNaN(y1)) {
+                            this.setPosition(this.m + this.t * 25, this.r - 200 * y1);
+                        }
+                        if (this.dir == 0) this.t += 0.05;
+                        if (this.dir == 1) this.t -= 0.05;
+                    }
                     break;
             }
         }

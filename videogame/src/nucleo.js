@@ -9,6 +9,8 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
         this.vidaTotal = 100;
         this.vida = 100;
         this.tamBarra = 150;
+        this.posX = x;
+        this.posY = y;
     }
 
     onDestroy() {
@@ -21,6 +23,6 @@ export default class Nucleo extends Phaser.GameObjects.Sprite {
         let barra = 150 - ((this.vida * 150) / this.vidaTotal);
         let graphics = this.game.add.graphics();
         graphics.fillStyle(0xA9A9A9, 1);
-        graphics.fillRect(1320 - barra, 180, barra, 20);
+        graphics.fillRect(this.posX + 70 - barra, this.posY - 170, barra, 20);
     }
 }

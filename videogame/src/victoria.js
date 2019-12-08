@@ -1,11 +1,8 @@
-import Mapa from "./mapa.js";
-import Game from "../game.js";
+import { sigNivelMax, sigNivelActual, getNivelActual, getNivelMax } from './mapa.js';
 
 export default class Victoria extends Phaser.Scene {
-    constructor(n) {
+    constructor() {
         super({ key: "Victoria" });
-        if (n != undefined) this.nivel = n;
-        else this.nivel = 1;
     }
 
     preload() {
@@ -28,9 +25,13 @@ export default class Victoria extends Phaser.Scene {
         this.add.image(700, 170, "victoria").setScale(1.3);
         this.boton1 = this.add.image(515, 380, "siguiente0").setScale(0.7).setInteractive();
         this.boton2 = this.add.image(885, 380, "volver0").setScale(0.7).setInteractive();
+        
+        //SI EL NIVEL SUPERADO ERA EL ÚLTIMO DISPONIBLE SE DESBLOQUEA EL SIGUIENTE
+        if (getNivelActual() == getNivelMax()) sigNivelMax();
     }
 
     update() {
+        //BOTÓN PARA LA SIGUIENTE PARTIDA
         this.boton1.on('pointerover', pointer => {
             this.boton1.destroy();
             this.boton2.destroy();
@@ -39,9 +40,14 @@ export default class Victoria extends Phaser.Scene {
             this.boton1.on('pointerdown', pointer => {
                 this.boton1.destroy();
                 this.boton1 = this.add.image(515, 380, "siguiente2").setScale(0.7).setInteractive();
-                this.boton1.on('pointerup', pointer => { this.scene.start("main", new Game(++this.nivel)); });
+                this.boton1.on('pointerup', pointer => {
+                    //SIGUIENTE NIVEL AL JUGADO
+                    sigNivelActual();
+                    this.scene.start("main");
+                });
             });
         });
+        //BOTÓN PARA VOLVER AL MAPA
         this.boton2.on('pointerover', pointer => {
             this.boton1.destroy();
             this.boton2.destroy();
@@ -50,7 +56,7 @@ export default class Victoria extends Phaser.Scene {
             this.boton2.on('pointerdown', pointer => {
                 this.boton2.destroy();
                 this.boton2 = this.add.image(885, 380, "volver2").setScale(0.7).setInteractive();
-                this.boton2.on('pointerup', pointer => { this.scene.start("Mapa", new Mapa(++this.nivel)); });
+                this.boton2.on('pointerup', pointer => { this.scene.start("Mapa"); });
             });
         });
     }
