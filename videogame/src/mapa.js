@@ -1,12 +1,14 @@
 import Game from '../game.js';
 
-export default class Mapa extends Phaser.Scene {
-    constructor(n) {
-      super({ key: 'Mapa' });
-      if (n == undefined) this.nivel = 1;
-      else this.nivel = n;
-    }
+let nivel;
+let nivelMax;
 
+export default class Mapa extends Phaser.Scene {
+    constructor() {
+      super({ key: 'Mapa' });
+      nivelMax = 2;
+    }
+    
     preload() {  
         this.load.on("complete", () => { this.scene.start("Mapa"); });
         this.load.image("mapa", "./assets/MapaNiveles.png");
@@ -19,13 +21,13 @@ export default class Mapa extends Phaser.Scene {
         this.load.image("6", "./assets/6.png");
         this.load.image("7", "./assets/7.png");
     }
-
+    
     create() {
         this.add.image(0, 0, "mapa").setOrigin(0);
         this.add.image(0, 0, "niveles").setOrigin(0);
 
         let nX;
-        for (let i = 0; i < this.nivel; i++) {
+        for (let i = 0; i < nivelMax; i++) {
             switch (i) {
                 case 0:
                     nX = this.add.image(159, 151, "1");
@@ -56,7 +58,21 @@ export default class Mapa extends Phaser.Scene {
     seleccNivel(nX, i) {
         nX.setInteractive();
         nX.on('pointerdown', pointer => {
-            this.scene.start("main", new Game(i));
+            nivel = i;
+            this.scene.start("main");
         });
     }
-}  
+}
+
+//ACTUALIZA EL NIVEL
+export function setNivel(niv) {
+    nivel = niv;
+}
+//DEVUELVE EL NIVEL QUE SE QUIERE CARGAR
+export function getNivelActual() {
+    return nivel;
+}
+//DEVUELVE EL TOTAL DE PARTIDAS QUE HAN SIDO DESBLOQUEADAS
+export function getNivelMax() {
+    return nivelMax;
+}

@@ -5,6 +5,7 @@ import Nucleo from './src/nucleo.js';
 import Lelanto from './src/unidades/lelanto.js';
 import Derrota from './src/derrota.js';
 import Victoria from './src/victoria.js';
+import {setNivel, getNivelActual} from './src/mapa.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
@@ -13,15 +14,18 @@ const costeTorreB = 200; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
-export default class Game extends Phaser.Scene {
-  constructor(numNivel) {
-    super({ key: 'main' });
-    if (numNivel == undefined) this.nivel = 1;
-    else this.nivel = numNivel;
-  }
 
+
+export default class Game extends Phaser.Scene {
+  constructor() {
+    console.log("jj");
+    super({ key: 'main' });
+    this.nivel = 1;
+  }
+  
   preload() {  
     this.load.on("complete", () => { this.scene.start("main"); });
+    this.nivel = getNivelActual();
     this.load.image("base", "./assets/circulo_base.png");
     this.load.image("torre", "./assets/torreBase.png");
     this.load.image("torreA", "./assets/torreA.png");
@@ -388,6 +392,10 @@ export default class Game extends Phaser.Scene {
         let graphics = this.add.graphics();
         graphics.fillStyle(0xFF0000, 1);
         graphics.fillRect(1170, 180, 150, 20);
+        console.log(this.nivel);
+        break;
+      case 2:
+          console.log("ff" + this.nivel);
         break;
     }
   }
