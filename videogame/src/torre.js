@@ -8,6 +8,7 @@ export default class Torre extends GameObjectsGO {
         scene.add.existing(this);
         this.setInteractive();
         this.mejora(x, y, level);
+        this.usaBala = true;
     }
 
     //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
@@ -16,29 +17,29 @@ export default class Torre extends GameObjectsGO {
         switch (this.level) {
             case 'O':
                 this.setScale(0.25);
-                this.rango = 400;
+                this.rango = 200;
                 break;
             case 'A':
                 this.setScale(0.8);
-                this.rango = 600;
+                this.rango = 350;
                 this.daño = this.daño + 5;
                 this.cadencia = this.cadencia - 20;
                 break;
             case 'B':
                 this.setScale(0.2);
-                this.rango = 450;
+                this.rango = 250;
                 this.daño = this.daño + 15;
                 this.cadencia = this.cadencia + 20;
                 break;
             case 'AA':
                 this.setScale(1);
-                this.rango = 700;
+                this.rango = 500;
                 this.daño = this.daño + 15;
                 this.cadencia = this.cadencia - 30;
                 break;
             case 'BB':
                 this.setScale(1);
-                this.rango = 500;
+                this.rango = 300;
                 this.daño = this.daño + 30;
                 this.cadencia = this.cadencia + 40;
                 break;

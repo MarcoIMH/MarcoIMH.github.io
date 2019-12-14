@@ -6,7 +6,7 @@ let nivelMax;
 export default class Mapa extends Phaser.Scene {
     constructor() {
       super({ key: 'Mapa' });
-      nivelMax = 7;
+      nivelMax = 1;
     }
     
     preload() {  

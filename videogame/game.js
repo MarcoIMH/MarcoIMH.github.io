@@ -1,4 +1,5 @@
 import Torre from './src/torre.js';
+
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
@@ -35,26 +36,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("barraExp", "./assets/BarraExp.png");
     this.load.image("barraOleada", "./assets/BarraOleada.png");
     this.load.image("barraUnidades", "./assets/BarraUnid.png");
-  }
-
-  Pool(scene, entities){
-    this._group = scene.add.group();
-    this._group.addMultiple(entities);
-    this._group.children.iterate(c => {
-      c.setAlive(false);
-      c.setVisible(false);
-    });
-
-    Pool.prototype.spawn = function (x, y) {
-      var entity = this._group.getFirstDead();
-      if (entity) {
-        entity.x = x;
-        entity.y = y;
-        entity.setAlive(true);
-        entity.setVisible(true);
-      }
-      return entity;
-    }
+    this.load.image("bala", "./assets/flecha.png");
   }
 
   create() {
@@ -74,17 +56,19 @@ export default class Game extends Phaser.Scene {
     this.opcionB;
     this.posXEnem;
     this.posYEnem;
+    this.posXUnid;
+    this.posYUnid;
+    this.posRelativa;
     this.pausaOleada = false; //MARCA SI ESTAMOS ENTRE UNA OLEADA Y LA SIGUIENTE
     this.numEnems = 0;  //LLEVA EL RECUENTO DE LOS ENEMIGOS DE CADA OLEADA QUE VAN APARECIENDO
     this.numOleada = 1; //OLEADA ACTUAL
+    this.vidaNucleo = 1000;
 
     //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
     this.torres = this.add.group();
     this.unidades = this.add.group();
     this.enemigos = this.add.group();
-
-    this.vidaNucleo = 1000;
 
     this.cargaNivel();  //CARGA LOS DATOS SEGÚN EL NIVEL A JUGAR
 
@@ -139,13 +123,13 @@ export default class Game extends Phaser.Scene {
           //COLISIÓN CON NÚCLEO
           this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
           this.torres.children.iterate(item => {        
-            //ATAQUE TORRE->ENEMIGO
+            //ATAQUE TORRE -> ENEMIGO
             if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
               item.ataque(item, enem);
             }
           });
           //SI HAY UNIDADES EN EL MAPA
-          if (this.enemigos != undefined) {
+          if (this.unidades != undefined) {
             this.unidades.children.iterate(unid => {
               //ATAQUE UNIDAD <-> ENEMIGO
               this.physics.add.collider(unid, enem, unid.ataque, null, this);
@@ -281,7 +265,7 @@ export default class Game extends Phaser.Scene {
       if (this.unidCargada) {
         switch (tipo) {
           case "unidad":
-            this.unidades.add(new Lelanto(this, 1100, 350));
+            this.unidades.add(new Lelanto(this, this.posXUnid, this.posYUnid, this.posRelativa));
             break;
           case "hydra":
             break;
@@ -291,6 +275,24 @@ export default class Game extends Phaser.Scene {
         this.tiempoUltUnid = 0;
         this.unidCargada = false;
       }
+    });
+  }
+
+  //MÉTODO PARA GENERAR LAS BALAS
+  disparaBala(obj1, obj2) {
+    let pos1X = obj1.x;
+    let pos1Y = obj1.y;
+    let pos2X = obj2.x;
+    let pos2Y = obj2.y;
+    //CALCULAMOS EL VECTOR DE MOVIMIENTO DE LA BALA
+    let dirX = pos1X - pos2X;
+    let dirY = pos1Y - pos2Y;
+    //CREAMOS LA BALA
+    this.bala = new Bala(this, pos1X, pos1Y, dirX, dirY, "bala");
+    this.physics.add.collider(this.bala, obj2, () => {
+        console.log("Colisión");
+        this.bala.destroy();
+        obj2.vida -= obj1.daño;
     });
   }
 
@@ -369,6 +371,9 @@ export default class Game extends Phaser.Scene {
       case 1:
         this.posXEnem = 0;
         this.posYEnem = 350;
+        this.posXUnid = 1100;
+        this.posYUnid = 350;
+        this.posRelativa = 44;
         this.oleada1 = 5;
         this.oleada2 = 8;
         this.oleada3 = 12;
@@ -392,6 +397,9 @@ export default class Game extends Phaser.Scene {
       case 2:
         this.posXEnem = 700;
         this.posYEnem = 300;
+        this.posXUnid = 710;
+        this.posYUnid = 300;
+        this.posRelativa = 0;
         this.oleada1 = 10;
         this.oleada2 = 15;
         this.oleada3 = 20;

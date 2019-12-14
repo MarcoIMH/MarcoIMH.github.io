@@ -1,7 +1,7 @@
 import GameObjectsGO from "../gameObjects.js";
 
 export default class Unidad extends GameObjectsGO {
-    constructor(scene, daño, x, y, cad, type){ 
+    constructor(scene, daño, x, y, posRelativa, cad, type){ 
         super(scene, daño, x, y, cad, type);
         this.game = scene;
         scene.add.existing(this);
@@ -9,11 +9,15 @@ export default class Unidad extends GameObjectsGO {
         this.setScale(0.1);
         
         //VARIABLES AUXILIARES
-        this.t = x / 25;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
+        this.t = posRelativa;    //REPRESENTA LA POSICIÓN RELATIVA X EN EL MAPA
         this.n = y + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN Y EN EL MAPA
+        this.r = y;
+        this.m = x + Phaser.Math.Between(-50, 50);  //REPRESENTA LA POSICIÓN X EN EL MAPA
+        this.dir = Phaser.Math.Between(0, 1);
         this.pausa = false;
         this.vida;
         this.enemigo = undefined;
+        this.funcion = 0;
 
         scene.children.moveDown(this);
     }
@@ -25,10 +29,36 @@ export default class Unidad extends GameObjectsGO {
                 case 1:
                     this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
                     this.t -= 0.1;
+                    if (this.t <= 10) { this.pausa = true; }
+                    break;
+                case 2:
+                    //DISPONEMOS DE 2 CAMINOS EN ESTE NIVEL (DIR)
+                    //CADA CAMINO ESTÁ FORMADO POR 2 FUNCIONES CADA UNO
+                    if (this.funcion == 0) {
+                        let y0 = Math.sqrt(1 - (Math.pow(Math.abs(this.t/7) - 1, 2)));
+                        if (!isNaN(y0)) {
+                            this.setPosition(this.m + this.t * 25, this.r - 200 * y0);
+                        }
+                        else {
+                            if (this.dir == 0) this.t = 14;
+                            if (this.dir == 1) this.t = -14;
+                            this.funcion = 1;
+                        }
+                        if (this.dir == 0) this.t += 0.1;
+                        if (this.dir == 1) this.t -= 0.1;
+                    }
+                    if (this.funcion == 1) {
+                        let y1 = -2.5 * Math.sqrt(1 - Math.sqrt(Math.abs(this.t/7) / 2));
+                        if (!isNaN(y1)) {
+                            this.setPosition(this.m + this.t * 25, this.r - 200 * y1);
+                        }
+                        if (this.dir == 0) this.t -= 0.1;
+                        if (this.dir == 1) this.t += 0.1;
+                    }
+                    if (this.y >= 700) { this.pausa = true; }
                     break;
             }
         }
-        if (this.t <= 10) { this.pausa = true; }
     }
 
     //ATAQUE UNIDAD <-> ENEMIGO (SÓLO COGE LA COLISIÓN UNA VEZ, NO SE PUEDE HACER EN LAS DOS CLASES)
