@@ -1,5 +1,4 @@
 import Torre from './src/torre.js';
-
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
@@ -302,9 +301,17 @@ export default class Game extends Phaser.Scene {
       case 'O':
         let ops, opcionA, opcionB;
         if (!this.panelOpciones) {
-          ops = this.add.image(p, q - 150, "opciones").setScale(1.5);
-          opcionA = this.add.image(p - 50, q - 155, "torreA").setScale(0.35).setInteractive();
-          opcionB = this.add.image(p + 50, q - 157, "torreB").setScale(0.17).setInteractive();
+          if (q > 200) {
+            ops = this.add.image(p, q - 150, "opciones").setScale(1.5);
+            opcionA = this.add.image(p - 50, q - 155, "torreA").setScale(0.35).setInteractive();
+            opcionB = this.add.image(p + 50, q - 157, "torreB").setScale(0.17).setInteractive();
+          }
+          else {
+            ops = this.add.image(p, q + 150, "opciones").setScale(1.5);
+            ops.rotation = 3.14;
+            opcionA = this.add.image(p - 50, q + 155, "torreA").setScale(0.35).setInteractive();
+            opcionB = this.add.image(p + 50, q + 157, "torreB").setScale(0.17).setInteractive();
+          }
           this.panelOpciones = true;
           opcionA.on('pointerdown', pointer => {
             ops.destroy();
