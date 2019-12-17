@@ -3,6 +3,9 @@ import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
 import Lelanto from './src/unidades/lelanto.js';
+import UnidadLigera from "./src/unidades/unidadLigera.js";
+import UnidadMedia from "./src/unidades/unidadMedia.js";
+import UnidadPesada from "./src/unidades/unidadPesada.js";
 import {getNivelActual} from './src/mapa.js';
 
 //VARIABLES CONSTANTES
@@ -27,15 +30,21 @@ export default class Game extends Phaser.Scene {
     this.load.image("torreB", "./assets/torreB.png");
     this.load.image("opciones", "./assets/opciones.png");
     this.load.image("enemigo", "./assets/favicon.png");
-    this.load.image("unidad", "./assets/esqueleto.png");
+    this.load.image("unidadL", "./assets/b1.png");
+    this.load.image("unidadM", "./assets/b2.png");
+    this.load.image("unidadP", "./assets/b3.png");
     this.load.image("nucleo", "./assets/nucleoColor.png");
     this.load.image("fondo1", "./assets/MapaV2.png");
     this.load.image("fondo2", "./assets/MapaV3.png");
     this.load.image("fondoCols", "./assets/FondoColumnas.png");
-    this.load.image("barraExp", "./assets/BarraExp.png");
+    this.load.image("barraExp", "./assets/BarraExp.png");    
     this.load.image("barraOleada", "./assets/BarraOleada.png");
-    this.load.image("barraUnidades", "./assets/BarraUnid.png");
     this.load.image("bala", "./assets/flecha.png");
+    this.load.image("barraUnidades", "./assets/BarraUnid.png");    
+    this.load.image("barraunidadLigera", "./assets/best1.png");
+    this.load.image("barraUnidadMedia", "./assets/best2.png");
+    this.load.image("barraUnidadPesada", "./assets/best3.png");
+
   }
 
   create() {
@@ -68,6 +77,8 @@ export default class Game extends Phaser.Scene {
     this.torres = this.add.group();
     this.unidades = this.add.group();
     this.enemigos = this.add.group();
+    //this.mapasCompletados = this.add.group();
+    //this.mapasSinCompletar = this.add.group();
 
     this.cargaNivel();  //CARGA LOS DATOS SEGÚN EL NIVEL A JUGAR
 
@@ -89,9 +100,9 @@ export default class Game extends Phaser.Scene {
 
     //BARRA DE UNIDADES
     graphics.fillStyle(0x668AD8, 1);
-    this.add.image(85, 710, "barraUnidades").setScale(1.5);
-    this.add.image(220, 710, "barraUnidades").setScale(1.5);
-    this.add.image(355, 710, "barraUnidades").setScale(1.5);
+    this.add.image(85, 710, "barraUnidades").setScale(1.3);
+    this.add.image(220, 710, "barraUnidades").setScale(1.3);
+    this.add.image(355, 710, "barraUnidades").setScale(1.3);
     graphics.fillRect(435, 638, 22, 145);
 
     this.barraUnidades();
@@ -220,55 +231,66 @@ export default class Game extends Phaser.Scene {
   }
 
   //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES
-  //TIPOS:  0: LELANTO, 1: HYDRA, 2: EOLO
-  barraUnidades() {
+  //TIPOS:  0: UNIDADLIGERA, 1: UNIDADMEDIA, 2: UNIDADPESADA
+  barraUnidades() {   
     //DISPONEMOS DE TRES CASILLAS
     for (let i = 0; i < 3; i++) {
-      let tipo = Phaser.Math.Between(0, this.nivel - 1);
+      this.nuevaUnidad(i);
+    }
+  }
+
+  nuevaUnidad(casilla){
+   this.tipoUnidad = "";
+    let tipo = Phaser.Math.Between(0, 2);     
       switch (tipo) {
         //CREACIÓN DE UNIDADES
         case 0:
-          this.casillaUnidad(i, "unidad");
+          this.tipoUnidad = "unidadL";
           break;
         case 1:
-          this.casillaUnidad(i, "hydra");
+         this.tipoUnidad = "unidadM";
           break;
         case 2:
-          this.casillaUnidad(i, "eolo");
+          this.tipoUnidad = "unidadP";
           break;
       }
-    }
+      this.casillaUnidad(casilla, this.tipoUnidad);
   }
     
   //CREA LA CASILLA DE LA UNIDAD DICHA
   casillaUnidad(casilla, tipo) {
     switch (casilla) {
-      case 0:
-        this.unid0 = this.add.image(88, 698, tipo).setScale(0.12).setInteractive();
-        this.seleccUnidad(this.unid0, tipo);
+      case 0:        
+        this.unid0 = this.add.image(88, 698, tipo).setScale(0.2).setInteractive();
+        this.seleccUnidad(this.unid0, tipo, casilla);
         break;
       case 1:
-        this.unid1 = this.add.image(223, 698, tipo).setScale(0.12).setInteractive();;
-        this.seleccUnidad(this.unid1, tipo);
+        this.unid1 = this.add.image(223, 698, tipo).setScale(0.2).setInteractive();
+        this.seleccUnidad(this.unid1, tipo, casilla);
         break;
       case 2:
-        this.unid2 = this.add.image(358, 698, tipo).setScale(0.12).setInteractive();;;
-        this.seleccUnidad(this.unid2, tipo);
+        this.unid2 = this.add.image(358, 698, tipo).setScale(0.2).setInteractive();
+        this.seleccUnidad(this.unid2, tipo, casilla);
         break;
     }
   }
   
   //SELECCIONA UNIDAD
-  seleccUnidad(unidX, tipo) {
+  seleccUnidad(unidX, tipo, casilla) {
     unidX.on('pointerdown', pointer => {
       if (this.unidCargada) {
         switch (tipo) {
-          case "unidad":
-            this.unidades.add(new Lelanto(this, this.posXUnid, this.posYUnid, this.posRelativa));
+          case "unidadL":
+            this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));    
+            this.nuevaUnidad(casilla);        
             break;
-          case "hydra":
+          case "unidadM":
+            this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
+            this.nuevaUnidad(casilla);
             break;
-          case "eolo":
+          case "unidadP":
+            this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));
+            this.nuevaUnidad(casilla);
             break;
         }
         this.tiempoUltUnid = 0;
