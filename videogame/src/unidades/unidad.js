@@ -1,6 +1,6 @@
 import GameObjectsGO from "../gameObjects.js";
-import {getPause} from '../../game.js';
 
+let pause = false;
 
 export default class Unidad extends GameObjectsGO {
     constructor(scene, daño, x, y, posRelativa, cad, type){ 
@@ -26,7 +26,7 @@ export default class Unidad extends GameObjectsGO {
 
     //MOVIMIENTO DE LA UNIDAD
     mov(){
-        if (!this.pausa) {
+        if (!this.pausa && !pause) {
             switch (this.game.nivel) {
                 case 1:
                     this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
@@ -66,25 +66,27 @@ export default class Unidad extends GameObjectsGO {
     //ATAQUE UNIDAD <-> ENEMIGO (SÓLO COGE LA COLISIÓN UNA VEZ, NO SE PUEDE HACER EN LAS DOS CLASES)
     //OBJ1 == UNIDAD    OBJ2 == ENEMIGO
     ataque(obj1, obj2){ 
-        if (obj1.enemigo == undefined && obj2.unidad == undefined) {    //AMBOS HAN DE ESTAR UNDEFINED PARA SABER QUE NO ESTÁN YA ATACANDO A ALGUIEN
+        if(!pause){
+            if (obj1.enemigo == undefined && obj2.unidad == undefined) {    //AMBOS HAN DE ESTAR UNDEFINED PARA SABER QUE NO ESTÁN YA ATACANDO A ALGUIEN
             obj1.pausa = true;
             obj2.pausa = true;
             obj1.enemigo = obj2;
             obj2.unidad = obj1;
-        }
-        //NOS ASEGURAMOS QUE EL ATAQUE ES UNO A UNO
-        if (obj1.enemigo == obj2)  super.ataque(obj1, obj2);
-        if (obj2.unidad == obj1)   super.ataque(obj2, obj1);
+            }
+            //NOS ASEGURAMOS QUE EL ATAQUE ES UNO A UNO
+            if (obj1.enemigo == obj2)  super.ataque(obj1, obj2);
+            if (obj2.unidad == obj1)   super.ataque(obj2, obj1);
 
-        //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
-        if (obj1.vida <= 0) {
-            obj1.onDestroy();
-            obj1.destroy();
-        }
-        if (obj2.vida <= 0) {
-            obj2.onDestroy();
-            obj2.destroy();
-        }
+            //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
+            if (obj1.vida <= 0) {
+                obj1.onDestroy();
+                obj1.destroy();
+            }
+            if (obj2.vida <= 0) {
+                obj2.onDestroy();
+                obj2.destroy();
+            }
+        }        
     }
 
     //ACCIONES CORRESPONDIENTES TRAS LA ELIMINACIÓN DE UNA UNIDAD
@@ -96,10 +98,13 @@ export default class Unidad extends GameObjectsGO {
         }
     }
 
-    preUpdate(time, delta) {
-        if(getPause() == false) {
-            this.mov();
-            //console.log("entra en preudpate de unidad");
-        }
+    preUpdate(time, delta) {       
+        this.mov();
     }
+}
+
+export function setPauseUnidad(p){
+    if(pause) pause = false;
+    else pause = true;
+    console.log("Unidades pausadas");
 }

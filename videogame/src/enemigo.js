@@ -1,5 +1,6 @@
 import GameObjectsGO from './gameObjects.js';
-import {getPause} from '../game.js';
+
+let pause = false;
 
 export default class Enemigo extends GameObjectsGO {
     constructor(scene, x, y, type){ 
@@ -26,7 +27,7 @@ export default class Enemigo extends GameObjectsGO {
 
     //MOVIMIENTO DEL ENEMIGO
     movEnem(){
-        if (!this.pausa) {
+        if (!this.pausa && !pause) {
             switch (this.game.nivel) {
                 case 1:
                     this.setPosition(this.t * 25, this.n + 150 * Math.sin(this.t/7));
@@ -82,12 +83,15 @@ export default class Enemigo extends GameObjectsGO {
         }
         this.game.ptosExp += this.exp;  //SUMAMOS LOS PTOS DE EXP DEL ENEMIGO
         super.muestraPtos();    //ACTUALIZAMOS LOS PTOS DE EXP
-    }
+    }  
 
-    preUpdate() {
-        if(getPause() == false) {
-            this.movEnem();
-            //console.log("entra en preudpate de enemigo");
-        }
-    }
+    preUpdate() {        
+        this.movEnem();
+    } 
+}
+
+export function setPauseEnemigo(){
+    if(pause) pause = false;
+    else pause = true;
+    console.log("Enemigos pausados");
 }

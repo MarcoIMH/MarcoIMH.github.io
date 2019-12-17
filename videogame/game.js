@@ -3,6 +3,9 @@ import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
 import {getNivelActual} from './src/mapa.js';
+import {setPauseEnemigo} from './src/enemigo.js';
+import {setPauseUnidad} from './src/unidades/unidad.js';
+import {setPauseTorre} from './src/torre.js';
 import UnidadLigera from "./src/unidades/unidadLigera.js";
 import UnidadMedia from "./src/unidades/unidadMedia.js";
 import UnidadPesada from "./src/unidades/unidadPesada.js";
@@ -131,8 +134,8 @@ export default class Game extends Phaser.Scene {
   
   update(time, delta) { 
     if(!this.partidaPausada){
-      if (this.derrota == true) this.scene.start("Derrota");   
-      if (this.victoria == true)this.scene.start("Victoria");
+      if (this.derrota == true)   this.scene.start("Derrota");   
+      if (this.victoria == true)  this.scene.start("Victoria");
 
       //COLISIONES
       //SI HAY TORRES EN EL MAPA
@@ -215,7 +218,7 @@ export default class Game extends Phaser.Scene {
           this.tiempoEnem = Phaser.Math.Between(100, 3000);
         }
       }
-      else {  this.tiempoUltEnem += delta;  }
+      else{  this.tiempoUltEnem += delta;  }
 
       //GENERACIÓN DE UNIDADES
       if (!this.unidCargada) {
@@ -223,18 +226,21 @@ export default class Game extends Phaser.Scene {
         else {  this.tiempoUltUnid += delta;  }
         this.barraTiempoUnid();
       }
-    }    
+    }     
   }
 
   cargaMenuPausa(menuPause){
       menuPause.on('pointerdown', pointer => {      
         if(!this.partidaPausada){
-           this.partidaPausada = true;
+          setPauseUnidad();
+          setPauseEnemigo();  
+          setPauseTorre();         
           console.log("Partida pausada");
         }else if(this.partidaPausada){
            this.partidaPausada = false;
           console.log("Partida no pausada");
-        }       
+        }   
+
         //menuPause.destroy();     
     });
   }
@@ -477,10 +483,4 @@ export default class Game extends Phaser.Scene {
         break;
     }
   }
-}
-
-
-//DEVUELVE SI EL JUEGO ESTÁ EN PAUSA O NO
-export function getPause() {
-    return partidaPausada;
 }

@@ -1,5 +1,7 @@
 import GameObjectsGO from "./gameObjects.js";
 
+let pause = false;
+
 export default class Torre extends GameObjectsGO {
     constructor(scene, x, y, level, type){ 
         super(scene, 10, x, y, 50, type);
@@ -55,7 +57,7 @@ export default class Torre extends GameObjectsGO {
 
     //ATAQUE DE LA TORRE
     ataque(torre, enemigo) { 
-        if (enemigo.active == true) super.ataque(torre, enemigo);
+        if (enemigo.active == true && !pause) super.ataque(torre, enemigo);
 
         //SI EL ENEMIGO SE QUEDA SIN VIDA LO DESTRUIMOS
         if (enemigo.vida <= 0) {
@@ -67,4 +69,10 @@ export default class Torre extends GameObjectsGO {
     preUpdate() {
         this.game.children.bringToTop(this);
     }
+}
+
+export function setPauseTorre(){
+    if(pause) pause = false;
+    else pause = true;
+    console.log("Torres pausadas");
 }
