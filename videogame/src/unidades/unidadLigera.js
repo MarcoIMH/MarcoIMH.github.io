@@ -10,6 +10,6 @@ export default class UnidadLigera extends Unidad {
         
         //VARIABLES AUXILIARES
         this.vida = 100;
-        this.game.tiempoUnid = 5000; 
+        this.game.tiempoUnid = 4000; 
     }
 }

@@ -230,8 +230,7 @@ export default class Game extends Phaser.Scene {
     else graphics.fillRect(435, 783, 22, -145);
   }
 
-  //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES
-  //TIPOS:  0: UNIDADLIGERA, 1: UNIDADMEDIA, 2: UNIDADPESADA
+  //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES INICIAL  
   barraUnidades() {   
     //DISPONEMOS DE TRES CASILLAS
     for (let i = 0; i < 3; i++) {
@@ -239,6 +238,8 @@ export default class Game extends Phaser.Scene {
     }
   }
 
+  //MÉTODO PARA CREAR UNA NUEVA UNIDAD EN UNA CASILLA DETERMINADA
+  //TIPOS:  0: UNIDADLIGERA, 1: UNIDADMEDIA, 2: UNIDADPESADA
   nuevaUnidad(casilla){
    this.tipoUnidad = "";
     let tipo = Phaser.Math.Between(0, 2);     
@@ -254,45 +255,42 @@ export default class Game extends Phaser.Scene {
           this.tipoUnidad = "unidadP";
           break;
       }
-      this.casillaUnidad(casilla, this.tipoUnidad);
+      this.setCasillaUnidad(casilla, this.tipoUnidad);
   }
     
   //CREA LA CASILLA DE LA UNIDAD DICHA
-  casillaUnidad(casilla, tipo) {
-    switch (casilla) {
+  setCasillaUnidad(casilla, tipo) {
+    this.unid;
+    switch (casilla) {      
       case 0:        
-        this.unid0 = this.add.image(88, 698, tipo).setScale(0.2).setInteractive();
-        this.seleccUnidad(this.unid0, tipo, casilla);
+        this.unid = this.add.image(88, 698, tipo).setScale(0.2).setInteractive();        
         break;
       case 1:
-        this.unid1 = this.add.image(223, 698, tipo).setScale(0.2).setInteractive();
-        this.seleccUnidad(this.unid1, tipo, casilla);
+        this.unid = this.add.image(223, 698, tipo).setScale(0.2).setInteractive();
         break;
       case 2:
-        this.unid2 = this.add.image(358, 698, tipo).setScale(0.2).setInteractive();
-        this.seleccUnidad(this.unid2, tipo, casilla);
+        this.unid = this.add.image(358, 698, tipo).setScale(0.2).setInteractive();
         break;
     }
+    this.invocarUnidad(this.unid, tipo, casilla);
   }
   
-  //SELECCIONA UNIDAD
-  seleccUnidad(unidX, tipo, casilla) {
+  //INVOCA UNA UNIDAD AL SELECCIONARLA EN LA BARRA DE UNIDADES SI ESTÁ CARGADA
+  invocarUnidad(unidX, tipo, casilla) {
     unidX.on('pointerdown', pointer => {
       if (this.unidCargada) {
         switch (tipo) {
           case "unidadL":
-            this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));    
-            this.nuevaUnidad(casilla);        
+            this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));     
             break;
           case "unidadM":
             this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
-            this.nuevaUnidad(casilla);
             break;
           case "unidadP":
-            this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));
-            this.nuevaUnidad(casilla);
+            this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));            
             break;
         }
+        this.nuevaUnidad(casilla); 
         this.tiempoUltUnid = 0;
         this.unidCargada = false;
       }

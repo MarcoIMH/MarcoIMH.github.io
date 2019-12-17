@@ -9,7 +9,7 @@ export default class UnidadMedia extends Unidad {
         this.setScale(0.1);
         
         //VARIABLES AUXILIARES
-        this.vida = 100;
-        this.game.tiempoUnid = 5000; 
+        this.vida = 150;
+        this.game.tiempoUnid = 6000; 
     }
 }
