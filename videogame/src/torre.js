@@ -71,7 +71,7 @@ export default class Torre extends GameObjectsGO {
     }
 }
 
-export function setPauseTorre(){
+export function switchPauseTorre(){
     if(pause) pause = false;
     else pause = true;
     console.log("Torres pausadas");

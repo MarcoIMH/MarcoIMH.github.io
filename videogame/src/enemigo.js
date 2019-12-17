@@ -90,7 +90,7 @@ export default class Enemigo extends GameObjectsGO {
     } 
 }
 
-export function setPauseEnemigo(){
+export function switchPauseEnemigo(){
     if(pause) pause = false;
     else pause = true;
     console.log("Enemigos pausados");

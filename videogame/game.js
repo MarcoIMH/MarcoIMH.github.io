@@ -2,10 +2,13 @@ import Torre from './src/torre.js';
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
+import MenuPausa from './src/menuPausa.js';
+import {getBotonMenu} from './src/menuPausa.js';
+import {getBotonVolver} from './src/menuPausa.js';
 import {getNivelActual} from './src/mapa.js';
-import {setPauseEnemigo} from './src/enemigo.js';
-import {setPauseUnidad} from './src/unidades/unidad.js';
-import {setPauseTorre} from './src/torre.js';
+import {switchPauseEnemigo} from './src/enemigo.js';
+import {switchPauseUnidad} from './src/unidades/unidad.js';
+import {switchPauseTorre} from './src/torre.js';
 import UnidadLigera from "./src/unidades/unidadLigera.js";
 import UnidadMedia from "./src/unidades/unidadMedia.js";
 import UnidadPesada from "./src/unidades/unidadPesada.js";
@@ -17,13 +20,11 @@ const costeTorreB = 200; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
-let partidaPausada;
-
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
     this.nivel = 1;
-    partidaPausada = false;
+    this.partidaPausada = false;
   }
   
   preload() {  
@@ -49,7 +50,15 @@ export default class Game extends Phaser.Scene {
     this.load.image("barraunidadLigera", "./assets/best1.png");
     this.load.image("barraUnidadMedia", "./assets/best2.png");
     this.load.image("barraUnidadPesada", "./assets/best3.png");
-    this.load.image('menuImage', "./assets/menuPulsado.png", 270, 180);
+    this.load.image('menu0', "./assets/Menu.png");
+    this.load.image("menu1", "./assets/MenuMarcado.png");
+    this.load.image("menu1", "./assets/MenuPulsado.png");
+    this.load.image("reiniciar0", "./assets/ReiniciarBase.png");
+    this.load.image("reiniciar1", "./assets/ReiniciarMarcado.png");
+    this.load.image("reiniciar2", "./assets/ReiniciarPulsado.png");
+    this.load.image("volver0", "./assets/VolverBase.png");
+    this.load.image("volver1", "./assets/VolverMarcado.png");
+    this.load.image("volver2", "./assets/VolverPulsado.png");
   }
 
   create() {
@@ -86,9 +95,6 @@ export default class Game extends Phaser.Scene {
     //this.mapasSinCompletar = this.add.group();
 
     this.cargaNivel();  //CARGA LOS DATOS SEGÚN EL NIVEL A JUGAR
-
-    //CREACION DE MENÚ
-
 
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
@@ -127,9 +133,14 @@ export default class Game extends Phaser.Scene {
     this.add.image(120, 65, "barraOleada").setScale(1.15);
     this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
     
-    //MENU    
-    this.menuPause = this.add.image(1200, 710, "menuImage").setScale(0.3).setInteractive();
-    this.cargaMenuPausa(this.menuPause);
+    //MENU   
+    this.menuPause;
+    this.fondoMenuPausa;
+    this.menuPausaBotonVolver;
+    this.menuPausaBotonMenu;
+    this.partidaPausada = false;
+    this.botonPausa = this.add.image(1200, 710, "menu0").setScale(0.6).setInteractive();    
+    this.cargaMenuPausa(this.botonPausa);
    }
   
   update(time, delta) { 
@@ -218,7 +229,7 @@ export default class Game extends Phaser.Scene {
           this.tiempoEnem = Phaser.Math.Between(100, 3000);
         }
       }
-      else{  this.tiempoUltEnem += delta;  }
+      else if(!this.partidaPausada) { this.tiempoUltEnem += delta;  }
 
       //GENERACIÓN DE UNIDADES
       if (!this.unidCargada) {
@@ -226,22 +237,81 @@ export default class Game extends Phaser.Scene {
         else {  this.tiempoUltUnid += delta;  }
         this.barraTiempoUnid();
       }
-    }     
+    }else{
+      // ACTUALIZACION BOTONES
+      //BOTÓN PARA VOLVER AL MAPA
+      if(this.menuPausaBotonMenu != undefined){        
+        this.menuPausaBotonMenu.on('pointerover', pointer => {
+            this.menuPausaBotonVolver.destroy();
+            this.menuPausaBotonMenu.destroy();
+            this.menuPausaBotonVolver = this.add.image(515, 380, "reiniciar0").setScale(0.7).setInteractive();
+            this.menuPausaBotonMenu = this.add.image(885, 380, "volver1").setScale(0.7).setInteractive();
+            this.menuPausaBotonMenu.on('pointerdown', pointer => {
+                this.menuPausaBotonMenu.destroy();
+                this.menuPausaBotonMenu = this.add.image(885, 380, "volver2").setScale(0.7).setInteractive();
+                this.menuPausaBotonMenu.on('pointerup', pointer => { 
+                    //DEVOLVEMOS LOS OBJETOS A SU ESTADO NATURAL
+                    switchPauseUnidad();
+                    switchPauseEnemigo();  
+                    switchPauseTorre();
+                    console.log("Pausa off. Saliendo del menu pausa.");
+                    //QUITAMOS EL PAUSE DE LA PARTIDA
+                    this.partidaPausada = !this.partidaPausada;
+                    //CARGAMOS LA ESCENA DE MAPA
+                    this.scene.start("Mapa");       
+                  });
+              });
+        });
+      }
+      //BOTÓN PARA VOLVER A LA PARTIDA
+      if(this.menuPausaBotonVolver != undefined){
+        
+        this.menuPausaBotonVolver.on('pointerover', pointer => {
+            this.menuPausaBotonVolver.destroy();
+            this.menuPausaBotonMenu.destroy();
+            this.menuPausaBotonVolver = this.add.image(515, 380, "reiniciar1").setScale(0.7).setInteractive();
+            this.menuPausaBotonMenu = this.add.image(885, 380, "volver0").setScale(0.7).setInteractive();
+            this.menuPausaBotonVolver.on('pointerdown', pointer => {
+                this.menuPausaBotonVolver.destroy();
+                this.menuPausaBotonVolver = this.add.image(515, 380, "reiniciar2").setScale(0.7).setInteractive();
+                this.menuPausaBotonVolver.on('pointerup', pointer => {  
+                  //CERRAMOS EL MENU 
+                  this.fondoMenuPausa.destroy();
+                  this.menuPausaBotonVolver.destroy();
+                  this.menuPausaBotonMenu.destroy(); 
+                  this.partidaPausada = !this.partidaPausada; 
+                  //ORDENAMOS A LOS OBJETOS QUE SE REANUDEN
+                  switchPauseUnidad();
+                  switchPauseEnemigo();  
+                  switchPauseTorre(); 
+                  console.log("Pausa off. Saliendo del menu pausa.");
+                });
+            });
+        });
+      }
+    }
   }
 
-  cargaMenuPausa(menuPause){
-      menuPause.on('pointerdown', pointer => {      
-        if(!this.partidaPausada){
-          setPauseUnidad();
-          setPauseEnemigo();  
-          setPauseTorre();         
-          console.log("Partida pausada");
-        }else if(this.partidaPausada){
-           this.partidaPausada = false;
-          console.log("Partida no pausada");
-        }   
+  //BOTON MENU INGAME
+  cargaMenuPausa(botonPausa){
+      botonPausa.on('pointerdown', pointer => {  
+        //PAUSAMOS PARTIDA
+        this.partidaPausada = !this.partidaPausada; 
 
-        //menuPause.destroy();     
+        //this.scene.pause('main');
+        //this.menuPause = new MenuPausa(this);
+        //ORDENAMOS A LAS OBJETOS QUE PAREN
+        switchPauseUnidad();
+        switchPauseEnemigo();  
+        switchPauseTorre();  
+        //ABRIMOS EL MENU   
+        this.fondoMenuPausa  = this.add.image(0, 0, "fondoCols").setOrigin(0);
+        this.menuPausaBotonMenu  = this.add.image(515, 380, "reiniciar0").setScale(0.7).setInteractive();
+        this.menuPausaBotonVolver = this.add.image(885, 380, "volver0").setScale(0.7).setInteractive(); 
+              
+        console.log("Pausa on. Abriendo menu pausa.");
+     
+        //else this.scene.resume('main');     
     });
   }
 
@@ -300,7 +370,6 @@ export default class Game extends Phaser.Scene {
       }
       this.invocarUnidad(this.unid, tipo, casilla);
     }
-
   }
   
   //INVOCA UNA UNIDAD AL SELECCIONARLA EN LA BARRA DE UNIDADES SI ESTÁ CARGADA

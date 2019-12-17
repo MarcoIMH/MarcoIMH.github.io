@@ -103,7 +103,7 @@ export default class Unidad extends GameObjectsGO {
     }
 }
 
-export function setPauseUnidad(p){
+export function switchPauseUnidad(p){
     if(pause) pause = false;
     else pause = true;
     console.log("Unidades pausadas");
