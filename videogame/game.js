@@ -2,11 +2,10 @@ import Torre from './src/torre.js';
 import Base from './src/base.js';
 import Enemigo from './src/enemigo.js';
 import Nucleo from './src/nucleo.js';
-import Lelanto from './src/unidades/lelanto.js';
+import {getNivelActual} from './src/mapa.js';
 import UnidadLigera from "./src/unidades/unidadLigera.js";
 import UnidadMedia from "./src/unidades/unidadMedia.js";
 import UnidadPesada from "./src/unidades/unidadPesada.js";
-import {getNivelActual} from './src/mapa.js';
 
 //VARIABLES CONSTANTES
 const costeTorreBase = 150;  //COSTE DE CREAR TORRE BASE
@@ -15,10 +14,13 @@ const costeTorreB = 200; //COSTE DE AUMENTAR A TORRE_B
 const costeTorreAA = 120; //COSTE DE MEJORAR LA TORRE_A
 const costeTorreBB = 150; //COSTE DE MEJORAR LA TORRE_B
 
+let partidaPausada;
+
 export default class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'main' });
     this.nivel = 1;
+    partidaPausada = false;
   }
   
   preload() {  
@@ -44,7 +46,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("barraunidadLigera", "./assets/best1.png");
     this.load.image("barraUnidadMedia", "./assets/best2.png");
     this.load.image("barraUnidadPesada", "./assets/best3.png");
-
+    this.load.image('menuImage', "./assets/menuPulsado.png", 270, 180);
   }
 
   create() {
@@ -70,7 +72,7 @@ export default class Game extends Phaser.Scene {
     this.pausaOleada = false; //MARCA SI ESTAMOS ENTRE UNA OLEADA Y LA SIGUIENTE
     this.numEnems = 0;  //LLEVA EL RECUENTO DE LOS ENEMIGOS DE CADA OLEADA QUE VAN APARECIENDO
     this.numOleada = 1; //OLEADA ACTUAL
-    this.vidaNucleo = 1000;
+    this.vidaNucleo = 1000;  
 
     //ARRAYS DE OBJETOS DEL JUEGO
     this.bases = this.add.group();
@@ -81,6 +83,9 @@ export default class Game extends Phaser.Scene {
     //this.mapasSinCompletar = this.add.group();
 
     this.cargaNivel();  //CARGA LOS DATOS SEGÚN EL NIVEL A JUGAR
+
+    //CREACION DE MENÚ
+
 
     //CREACIÓN DE TORRES
     this.bases.children.iterate(item => {
@@ -105,7 +110,10 @@ export default class Game extends Phaser.Scene {
     this.add.image(355, 710, "barraUnidades").setScale(1.3);
     graphics.fillRect(435, 638, 22, 145);
 
-    this.barraUnidades();
+    //RELLENAMOS LA BARRA DE UNIDADES
+    for (let i = 0; i < 3; i++) {
+      this.nuevaUnidad(i);
+    }
 
     //SITUAMOS EL NÚCLEO DELANTE DEL TODO
     this.children.bringToTop(this.nucleo);
@@ -115,134 +123,144 @@ export default class Game extends Phaser.Scene {
     this.ptos = this.add.text(340, 50, this.ptosExp, { font: "40px Courier", fill: "#FFFFFF"});
     this.add.image(120, 65, "barraOleada").setScale(1.15);
     this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+    
+    //MENU    
+    this.menuPause = this.add.image(1200, 710, "menuImage").setScale(0.3).setInteractive();
+    this.cargaMenuPausa(this.menuPause);
    }
   
   update(time, delta) { 
-    if (this.derrota == true) {
-      this.scene.start("Derrota");
-    }  
-    if (this.victoria == true) {
-      this.scene.start("Victoria");
-    }
+    if(!this.partidaPausada){
+      if (this.derrota == true) this.scene.start("Derrota");   
+      if (this.victoria == true)this.scene.start("Victoria");
 
-    //COLISIONES
-    //SI HAY TORRES EN EL MAPA
-    if (this.enemigos != undefined) {
-      this.enemigos.children.iterate(enem => {    
-        if (enem != undefined) { 
-          //COLISIÓN CON NÚCLEO
-          this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
-          this.torres.children.iterate(item => {        
-            //ATAQUE TORRE -> ENEMIGO
-            if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
-              item.ataque(item, enem);
-            }
-          });
-          //SI HAY UNIDADES EN EL MAPA
-          if (this.unidades != undefined) {
-            this.unidades.children.iterate(unid => {
-              //ATAQUE UNIDAD <-> ENEMIGO
-              this.physics.add.collider(unid, enem, unid.ataque, null, this);
+      //COLISIONES
+      //SI HAY TORRES EN EL MAPA
+      if (this.enemigos != undefined) {
+        this.enemigos.children.iterate(enem => {    
+          if (enem != undefined) { 
+            //COLISIÓN CON NÚCLEO
+            this.physics.add.collider(enem, this.nucleo, enem.ataqueNucleo, null, this);
+            this.torres.children.iterate(item => {        
+              //ATAQUE TORRE -> ENEMIGO
+              if (enem.x > item.x - item.rango && enem.x < item.x + item.rango && enem.y > item.y - item.rango && enem.y < item.y + item.rango) {
+                item.ataque(item, enem);
+              }
             });
+            //SI HAY UNIDADES EN EL MAPA
+            if (this.unidades != undefined) {
+              this.unidades.children.iterate(unid => {
+                //ATAQUE UNIDAD <-> ENEMIGO
+                this.physics.add.collider(unid, enem, unid.ataque, null, this);
+              });
+            }
           }
+          else { this.enemigos.remove(enem); }
+        });
+      }
+
+      //GENERACIÓN DE ENEMIGOS
+      if (this.tiempoUltEnem >= this.tiempoEnem && !this.pausaOleada) {
+        let creaEnem = false;
+        switch (this.numOleada)
+        {
+          case 1:
+            if (this.numEnems < this.oleada1) creaEnem = true;
+            else {
+              this.pausaOleada = true;
+              this.numOleada++;
+              this.numEnems = 0;
+              setTimeout(() => {
+                this.pausaOleada = false;
+                this.oled.destroy();
+                this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+              }, 5000);
+            }
+            break;
+          case 2:
+              if (this.numEnems < this.oleada2) creaEnem = true;
+              else {
+                this.pausaOleada = true;
+                this.numOleada++;
+                this.numEnems = 0;
+                setTimeout(() => {
+                  this.pausaOleada = false;
+                  this.oled.destroy();
+                  this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+                }, 5000);
+              }
+            break;
+          case 3:
+              if (this.numEnems < this.oleada3) creaEnem = true;
+              else {
+                this.pausaOleada = true;
+                this.numOleada++;
+                this.numEnems = 0;
+                setTimeout(() => {
+                  this.pausaOleada = false;
+                  this.oled.destroy();
+                  this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
+                }, 5000);
+              }
+            break;
+          case 4:
+              if (this.numEnems < this.oleada4) creaEnem = true;
+              else this.victoria = true;  //FIN__VICTORIA
+            break;
         }
-        else { this.enemigos.remove(enem); }
-      });
-    }
-
-    //GENERACIÓN DE ENEMIGOS
-    if (this.tiempoUltEnem >= this.tiempoEnem && !this.pausaOleada) {
-      let creaEnem = false;
-      switch (this.numOleada)
-      {
-        case 1:
-          if (this.numEnems < this.oleada1) creaEnem = true;
-          else {
-            this.pausaOleada = true;
-            this.numOleada++;
-            this.numEnems = 0;
-            setTimeout(() => {
-              this.pausaOleada = false;
-              this.oled.destroy();
-              this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
-            }, 5000);
-          }
-          break;
-        case 2:
-            if (this.numEnems < this.oleada2) creaEnem = true;
-            else {
-              this.pausaOleada = true;
-              this.numOleada++;
-              this.numEnems = 0;
-              setTimeout(() => {
-                this.pausaOleada = false;
-                this.oled.destroy();
-                this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
-              }, 5000);
-            }
-          break;
-        case 3:
-            if (this.numEnems < this.oleada3) creaEnem = true;
-            else {
-              this.pausaOleada = true;
-              this.numOleada++;
-              this.numEnems = 0;
-              setTimeout(() => {
-                this.pausaOleada = false;
-                this.oled.destroy();
-                this.oled = this.add.text(122, 50, this.numOleada + "/4", { font: "40px Courier", fill: "#FFFFFF"});
-              }, 5000);
-            }
-          break;
-        case 4:
-            if (this.numEnems < this.oleada4) creaEnem = true;
-            else this.victoria = true;  //FIN__VICTORIA
-          break;
+        if (creaEnem) {
+          this.enemigos.add(new Enemigo(this, this.posXEnem, this.posYEnem, "enemigo"));
+          this.tiempoUltEnem = 0;
+          this.numEnems++;
+          this.tiempoEnem = Phaser.Math.Between(100, 3000);
+        }
       }
-      if (creaEnem) {
-        this.enemigos.add(new Enemigo(this, this.posXEnem, this.posYEnem, "enemigo"));
-        this.tiempoUltEnem = 0;
-        this.numEnems++;
-        this.tiempoEnem = Phaser.Math.Between(100, 3000);
-      }
-    }
-    else {  this.tiempoUltEnem += delta;  }
+      else {  this.tiempoUltEnem += delta;  }
 
-    //GENERACIÓN DE UNIDADES
-    if (!this.unidCargada) {
-      if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }
-      else {  this.tiempoUltUnid += delta;  }
-      this.barraTiempoUnid();
-    }
+      //GENERACIÓN DE UNIDADES
+      if (!this.unidCargada) {
+        if (this.tiempoUltUnid >= this.tiempoUnid) {  this.unidCargada = true;  }
+        else {  this.tiempoUltUnid += delta;  }
+        this.barraTiempoUnid();
+      }
+    }    
+  }
+
+  cargaMenuPausa(menuPause){
+      menuPause.on('pointerdown', pointer => {      
+        if(!this.partidaPausada){
+           this.partidaPausada = true;
+          console.log("Partida pausada");
+        }else if(this.partidaPausada){
+           this.partidaPausada = false;
+          console.log("Partida no pausada");
+        }       
+        //menuPause.destroy();     
+    });
   }
 
   //BARRA DE TIEMPO DE LAS UNIDADES
   barraTiempoUnid() {
-    //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
-    let graphics = this.add.graphics();
-    graphics.fillStyle(0xA9A9A9, 1);
-    graphics.fillRect(435, 638, 22, 145);
-    graphics.fillStyle(0x668AD8, 1);
-    if (this.tiempoUltUnid <= this.tiempoUnid) {
-        let barra = (145 * this.tiempoUltUnid) / this.tiempoUnid;
-        graphics.fillRect(435, 783, 22, -barra);
-    }
-    else graphics.fillRect(435, 783, 22, -145);
-  }
-
-  //GENERADOR DE UNIDADES ALEATORIAS PARA LA BARRA DE UNIDADES INICIAL  
-  barraUnidades() {   
-    //DISPONEMOS DE TRES CASILLAS
-    for (let i = 0; i < 3; i++) {
-      this.nuevaUnidad(i);
-    }
-  }
+    if(!this.partidaPausada){
+      //MISMA MECÁNICA QUE LA BARRA DE SALUD DEL NÚCLEO
+      let graphics = this.add.graphics();
+      graphics.fillStyle(0xA9A9A9, 1);
+      graphics.fillRect(435, 638, 22, 145);
+      graphics.fillStyle(0x668AD8, 1);
+      if (this.tiempoUltUnid <= this.tiempoUnid) {
+          let barra = (145 * this.tiempoUltUnid) / this.tiempoUnid;
+          graphics.fillRect(435, 783, 22, -barra);
+      }
+      else graphics.fillRect(435, 783, 22, -145);
+    }    
+  } 
 
   //MÉTODO PARA CREAR UNA NUEVA UNIDAD EN UNA CASILLA DETERMINADA
   //TIPOS:  0: UNIDADLIGERA, 1: UNIDADMEDIA, 2: UNIDADPESADA
   nuevaUnidad(casilla){
-   this.tipoUnidad = "";
-    let tipo = Phaser.Math.Between(0, 2);     
+    if(!this.partidaPausada){
+      this.tipoUnidad = "";
+      let tipo = Phaser.Math.Between(0, 2);     
       switch (tipo) {
         //CREACIÓN DE UNIDADES
         case 0:
@@ -256,71 +274,80 @@ export default class Game extends Phaser.Scene {
           break;
       }
       this.setCasillaUnidad(casilla, this.tipoUnidad);
+    }   
   }
     
-  //CREA LA CASILLA DE LA UNIDAD DICHA
+  //CREA LA UNIDAD INDICADA EN LA CASILLA SOLICITADA
   setCasillaUnidad(casilla, tipo) {
-    this.unid;
-    switch (casilla) {      
-      case 0:        
-        this.unid = this.add.image(88, 698, tipo).setScale(0.2).setInteractive();        
-        break;
-      case 1:
-        this.unid = this.add.image(223, 698, tipo).setScale(0.2).setInteractive();
-        break;
-      case 2:
-        this.unid = this.add.image(358, 698, tipo).setScale(0.2).setInteractive();
-        break;
+    if(!this.partidaPausada){
+      this.unid;
+      switch (casilla) {      
+        case 0:        
+          this.unid = this.add.image(88, 698, tipo).setScale(0.2).setInteractive();        
+          break;
+        case 1:
+          this.unid = this.add.image(223, 698, tipo).setScale(0.2).setInteractive();
+          break;
+        case 2:
+          this.unid = this.add.image(358, 698, tipo).setScale(0.2).setInteractive();
+          break;
+      }
+      this.invocarUnidad(this.unid, tipo, casilla);
     }
-    this.invocarUnidad(this.unid, tipo, casilla);
+
   }
   
   //INVOCA UNA UNIDAD AL SELECCIONARLA EN LA BARRA DE UNIDADES SI ESTÁ CARGADA
-  invocarUnidad(unidX, tipo, casilla) {
-    unidX.on('pointerdown', pointer => {
-      if (this.unidCargada) {
-        switch (tipo) {
-          case "unidadL":
-            this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));     
-            break;
-          case "unidadM":
-            this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
-            break;
-          case "unidadP":
-            this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));            
-            break;
+  invocarUnidad(unidX, tipo, casilla) {  
+    if(!this.partidaPausada){
+      unidX.on('pointerdown', pointer => {      
+        if (this.unidCargada) {
+          unidX.destroy();  //BORRAMOS LA UNIDAD ANTERIOR Y CREAMOS UNA NUEVA EN BASE A LA SOLICITUD
+          switch (tipo) {
+            case "unidadL":            
+              this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));     
+              break;
+            case "unidadM":
+              this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
+              break;
+            case "unidadP":
+              this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));            
+              break;
+          }
+          this.nuevaUnidad(casilla); 
+          this.tiempoUltUnid = 0;
+          this.unidCargada = false;
         }
-        this.nuevaUnidad(casilla); 
-        this.tiempoUltUnid = 0;
-        this.unidCargada = false;
-      }
-    });
+      });
+    }    
   }
 
   //MÉTODO PARA GENERAR LAS BALAS
-  disparaBala(obj1, obj2) {
-    let pos1X = obj1.x;
-    let pos1Y = obj1.y;
-    let pos2X = obj2.x;
-    let pos2Y = obj2.y;
-    //CALCULAMOS EL VECTOR DE MOVIMIENTO DE LA BALA
-    let dirX = pos1X - pos2X;
-    let dirY = pos1Y - pos2Y;
-    //CREAMOS LA BALA
-    this.bala = new Bala(this, pos1X, pos1Y, dirX, dirY, "bala");
-    this.physics.add.collider(this.bala, obj2, () => {
-        console.log("Colisión");
-        this.bala.destroy();
-        obj2.vida -= obj1.daño;
-    });
+  disparaBala(obj1, obj2) {   
+    if(!this.partidaPausada){
+      let pos1X = obj1.x;
+      let pos1Y = obj1.y;
+      let pos2X = obj2.x;
+      let pos2Y = obj2.y;
+      //CALCULAMOS EL VECTOR DE MOVIMIENTO DE LA BALA
+      let dirX = pos1X - pos2X;
+      let dirY = pos1Y - pos2Y;
+      //CREAMOS LA BALA
+      this.bala = new Bala(this, pos1X, pos1Y, dirX, dirY, "bala");
+      this.physics.add.collider(this.bala, obj2, () => {
+          this.bala.destroy();
+          obj2.vida -= obj1.daño;
+      });
+    }     
   }
 
   //GESTIONA EL CAMBIO DE TORRE LLAMADO DESDE LA CLASE DE LA TORRE CORRESPONDIENTE
   mejoraTorre(p, q, object) {
-    switch (object.level) {
+    if(!this.partidaPausada){
+      switch (object.level) {
       case 'O':
         let ops, opcionA, opcionB;
-        if (!this.panelOpciones) {
+        if (!this.panelOpciones) {          
           if (q > 200) {
             ops = this.add.image(p, q - 150, "opciones").setScale(1.5);
             opcionA = this.add.image(p - 50, q - 155, "torreA").setScale(0.35).setInteractive();
@@ -389,7 +416,8 @@ export default class Game extends Phaser.Scene {
         }
         else { console.log("No dispone de los puntos de experiencia suficientes"); }
         break;
-    }
+      }
+    }    
   }
 
   cargaNivel() {
@@ -451,4 +479,10 @@ export default class Game extends Phaser.Scene {
         break;
     }
   }
+}
+
+
+//DEVUELVE SI EL JUEGO ESTÁ EN PAUSA O NO
+export function getPause() {
+    return partidaPausada;
 }

@@ -10,6 +10,6 @@ export default class UnidadPesada extends Unidad {
         
         //VARIABLES AUXILIARES
         this.vida = 230;
-        this.game.tiempoUnid = 10000; 
+        this.game.tiempoUnid = 12000; 
     }
 }

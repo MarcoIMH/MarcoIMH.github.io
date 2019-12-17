@@ -1,4 +1,6 @@
 import GameObjectsGO from "../gameObjects.js";
+import {getPause} from '../../game.js';
+
 
 export default class Unidad extends GameObjectsGO {
     constructor(scene, daño, x, y, posRelativa, cad, type){ 
@@ -71,7 +73,7 @@ export default class Unidad extends GameObjectsGO {
             obj2.unidad = obj1;
         }
         //NOS ASEGURAMOS QUE EL ATAQUE ES UNO A UNO
-        if (obj1.enemigo == obj2)   super.ataque(obj1, obj2);
+        if (obj1.enemigo == obj2)  super.ataque(obj1, obj2);
         if (obj2.unidad == obj1)   super.ataque(obj2, obj1);
 
         //SI ALGÚN OBJ SE QUEDA SIN VIDA LO DESTRUIMOS
@@ -95,6 +97,9 @@ export default class Unidad extends GameObjectsGO {
     }
 
     preUpdate(time, delta) {
-        this.mov();
+        if(getPause() == false) {
+            this.mov();
+            //console.log("entra en preudpate de unidad");
+        }
     }
 }

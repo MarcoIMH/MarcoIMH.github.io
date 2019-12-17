@@ -10,7 +10,7 @@ export default class Torre extends GameObjectsGO {
         this.mejora(x, y, level);
         this.usaBala = true;
     }
-
+    
     //MEJORA DE TORRES -- PRUEBA BASE, MOVER A HERENCIAS DE LA TORRE                  //*********//
     mejora(p, q) {
         //MODIFICAMOS LOS VALORES DE LA TORRE SEGÚN SU NIVEL

@@ -1,4 +1,5 @@
 import GameObjectsGO from './gameObjects.js';
+import {getPause} from '../game.js';
 
 export default class Enemigo extends GameObjectsGO {
     constructor(scene, x, y, type){ 
@@ -84,6 +85,9 @@ export default class Enemigo extends GameObjectsGO {
     }
 
     preUpdate() {
-        this.movEnem();
+        if(getPause() == false) {
+            this.movEnem();
+            //console.log("entra en preudpate de enemigo");
+        }
     }
 }
