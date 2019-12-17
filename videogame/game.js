@@ -298,28 +298,26 @@ export default class Game extends Phaser.Scene {
   }
   
   //INVOCA UNA UNIDAD AL SELECCIONARLA EN LA BARRA DE UNIDADES SI ESTÁ CARGADA
-  invocarUnidad(unidX, tipo, casilla) {  
-    if(!this.partidaPausada){
-      unidX.on('pointerdown', pointer => {      
-        if (this.unidCargada) {
-          unidX.destroy();  //BORRAMOS LA UNIDAD ANTERIOR Y CREAMOS UNA NUEVA EN BASE A LA SOLICITUD
-          switch (tipo) {
-            case "unidadL":            
-              this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));     
-              break;
-            case "unidadM":
-              this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
-              break;
-            case "unidadP":
-              this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));            
-              break;
-          }
-          this.nuevaUnidad(casilla); 
-          this.tiempoUltUnid = 0;
-          this.unidCargada = false;
+  invocarUnidad(unidX, tipo, casilla) {    
+    unidX.on('pointerdown', pointer => {      
+      if (this.unidCargada && !this.partidaPausada) {
+        unidX.destroy();  //BORRAMOS LA UNIDAD ANTERIOR Y CREAMOS UNA NUEVA EN BASE A LA SOLICITUD
+        switch (tipo) {
+          case "unidadL":            
+            this.unidades.add(new UnidadLigera(this, this.posXUnid, this.posYUnid, this.posRelativa));     
+            break;
+          case "unidadM":
+            this.unidades.add(new UnidadMedia(this, this.posXUnid, this.posYUnid, this.posRelativa));
+            break;
+          case "unidadP":
+            this.unidades.add(new UnidadPesada(this, this.posXUnid, this.posYUnid, this.posRelativa));            
+            break;
         }
-      });
-    }    
+        this.nuevaUnidad(casilla); 
+        this.tiempoUltUnid = 0;
+        this.unidCargada = false;
+      }
+    });   
   }
 
   //MÉTODO PARA GENERAR LAS BALAS
