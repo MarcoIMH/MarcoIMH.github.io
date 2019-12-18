@@ -6,17 +6,15 @@ import MiddleUnit from "./units/middleUnit.js";
 import HeavyUnit from "./units/heavyUnit.js";
 
 export default class Game extends Phaser.Scene {
-  constructor() {
-    super({ key: 'main' });
-    this.partidaPausada = false;
-  }
-  preload(){
-
-  }
-  create(){
-
-  }
-  update(){
-
-  }
+	constructor(){
+		super({ key: 'game'});
+		this.stage;
+	}
+	preload(){
+		console.log("entra en preload");
+	}
+	create(){
+		let pointer = this.input.activePointer;
+		this.input.mouse.disableContextMenu();
+	}
 }
