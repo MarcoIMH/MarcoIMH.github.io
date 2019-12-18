@@ -1,0 +1,54 @@
+<HTML>
+    <HEAD>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=2.0">
+        <script src="phaser.min.js"></script>
+        <LINK href="../css/css.css" rel="StyleSheet" type="text/css" media="screen"/>
+        <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=yes"/>
+        <title>TheWhoStudios</title>
+    </HEAD>
+    <BODY>
+        <div id="banner">
+            <img src="../../img/background2.jpg"/>
+        </div>
+        <div id="nav">
+            <ul class="menu">
+                <li><a href="../index.html">TheWhoStudios</a></li>
+                <li><a href="../content/milestones/milestones.html">Hitos</a></li>
+                <li>
+                    <a href="../content/info/info.html">Información</a>
+                    <ul>
+                        <li><a href="../content/info/doc.html">Documentación</a></li>
+                        <li><a href="../content/info/play.html">Jugabilidad</a></li>
+                    </ul>
+                </li>
+                <li> 
+                    <a href="../content/towerdefense/defense.html">Tower Defense</a>
+                    <ul>
+                        <li><a href="../content/towerdefense/sec.html">Secciones</a></li>				
+                        <li><a href="../content/towerdefense/towers.html">Torres</a></li>
+                        <li><a href="../content/towerdefense/races.html">Razas</a></li>
+                        <li><a href="../content/towerdefense/warzones.html">WarZones</a></li>
+                    </ul>
+                </li>
+                <li><a href="zindex.html">¡Juega!</a></li>				
+            </ul>
+        </div> 
+        <div>
+            <script type="module">
+                import Game from './src/game.js';            
+                var setup = {
+                    type: Phaser.AUTO, 
+                    width: 1400,height: 800,
+                    pixelArt: true,
+                    backgroundColor: 'transparent',
+                    input: {gamepad: true},
+                    scale: {mode: Phaser.Scale.FIT,},
+                    scene: [ Game ],
+                    physics: { default: 'arcade', arcade: { debug: false } }
+                };
+                new Phaser.Game(setup);
+            </script>
+        </div>
+    </BODY>
+</HTML>
