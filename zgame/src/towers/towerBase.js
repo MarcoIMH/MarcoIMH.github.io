@@ -1,6 +1,6 @@
-import TowerBase from "towerBase.js";
+import GObjects from "../gObjects.js";
 
-export default class TowerB extends TowerBase {
+export default class TowerBase extends GObjects {
   constructor() {
   }
 }

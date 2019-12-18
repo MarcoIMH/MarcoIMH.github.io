@@ -1,5 +1,6 @@
-export default class Game extends Phaser.Scene {
+import TowerBase from "./towerBase.js";
+
+export default class TowerB extends TowerBase {
   constructor() {
-    super({ key: 'main' });
-    this.partidaPausada = false;
   }
+}

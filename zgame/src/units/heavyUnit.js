@@ -1,4 +1,4 @@
-import UnitBase from "unitBase.js";
+import UnitBase from "./unitBase.js";
 
 export default class HeavyUnit extends UnitBase {
   constructor() {
