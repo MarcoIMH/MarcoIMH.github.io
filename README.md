@@ -1,3 +1,2 @@
 # TheWhoStudios
-Marco Iván Merino Hernández && 
-Paula Martínez Martínez
+Marco Iván Merino Hernández
