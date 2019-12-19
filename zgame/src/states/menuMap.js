@@ -1,6 +1,8 @@
 import Selector from "../others/selector.js";
 import Icon from "../others/icon.js";
 
+var ms;
+
 export default class MenuMap extends Phaser.Scene {
 	constructor(){
 		super({ key: 'menumap'});
@@ -57,7 +59,7 @@ export default class MenuMap extends Phaser.Scene {
 			this.buttonPlay = this.add.image(170, 750, "buttonPlayIn").setScale(0.5).setInteractive();
 			this.buttonPlay.on('pointerdown', pointer=>{
 				if(this.mapSelector!=0){
-					this.mapSelector = 0;
+					this.mapSelector = 0;					
 					this.scene.start('game');
 				}
 			});
@@ -91,6 +93,7 @@ export default class MenuMap extends Phaser.Scene {
 		this.mapSelector = x;
 		this.iconArray.children.iterate(elem=>{
 			if(elem.getIconNumber() == this.mapSelector){
+				ms = this.mapSelector;
 				if(this.selector != undefined) {
 					console.log("Selector is not undefined");
 					this.selector.destroy(); //PREGUNTAR A CARLOS POR QUÉ NO DESTRUYE ESTE OBJETO. SE MULTIPLICAN LOS SELECTORES!!!!!
@@ -99,4 +102,8 @@ export default class MenuMap extends Phaser.Scene {
 			}
 		});
 	}
+}
+
+export function getMapSelector(){
+	return ms;
 }
