@@ -1,5 +1,5 @@
-import Selector from "../others/selector.js";
-import Icon from "../others/icon.js";
+import Selector from "../icons/iconSelector.js";
+import Icon from "../icons/icon.js";
 
 var ms;
 
@@ -8,7 +8,7 @@ export default class MenuMap extends Phaser.Scene {
 		super({ key: 'menumap'});
 		this.currentStage = 1;
 		this.maxStage = 3;	
-		this.unlockedStages = 3;
+		this.unlockedStages = 1;
 		this.mapSelector = 0;	
 		this.iconSelector;
 	}
@@ -41,6 +41,7 @@ export default class MenuMap extends Phaser.Scene {
 		this.buttonBack = this.add.image(1200,750, "buttonBackOut").setScale(0.5).setInteractive();
 		this.buttonPlay = this.add.image(170, 750, "buttonPlayOut").setScale(0.5).setInteractive();
 		
+		//Array for icons
 		this.iconArray = this.add.group();
 		this.createIcons();			
 	}
@@ -89,13 +90,14 @@ export default class MenuMap extends Phaser.Scene {
 		}
 	}
 
+	//Create Selector above icon"x"
 	createSelector(x){
 		this.mapSelector = x;
 		this.iconArray.children.iterate(elem=>{
 			if(elem.getIconNumber() == this.mapSelector){
 				ms = this.mapSelector;
 				if(this.selector != undefined) {
-					console.log("Selector is not undefined");
+					//console.log("Selector is not undefined");
 					this.selector.destroy(); //PREGUNTAR A CARLOS POR QUÉ NO DESTRUYE ESTE OBJETO. SE MULTIPLICAN LOS SELECTORES!!!!!
 				}
 				this.selector = new Selector(this, this.selector, elem.getXPos(), elem.getYPos());
