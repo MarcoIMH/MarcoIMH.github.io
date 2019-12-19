@@ -1,6 +1,6 @@
-import IconBase from "./iconBase.js";
+import GObject from "../gObject.js";
 
-export default class Icon extends IconBase{
+export default class Icon extends GObject{
 	constructor(state, object, x, y, iconNumber){
 		super(state, object, x, y);	
 		this.p = iconNumber;

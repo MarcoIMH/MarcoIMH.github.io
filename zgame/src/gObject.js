@@ -1,4 +1,4 @@
-export default class IconBase extends Phaser.GameObjects.Sprite{
+export default class GObject extends Phaser.GameObjects.Sprite{
 	constructor(state, object, x, y){
 		super(state, object, x, y);
 		this.st = state;

@@ -1,6 +1,6 @@
-import GObjects from "../gObjects.js";
+import GObject from "../gObject.js";
 
-export default class UnitBase extends GObjects {
+export default class UnitBase extends GObject {
   constructor() {
   }
 }
