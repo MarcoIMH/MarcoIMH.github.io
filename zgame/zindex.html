@@ -36,9 +36,11 @@
         </div> 
         <div>
             <script type="module">
-                import Menu from "./src/states/menu.js"; 
+                import Menu from "./src/states/menuMain.js"; 
                 import Info from "./src/states/info.js"; 
-                import Game from "./src/game.js";  
+                import MenuMap from "./src/states/menuMap.js";
+                import MenuEnd from "./src/states/menuEnd.js";
+                import Game from "./src/game.js";                  
 
                 var setup = {
                     type: Phaser.AUTO, 
@@ -47,7 +49,7 @@
                     backgroundColor: 'transparent',
                     input: {gamepad: true},
                     scale: {mode: Phaser.Scale.FIT,},
-                    scene: [ Menu, Game, Info ],
+                    scene: [ Menu, MenuMap, Game, Info ],
                     physics: { default: 'arcade', arcade: { debug: false } }
                 };
                 new Phaser.Game(setup);

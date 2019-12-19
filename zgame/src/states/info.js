@@ -22,10 +22,8 @@ export default class Info extends Phaser.Scene {
 			this.buttonBack.destroy();
 			this.buttonBack = this.add.image(1100,700, "buttonBackIn").setScale(0.5).setInteractive();
 			this.buttonBack.on('pointerdown', pointer=>{
-				this.scene.start('menu');
+				this.scene.start('menumain');
 			})				
 		});
 	}
-
-
 }
