@@ -37,7 +37,7 @@ export default class MenuMap extends Phaser.Scene {
 
 		//Buttons
 		this.buttonBack = this.add.image(1200,750, "buttonBackOut").setScale(0.5).setInteractive();
-		this.buttonPlay = this.add.image(150, 750, "buttonPlayOut").setScale(0.5).setInteractive();
+		this.buttonPlay = this.add.image(170, 750, "buttonPlayOut").setScale(0.5).setInteractive();
 		
 		this.iconArray = this.add.group();
 		this.createIcons();			
@@ -52,10 +52,16 @@ export default class MenuMap extends Phaser.Scene {
 			});			
 		});
 
-		this.buttonPlay.on('poniterover', pointer=>{
+		this.buttonPlay.on('pointerover', pointer=>{
 			this.buttonPlay.destroy();
-			this.buttonPlay = this.add.image()
-		});		
+			this.buttonPlay = this.add.image(170, 750, "buttonPlayIn").setScale(0.5).setInteractive();
+			this.buttonPlay.on('pointerdown', pointer=>{
+				if(this.mapSelector!=0){
+					this.mapSelector = 0;
+					this.scene.start('game');
+				}
+			});
+		});	
 	}
 
 	//Crate icons based on unlockstage
@@ -83,7 +89,14 @@ export default class MenuMap extends Phaser.Scene {
 
 	createSelector(x){
 		this.mapSelector = x;
-		if(this.iconArray[x]!=undefined)	console.log("Array Element: "+this.iconArray[x].getXPos());
-		console.log("Creating selector above icon "+ x);
+		this.iconArray.children.iterate(elem=>{
+			if(elem.getIconNumber() == this.mapSelector){
+				if(this.selector != undefined) {
+					console.log("Selector is not undefined");
+					this.selector.destroy(); //PREGUNTAR A CARLOS POR QUÉ NO DESTRUYE ESTE OBJETO. SE MULTIPLICAN LOS SELECTORES!!!!!
+				}
+				this.selector = new Selector(this, this.selector, elem.getXPos(), elem.getYPos());
+			}
+		});
 	}
 }
