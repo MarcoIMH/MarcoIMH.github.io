@@ -7,7 +7,7 @@ export default class Selector extends GObject{
 	}
 
 	createIconSelector(){
-		this.element = this.st.add.image(this.xPos, this.yPos, "selector");
+		this.element = this.st.add.image(this.xPos - 1 , this.yPos +1, "selector");
 		console.log("Icon selector created at "+this.xPos + ","+this.yPos);
 	}
 
