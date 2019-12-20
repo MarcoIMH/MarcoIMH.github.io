@@ -10,7 +10,7 @@ export default class MenuMap extends Phaser.Scene {
 		this.maxStage = 3;	
 		this.unlockedStages = 3;
 		this.mapSelector = 0;	
-		this.iconSelector;
+		this.selector;
 	}
 
 	preload(){
@@ -97,8 +97,7 @@ export default class MenuMap extends Phaser.Scene {
 			if(elem.getIconNumber() == this.mapSelector){
 				ms = this.mapSelector;
 				if(this.selector != undefined) {
-					//console.log("Selector is not undefined");
-					this.selector.destroy(); //PREGUNTAR A CARLOS POR QUÉ NO DESTRUYE ESTE OBJETO. SE MULTIPLICAN LOS SELECTORES!!!!!
+					this.selector.clearSelector();
 				}
 				this.selector = new Selector(this, this.selector, elem.getXPos(), elem.getYPos());
 			}
