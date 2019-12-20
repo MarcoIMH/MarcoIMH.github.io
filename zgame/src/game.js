@@ -29,19 +29,21 @@ export default class Game extends Phaser.Scene {
 		console.log("Loading background. MapSelector: "+getMapSelector());
 		this.add.image(0,0,"bg"+getMapSelector()).setOrigin(0);
 
-		this.towerPointArray = this.add.group();
-		this.towerArray = this.add.group();
-		this.enemyArray = this.add.group();
-		this.unitArray = this.add.group();
+		
+		this.towerGroup = this.add.group();
+		this.enemyGroup = this.add.group();
+		this.unitGroup = this.add.group();
 
+		this.towerPointArray = [];
 		this.mapSettings(getMapSelector());
 	}
 
 	mapSettings(mapSel){
-		this.mapConfig = new MapFactory(this, this.mapConfig, mapSel);
+		this.mapConfig = new MapFactory(this, mapSel);	
 		this.towerPointArray = this.mapConfig.getMapPointArray();
-		this.towerPointArray.children.iterate(elem=>{
-			if(elem!= undefined) console.log(elem[0]+ " " + elem[1]);
-		});
+
+		for(let j = 0; j < this.towerPointArray.length; j++){
+			console.log("List of points created: "+this.towerPointArray[j].x + " " + this.towerPointArray[j].y);
+		} 
 	}
 }

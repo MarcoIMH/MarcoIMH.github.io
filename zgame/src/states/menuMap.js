@@ -10,6 +10,7 @@ export default class MenuMap extends Phaser.Scene {
 		this.maxStage = 3;	
 		this.unlockedStages = 3;
 		this.mapSelector = 0;	
+		this.defaultIcon;
 		this.selector;
 	}
 
