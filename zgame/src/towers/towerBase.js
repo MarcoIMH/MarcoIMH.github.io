@@ -5,7 +5,12 @@ import TowerB from "./towerB.js";
 export default class TowerBase extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
-		this.upgradeExp = 0;		
+
+		this.damage = 90;
+		this.range = 16;
+		this.cadence = 1.75;
+		this.upgradeExp = 80;	
+
 		this.createTowerBase();	
 	}
 
@@ -18,12 +23,12 @@ export default class TowerBase extends TowerInterface {
 		this.element.on('pointerdown', pointer=>{	
 			//PONER CÓDIGO AQUÍ PARA MOSTRAR LAS DOS OPCIONES DE MEJORA DE TORRE	
 
-			this.upgradeOption = "towerB";
 			//Check that the tower can be improved, in this case do it
-			if(this.checkUpgrade() == true && this.upgradeOption == "towerA") 
-				this.element = new TowerA(this.st, this.element, this.xPos, this.yPos);
-			else if(this.checkUpgrade() == true && this.upgradeOption == "towerB")
-				this.element = new TowerB(this.st, this.element, this.xPos, this.yPos)				
+			this.upgradeOption = "towerA";
+			if(this.checkUpgrade() == true){
+				if(this.upgradeOption == "towerA") this.element = new TowerA(this.st, this.element, this.xPos, this.yPos);
+				else this.element = new TowerB(this.st, this.element, this.xPos, this.yPos);
+			}			
 		});
 	}
 }

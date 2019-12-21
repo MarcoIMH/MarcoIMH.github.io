@@ -4,7 +4,12 @@ import TowerBB from "./towerBB.js";
 export default class TowerB extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
-		this.upgradeExp = 0;		
+
+		this.damage = 65;
+		this.range = 14;
+		this.cadence = 1.5;
+		this.upgradeExp = 120;
+
 		this.creatTowerB();	
 	}
 

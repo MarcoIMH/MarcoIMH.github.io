@@ -6,7 +6,7 @@ import TowerBase from "./towerBase.js";
 export default class TowerPoint extends TowerInterface{
 	constructor(state, object, x, y){
 		super(state, object, x, y);
-		this.upgradeExp = 0;
+		this.upgradeExp = 50;
 		this.createTowerPoint();		
 	}
 

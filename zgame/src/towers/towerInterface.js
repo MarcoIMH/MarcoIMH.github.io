@@ -2,11 +2,12 @@ import GObject from "../gObject.js";
 
 export default class TowerInterface extends GObject {
 	constructor(state, object, x, y){
-		super(state, object, x, y);
+		super(state, object, x, y);		
+		this.damage;
+		this.range;
+		this.cadence;
 		this.upgradeExp;
 		this.upgradeOption;
-		this.range;
-		this.cadence;		
 	}
 
 	preUpdate(){
@@ -29,6 +30,7 @@ export default class TowerInterface extends GObject {
 
 			return true;
 		}
+		console.log("You need more experiencie!");
 		return false;
 	}
 }

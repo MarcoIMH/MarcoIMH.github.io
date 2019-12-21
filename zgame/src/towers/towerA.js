@@ -4,7 +4,12 @@ import TowerAA from "./towerAA.js";
 export default class TowerA extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
-		this.upgradeExp = 0;		
+		
+		this.damage = 55;
+		this.range = 18;
+		this.cadence = 0.9;
+		this.upgradeExp = 120;	
+
 		this.createTowerA();	
 	}
 
