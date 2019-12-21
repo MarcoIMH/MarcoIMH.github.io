@@ -12,7 +12,8 @@ export default class MapFactory{
 		switch(this.mapSelector){
 			case 1:{				
 				this.addMapPointToArray(new Phaser.Geom.Point(100, 100));
-				
+				this.addMapPointToArray(new Phaser.Geom.Point(200, 200));
+				//this.addMapPointToArray(new Phaser.Geom.Point(300, 300));
 				break;
 			}
 			case 2:{break;}			

@@ -9,12 +9,14 @@ import MiddleUnit from "./units/middleUnit.js";
 import HeavyUnit from "./units/heavyUnit.js";
 import {getMapSelector} from "./states/menuMap.js";
 
+var pointer;
+
 export default class Game extends Phaser.Scene {
 	constructor(){
 		super({ key: 'game'});
 		this.stage;
 		this.mapConfig;
-		this.expAccumulated = 0;
+		this.expAccumulated = 10;
 		this.defaultTowerPoint;
 	}
 
@@ -23,13 +25,17 @@ export default class Game extends Phaser.Scene {
 		this.load.image("bg2", "./assets/maps/mapa2.jpg");
 		this.load.image("bg3", "./assets/maps/mapa3.jpg");
 
-
 		this.load.image("towerPoint1", "./assets/towers/towerPoint1.png");
 		this.load.image("towerPoint2", "./assets/towers/towerPoint2.png");
+		this.load.image("towerBase", "./assets/towers/towerBase.png");	
+		this.load.image("towerA", "./assets/towers/towerA.png");
+		this.load.image("towerAA", "./assets/towers/towerAA.png");	
+		this.load.image("towerB", "./assets/towers/towerB.png");
+		this.load.image("towerBB", "./assets/towers/towerBB.png");	
 	}
 
-	create(){
-		let pointer = this.input.activePointer;
+	create(){	
+		pointer = this.input.activePointer;	
 		this.input.mouse.disableContextMenu();
 
 		//Setting background depend of mapSelector
@@ -46,7 +52,7 @@ export default class Game extends Phaser.Scene {
 		this.towerPointArray = [];
 
 		//Map Settings depend of mapSelector
-		this.mapSettings(getMapSelector());
+		this.mapSettings(getMapSelector(), pointer);
 	}
 
 	mapSettings(mapSel){
@@ -59,9 +65,24 @@ export default class Game extends Phaser.Scene {
 
 		//Places points in map adding each point in group as object
 		for(let j = 0; j < this.towerPointArray.length; j++){
-			console.log("Creating tower point at: "+this.towerPointArray[j].x + " " + this.towerPointArray[j].y);
 			if(this.defaultTowerPoint!= undefined) this.defaultTowerPoint.destroy();
-			this.towerPointGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));
-		} 
+			this.towerPointGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));	
+		}
+
+		this.towerPointGroup.children.iterate(elem=>{
+			console.log(elem);
+		});
+	}
+
+	getAccumulatedExp(){
+		return this.expAccumulated;
+	}
+
+	subtractAccumulatedExp(howMany){
+		this.expAccumulated -= howMany;
+	}
+
+	addAccumulatedExp(howMany){
+		this.expAccumulated += howMany;
 	}
 }

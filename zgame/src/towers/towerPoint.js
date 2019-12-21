@@ -1,16 +1,26 @@
-import GObject from "../gObject.js";
+import TowerInterface from "./towerInterface.js";
+import TowerBase from "./towerBase.js";
 
-export default class TowerPoint extends GObject{
+//let pointer;
+
+export default class TowerPoint extends TowerInterface{
 	constructor(state, object, x, y){
 		super(state, object, x, y);
-		this.createTowerPoint();
+		this.upgradeExp = 0;
+		this.createTowerPoint();		
 	}
-	preload(){
-		this.load.image("towerPoint1", "./assets/towers/towerPoint1.png");
-		this.load.image("towerPoint2", "./assets/towers/towerPoint2.png");
-	}
+
 	createTowerPoint(){
-		this.element = this.st.add.image(this.xPos, this.yPos, "towerPoint1").setScale(0.2).setInteractive();
-		this.element = this.st.add.image(this.xPos + 100, this.yPos +100, "towerPoint2").setScale(0.2).setInteractive(); //LINEA PARA TESTEAR CUAL ME GUSTA MÁS, BORRAR ANTES DE ENTREGAR
+		console.log("Creating towerPoint at: "+this.xPos + "," + this.yPos);
+		//Set image in this object
+		this.element = this.st.add.image(this.xPos + 100, this.yPos +100, "towerPoint1").setScale(0.2).setInteractive(); 
+
+		//Set action
+		this.element.on('pointerdown', pointer=>{			
+			//Check that the tower can be improved
+			if(this.checkUpgrade() == true) {
+				this.element = new TowerBase(this.st, this.element, this.xPos, this.yPos);
+			}				
+		});
 	}
 }
