@@ -9,5 +9,8 @@ export default class LightEnemy extends EnemyBase{
 
 	createLightEnemy(){
 		this.element = this.st.add.image(this.xPos, this.yPos, "lightEnemy");
+
+		this.st.add.existing(this);
+        this.st.physics.world.enable(this);	
 	}
 }

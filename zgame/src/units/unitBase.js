@@ -6,12 +6,4 @@ export default class UnitBase extends GObject {
 		this.dps;
 		this.hp;
 	}
-
-	movement(){
-
-	}
-
-	atack(){
-
-	}
 }

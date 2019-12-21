@@ -154,19 +154,25 @@ export default class Game extends Phaser.Scene {
 			DEPENDS OF TYPE AND STAGE
 	------------------------------------------------*/
 	newEnemy(mapSel){
-		this.enemyConfigArray = this.enemyFactory.getEnemyConfig("middle");
-
-		
 		//Clear enemy creator container if necessary
 		if(this.defaultEnemy != undefined) this.defaultEnemy.destroy();		
-		this.enemyGroup.add(new LigthEnemy(this, this.defaultEnemy, 200, 200, this.enemyFactory.getEnemyConfig("light")));	
 
-		if(this.defaultEnemy != undefined) this.defaultEnemy.destroy();		
-		this.enemyGroup.add(new MiddleEnemy(this, this.defaultEnemy, 300, 300, this.enemyFactory.getEnemyConfig("middle")));	
+		let enemyType = Phaser.Math.Between(0, 2); 
 
-		if(this.defaultEnemy != undefined) this.defaultEnemy.destroy();	
-		this.enemyGroup.add(new HeavyEnemy(this, this.defaultEnemy, 400, 400, this.enemyFactory.getEnemyConfig("heavy")));	
-
+		switch(enemyType){
+			case 0:{
+				this.enemyGroup.add(new LigthEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("light")));
+				break;
+			}
+			case 1:{
+				this.enemyGroup.add(new MiddleEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("middle")));
+				break;
+			}
+			case 2:{
+				this.enemyGroup.add(new HeavyEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("heavy")));	
+				break;
+			}
+		}
 
 		this.enemyGroup.children.iterate(elem=>{
 			console.log(elem);

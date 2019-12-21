@@ -9,5 +9,8 @@ export default class MiddleEnemy extends EnemyBase{
 
 	createMiddleEnemy(){
 		this.element = this.st.add.image(this.xPos, this.yPos, "middleEnemy");
+
+		this.st.add.existing(this);
+        this.st.physics.world.enable(this);	
 	}
 }

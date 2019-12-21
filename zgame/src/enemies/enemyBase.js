@@ -5,6 +5,8 @@ export default class EnemyBase extends UnitBase {
 		super(state, object, x, y);
 		this.stats = enemyStats;
 
+		this.velocity = new Phaser.Geom.Point(10, 0)
+
 		//Resistances
 		this.poisonRes;	
 		this.iceRes;	
@@ -14,7 +16,16 @@ export default class EnemyBase extends UnitBase {
 		this.enemyConfigCreation();
 	}
 
+	preUpdate(time, delta){		
+		this.movement();
+	}
+
 	enemyConfigCreation(){	
 		console.log(this.stats);
+	}
+
+	movement(){	
+		this.xPos += 0.5;	
+		this.element.setPosition(this.xPos, this.yPos);
 	}
 }
