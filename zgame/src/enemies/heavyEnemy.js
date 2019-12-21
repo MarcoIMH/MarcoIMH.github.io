@@ -9,8 +9,5 @@ export default class HeavyEnemy extends EnemyBase{
 
 	createHeavyEnemy(){
 		this.element = this.st.add.image(this.xPos, this.yPos, "heavyEnemy");
-
-		this.st.add.existing(this);
-        this.st.physics.world.enable(this);		
 	}
 }

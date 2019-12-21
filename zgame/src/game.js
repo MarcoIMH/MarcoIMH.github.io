@@ -32,7 +32,7 @@ export default class Game extends Phaser.Scene {
 		this.enemyConfig;
 
 		//About Exp
-		this.expAccumulated = 0;
+		this.expAccumulated = 150;
 		this.expMarker;	
 
 		//About waves
@@ -125,10 +125,6 @@ export default class Game extends Phaser.Scene {
 			this.towerGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));	
 		}
 
-		this.towerGroup.children.iterate(elem=>{
-			console.log(elem);
-		});
-
 		//Nexus
 		this.nexus = new Nexus(this, this.nexus, 1250, 300);
 
@@ -173,10 +169,6 @@ export default class Game extends Phaser.Scene {
 				break;
 			}
 		}
-
-		this.enemyGroup.children.iterate(elem=>{
-			console.log(elem);
-		});
 	}
 
 	/*--------------------------------------------
