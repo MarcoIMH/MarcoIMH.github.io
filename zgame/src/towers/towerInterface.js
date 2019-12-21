@@ -9,6 +9,10 @@ export default class TowerInterface extends GObject {
 		this.cadence;		
 	}
 
+	preUpdate(){
+		this.element.bringOnTop();
+	}
+
 	setUpgradeOption(opt){
 		this.upgradeOption = opt;
 	}
@@ -16,6 +20,7 @@ export default class TowerInterface extends GObject {
 	checkUpgrade(){
 		//Check exp for upgrade
 		if(this.st.getAccumulatedExp() >= this.upgradeExp){
+			
 			//Destroy the last object if necessary
 			if(this.element != undefined) this.element.destroy();
 

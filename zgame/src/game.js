@@ -1,4 +1,5 @@
 import MapFactory from "./maps/mapFactory.js";
+import Nexus from "./towers/nexus.js";
 import TowerPoint from "./towers/towerPoint.js";
 import TowerBase from "./towers/towerBase.js";
 import TowerA from "./towers/towerA.js";
@@ -13,11 +14,12 @@ var pointer;
 
 export default class Game extends Phaser.Scene {
 	constructor(){
-		super({ key: 'game'});
-		this.stage;
+		super({ key: 'game'});this.stage;
+
+		//These elements are declared here for greater visibility
 		this.mapConfig;
 		this.expAccumulated = 10;
-		this.defaultTowerPoint;
+		this.defaultTowerPoint;		
 	}
 
 	preload(){
@@ -25,6 +27,7 @@ export default class Game extends Phaser.Scene {
 		this.load.image("bg2", "./assets/maps/mapa2.jpg");
 		this.load.image("bg3", "./assets/maps/mapa3.jpg");
 
+		this.load.image("nexus", "./assets/towers/nexus.png");
 		this.load.image("towerPoint1", "./assets/towers/towerPoint1.png");
 		this.load.image("towerPoint2", "./assets/towers/towerPoint2.png");
 		this.load.image("towerBase", "./assets/towers/towerBase.png");	
@@ -42,17 +45,20 @@ export default class Game extends Phaser.Scene {
 		console.log("Loading background. MapSelector: "+getMapSelector());
 		this.add.image(0,0,"bg"+getMapSelector()).setOrigin(0);
 
+		//Nexus
+		this.nexus;
+
 		//Groups
-		this.towerPointGroup = this.add.group();
 		this.towerGroup = this.add.group();
 		this.enemyGroup = this.add.group();
 		this.unitGroup = this.add.group();
 
 		//Arrays
 		this.towerPointArray = [];
+		this.enemyPathArray = [];
 
 		//Map Settings depend of mapSelector
-		this.mapSettings(getMapSelector(), pointer);
+		this.mapSettings(getMapSelector());
 	}
 
 	mapSettings(mapSel){
@@ -66,12 +72,14 @@ export default class Game extends Phaser.Scene {
 		//Places points in map adding each point in group as object
 		for(let j = 0; j < this.towerPointArray.length; j++){
 			if(this.defaultTowerPoint!= undefined) this.defaultTowerPoint.destroy();
-			this.towerPointGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));	
+			this.towerGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));	
 		}
 
-		this.towerPointGroup.children.iterate(elem=>{
+		this.towerGroup.children.iterate(elem=>{
 			console.log(elem);
 		});
+
+		this.nexus = new Nexus(this, this.nexus, 1250, 300);
 	}
 
 	getAccumulatedExp(){
