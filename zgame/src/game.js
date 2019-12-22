@@ -133,6 +133,8 @@ export default class Game extends Phaser.Scene {
 	mapSettings(mapSel){
 		//Get map config from map factory
 		this.mapConfig = new MapFactory(this, mapSel);	
+
+		//Towers Points
 		this.towerPointArray = this.mapConfig.getMapPointArray();
 
 		//Places points in map adding each point in group as object

@@ -14,7 +14,7 @@ export default class EnemyFactory{
 		this.enemySettings = this.resetConfig;
 		
 		/*----------------------------------------------------------------------------------
-				Array Structure: DAMAGE / HP / POISON RES / ICE RES / FIRE RES / LIGHT RES
+				Array Structure: DAMAGE / HP / POISON RES / ICE RES / FIRE RES / THUNDER RES
 		------------------------------------------------------------------------------------*/
 		switch(this.ms){
 			case 1: {
