@@ -24,9 +24,10 @@ export default class Game extends Phaser.Scene {
 	constructor(){
 		super({ key: 'game'});this.stage;
 
-		/*----------------------------------------------------
-		These elements are declared here for greater visibility
-		-------------------------------------------------------*/
+		/*--------------------------------------------------------
+		  These elements are declared here for greater visibility
+		---------------------------------------------------------*/
+		this.endGame = false;
 		this.stage;
 		this.mapConfig;
 		this.enemyConfig;
@@ -136,7 +137,7 @@ export default class Game extends Phaser.Scene {
 					MARKER'S UPDATE
 	------------------------------------------------*/
 	markers(){
-		//Esperiencie marker
+		//Experiencie marker
 		if(this.expMarker!=undefined) this.expMarker.destroy();
 		this.expMarker = this.add.text(40, 50, this.expAccumulated, {font: "50px Arial", fill: "#1C180E"});
 		
@@ -185,5 +186,9 @@ export default class Game extends Phaser.Scene {
 
 	addAccumulatedExp(howMany){
 		this.expAccumulated += howMany;
+	}
+
+	setEndGame(bool){
+		this.endGame = bool;
 	}	
 }
