@@ -30,6 +30,7 @@ export default class Game extends Phaser.Scene {
 		/*--------------------------------------------------------
 		  These elements are declared here for greater visibility
 		---------------------------------------------------------*/
+		this.background;
 		this.endGame = false;
 		this.stage;
 		this.mapConfig;
@@ -93,7 +94,7 @@ export default class Game extends Phaser.Scene {
 
 		//Setting background depends of mapSelector
 		console.log("Loading background. MapSelector: "+this.stage);
-		this.add.image(0, 0, "bg" + this.stage).setOrigin(0);
+		this.background = this.add.image(0, 0, "bg" + this.stage).setOrigin(0);
 
 		//Nexus
 		this.nexus = new Nexus(this, 1250, 300);
@@ -150,7 +151,10 @@ export default class Game extends Phaser.Scene {
 		this.mapConfig = new MapFactory(this, mapSel);	
 
 		//Towers Points
-		this.towerPointArray = this.mapConfig.getMapPointArray();
+		this.towerPointArray = this.mapConfig.getTowerPointArray();
+
+		//Summon points
+		this.enemyPathArray = this.mapConfig.getSummonPointArray();
 
 		//Places points in map adding each point in group as object
 		for(let j = 0; j < this.towerPointArray.length; j++){
@@ -185,18 +189,19 @@ export default class Game extends Phaser.Scene {
 		if(this.timeFromLastEnemy >= this.randomTimeToEnemySummon){	
 
 			let enemyType = Phaser.Math.Between(0, 2);
+			let summ = Phaser.Math.Between(0, this.enemyPathArray.length-1);
 			
 			switch(enemyType){
 				case 0:{
-					this.enemyGroup.add(new LigthEnemy(this, 200, 400, this.enemyFactory.getEnemyConfig("light")));
+					this.enemyGroup.add(new LigthEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("light")));
 					break;
 				}
 				case 1:{
-					this.enemyGroup.add(new MiddleEnemy(this, 200, 400, this.enemyFactory.getEnemyConfig("middle")));
+					this.enemyGroup.add(new MiddleEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("middle")));
 					break;
 				}
 				case 2:{
-					this.enemyGroup.add(new HeavyEnemy(this,  200, 400, this.enemyFactory.getEnemyConfig("heavy")));	
+					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("heavy")));	
 					break;
 				}
 			}
@@ -251,4 +256,13 @@ export default class Game extends Phaser.Scene {
 	setEndGame(bool){
 		this.endGame = bool;
 	}	
+
+	bringTop(object){
+		this.children.bringToTop(object);
+	}
+
+	objectMoveDown(object){
+		this.children.moveDown(object);
+		this.children.moveDown(this.background);
+	}
 }

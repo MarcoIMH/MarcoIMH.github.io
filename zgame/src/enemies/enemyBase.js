@@ -8,12 +8,11 @@ export default class EnemyBase extends GObject {
 		this.stats = enemyStats;		
 		this.velocity = new Phaser.Geom.Point(1, 0);
 
-		//Resistances
+		//Enemy config
 		this.poisonRes;	
 		this.iceRes;	
 		this.fireRes;
 		this.thunderRes;
-
 		this.exp;
 
 		this.animation = animation;
@@ -58,7 +57,9 @@ export default class EnemyBase extends GObject {
 		this.destroy();
 	}
 
-	preUpdate(){		
+	preUpdate(){
+		//this.st.children.moveDown(this);	
+		this.st.objectMoveDown(this);	
 		this.movement();
 	}
 }

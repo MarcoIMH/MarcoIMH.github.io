@@ -25,7 +25,7 @@ export default class TowerInterface extends Phaser.GameObjects.Sprite{
 	}
 
 	//state, x, y, texture, damage, xEnemyPoint, yEnemyPoint
-	preUpdate(){
+	preUpdate(){		
 		if(this.towerShot != undefined && this.timeFromLastShot > this.cadence){			
 			this.st.enemyGroup.children.iterate(enem=>{
 				if(this.xPos + this.range < enem.getXPos() && this.yPos + this.range < enem.getYPos() && this.timeFromLastShot > this.cadence){									
