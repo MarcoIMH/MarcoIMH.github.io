@@ -2,7 +2,8 @@ import GObject from "../gObject.js";
 
 export default class TowerInterface extends GObject {
 	constructor(state, object, x, y){
-		super(state, object, x, y);		
+		super(state, object, x, y);	
+		this.element = object;	
 		this.damage;
 		this.range;
 		this.cadence;
@@ -11,7 +12,7 @@ export default class TowerInterface extends GObject {
 	}
 
 	preUpdate(){
-		this.element.bringOnTop();
+		//this.element.bringOnTop();
 	}
 
 	setUpgradeOption(opt){

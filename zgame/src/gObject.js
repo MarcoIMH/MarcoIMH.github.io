@@ -1,8 +1,11 @@
-export default class GObject extends Phaser.GameObjects.Sprite{
-	constructor(state, object, x, y){
-		super(state, object, x, y);
+export default class GObject extends Phaser.Physics.Arcade.Sprite{
+	constructor(state, x, y, texture){
+		super(state, x, y, texture);		
 		this.st = state;
-		this.element = object;
+
+		this.st.add.existing(this);
+		this.st.physics.add.existing(this);
+
 		this.xPos = x;
 		this.yPos = y;		
 	}

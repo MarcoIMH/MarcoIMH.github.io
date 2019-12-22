@@ -1,7 +1,7 @@
 import Selector from "../icons/iconSelector.js";
 import Icon from "../icons/icon.js";
 
-var ms;
+var ms = 1;
 
 export default class MenuMap extends Phaser.Scene {
 	constructor(){

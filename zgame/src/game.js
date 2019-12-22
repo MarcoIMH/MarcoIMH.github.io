@@ -39,12 +39,13 @@ export default class Game extends Phaser.Scene {
 		//About waves
 		this.wave = 0;	
 		this.waveMarker;
+		this.maxtimeToEnemySummon = 200;
+		this.minTimeToEnemySummon = 100;
+		this.randomTimeToEnemySummon;
+		this.timeFromLastEnemy = 0;
 
-		//About towers
-		this.defaultTowerPoint;
-
-		//About enemies
-		this.defaultEnemy;
+		//About nexus
+		this.nexus;
 	}
 
 	preload(){
@@ -66,9 +67,13 @@ export default class Game extends Phaser.Scene {
 		this.load.image("towerBB", "./assets/towers/towerBB.png");
 
 		//Enemy assets
-		this.load.image("lightEnemy", "./assets/enemy/ligthEnemy.png");
-		this.load.image("middleEnemy", "./assets/enemy/middleEnemy.png");
-		this.load.image("heavyEnemy", "./assets/enemy/heavyEnemy.png");	
+		this.load.image("lightEnemyPool", "./assets/enemy/ligthEnemy.png", 	 { frameWidth: 36.2, frameHeight: 35 });
+		this.load.image("middleEnemyPool", "./assets/enemy/middleEnemy.png", { frameWidth: 36.2, frameHeight: 35 });
+		this.load.image("heavyEnemyPool", "./assets/enemy/heavyEnemy.png", 	 { frameWidth: 36.2, frameHeight: 35 });
+
+		this.load.image("lightEnemy", "./assets/enemy/ligthEnemyIndividual.png");
+		this.load.image("middleEnemy", "./assets/enemy/middleEnemyIndividual.png");
+		this.load.image("heavyEnemy", "./assets/enemy/heavyEnemyIndividual.png");
 	}
 
 	create(){	
@@ -80,15 +85,15 @@ export default class Game extends Phaser.Scene {
 
 		//Setting background depends of mapSelector
 		console.log("Loading background. MapSelector: "+this.stage);
-		this.add.image(0,0,"bg" + this.stage).setOrigin(0);
+		this.add.image(0, 0, "bg" + this.stage).setOrigin(0);
 
 		//Nexus
-		this.nexus;
+		this.nexus = new Nexus(this, 1250, 300);
 
 		//Groups
-		this.towerGroup = this.add.group();
-		this.enemyGroup = this.add.group();
+		this.towerGroup = this.add.group();		
 		this.unitGroup = this.add.group();
+		this.enemyGroup = this.physics.add.group();
 
 		//Arrays
 		this.towerPointArray = [];
@@ -101,13 +106,26 @@ export default class Game extends Phaser.Scene {
 		//Get enemy config from enemy factory
 		this.enemyFactory = new EnemyFactory(this, this.stage);
 
-		//Enemy summon
-		this.newEnemy(this.stage);
+		//Set enemy summon time
+		this.randomTimeToEnemySummon = Phaser.Math.Between(this.minTimeToEnemySummon, this.maxtimeToEnemySummon);
+
+		//Enemy animations
+	    //this.enemyAnimations();
 	}
 
 	update(){
+		this.newEnemy(this.stage);		
+
+		//Collissions
+		this.physics.add.collider(this.nexus, this.enemyGroup, (o1, o2) =>{o2.attack(o1);});
+
+		//Update markers
 		this.markers();
+
+		//Check endgame
+		if(this.endGame == true) this.scene.start('menuend')
 	}
+
 
 	/*--------------------------------------------------------------
 		FUNCTION TO GENERATE THE INITIAL CONFIGURATION OF EACH MAP
@@ -120,18 +138,14 @@ export default class Game extends Phaser.Scene {
 		//Places points in map adding each point in group as object
 		for(let j = 0; j < this.towerPointArray.length; j++){
 			//Release the default tower if necessary
-			if(this.defaultTowerPoint!= undefined) this.defaultTowerPoint.destroy();
-
 			//New tower structure. It is managed autonomously
-			this.towerGroup.add(new TowerPoint(this, this.defaultTowerPoint, this.towerPointArray[j].x, this.towerPointArray[j].y));	
+			this.towerGroup.add(new TowerPoint(this, this.towerPointArray[j].x, this.towerPointArray[j].y));	
 		}
-
-		//Nexus
-		this.nexus = new Nexus(this, this.nexus, 1250, 300);
 
 		//Markers
 		this.markers();
 	}
+
 
 	/*-----------------------------------------------
 					MARKER'S UPDATE
@@ -148,28 +162,50 @@ export default class Game extends Phaser.Scene {
 
 	/*-----------------------------------------------
 					ENEMY CREATION 
-			DEPENDS OF TYPE AND STAGE
+			    DEPENDS OF TYPE AND STAGE
 	------------------------------------------------*/
 	newEnemy(mapSel){
-		//Clear enemy creator container if necessary
-		if(this.defaultEnemy != undefined) this.defaultEnemy.destroy();		
+		//Check time to enemy summon
+		if(this.timeFromLastEnemy >= this.randomTimeToEnemySummon){	
 
-		let enemyType = Phaser.Math.Between(0, 2); 
+			let enemyType = Phaser.Math.Between(0, 2);
+			
+			switch(enemyType){
+				case 0:{
+					this.enemyGroup.add(new LigthEnemy(this, 0, 400, this.enemyFactory.getEnemyConfig("light")));
+					break;
+				}
+				case 1:{
+					this.enemyGroup.add(new MiddleEnemy(this, 0, 400, this.enemyFactory.getEnemyConfig("middle")));
+					break;
+				}
+				case 2:{
+					this.enemyGroup.add(new HeavyEnemy(this,  0, 400, this.enemyFactory.getEnemyConfig("heavy")));	
+					break;
+				}
+			}
+			this.timeFromLastEnemy = 0;
+			this.randomTimeToEnemySummon = Phaser.Math.Between(this.minTimeToEnemySummon, this.maxtimeToEnemySummon);
+		}else this.timeFromLastEnemy++;
+	}
 
-		switch(enemyType){
-			case 0:{
-				this.enemyGroup.add(new LigthEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("light")));
-				break;
-			}
-			case 1:{
-				this.enemyGroup.add(new MiddleEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("middle")));
-				break;
-			}
-			case 2:{
-				this.enemyGroup.add(new HeavyEnemy(this, this.defaultEnemy, 0, 400, this.enemyFactory.getEnemyConfig("heavy")));	
-				break;
-			}
-		}
+	/*-------------------------------------------------
+					ANIMATIONS
+	---------------------------------------------------*/
+	enemyAnimations(){
+		this.anims.create({
+	       key: 'middleEnemyAnimation',
+	       frameRate: 5,
+	       repeat: -1,
+	       frames: this.anims.generateFrameNumbers("middleEnemy", { start: 1, end: 4})	       
+	    });
+	}
+
+	/*-------------------------------------------------
+					REMOVE GROUPS ACTIONS
+	---------------------------------------------------*/
+	removeEnemy(enemy){
+		this.enemyGroup.remove(enemy);
 	}
 
 	/*--------------------------------------------
