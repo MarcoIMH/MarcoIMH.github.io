@@ -24,7 +24,7 @@ export default class TowerBase extends TowerInterface {
 			//PONER CÓDIGO AQUÍ PARA MOSTRAR LAS DOS OPCIONES DE MEJORA DE TORRE	
 
 			//Check that the tower can be improved, in this case do it
-			this.upgradeOption = "towerA";
+			this.upgradeOption = "towerB";
 			if(this.checkUpgrade() == true){
 				if(this.upgradeOption == "towerA") this.element = new TowerA(this.st, this.element, this.xPos, this.yPos);
 				else this.element = new TowerB(this.st, this.element, this.xPos, this.yPos);

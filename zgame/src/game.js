@@ -33,7 +33,7 @@ export default class Game extends Phaser.Scene {
 		this.enemyConfig;
 
 		//About Exp
-		this.expAccumulated = 150;
+		this.expAccumulated = 1150;
 		this.expMarker;	
 
 		//About waves
@@ -116,8 +116,8 @@ export default class Game extends Phaser.Scene {
 	update(){
 		this.newEnemy(this.stage);		
 
-		//Collissions
-		this.physics.add.collider(this.nexus, this.enemyGroup, (o1, o2) =>{o2.attack(o1);});
+		//Collissions - Nexus / Enemies
+		this.physics.add.collider(this.nexus, this.enemyGroup, (nex, enem) =>{enem.attack(nex);});
 
 		//Update markers
 		this.markers();
@@ -137,12 +137,11 @@ export default class Game extends Phaser.Scene {
 
 		//Places points in map adding each point in group as object
 		for(let j = 0; j < this.towerPointArray.length; j++){
-			//Release the default tower if necessary
 			//New tower structure. It is managed autonomously
-			this.towerGroup.add(new TowerPoint(this, this.towerPointArray[j].x, this.towerPointArray[j].y));	
+			this.towerGroup.add(new TowerPoint(this, null, this.towerPointArray[j].x, this.towerPointArray[j].y));	
 		}
 
-		//Markers
+		//Create Markers
 		this.markers();
 	}
 
@@ -157,7 +156,7 @@ export default class Game extends Phaser.Scene {
 		
 		//Wave Marker
 		if(this.waveMarker!=undefined) this.waveMarker.destroy();
-		this.waveMarker = this.add.text(900,50,this.wave, {font: "50px Arial", fill: "#1C180E"});
+		this.waveMarker = this.add.text(900, 50, this.wave, {font: "50px Arial", fill: "#1C180E"});
 	}
 
 	/*-----------------------------------------------

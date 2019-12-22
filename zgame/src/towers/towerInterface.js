@@ -1,18 +1,23 @@
 import GObject from "../gObject.js";
 
-export default class TowerInterface extends GObject {
+export default class TowerInterface extends Phaser.GameObjects.Sprite{
 	constructor(state, object, x, y){
-		super(state, object, x, y);	
+		super(state, x, y);	
+		this.st = state;
 		this.element = object;	
 		this.damage;
 		this.range;
-		this.cadence;
+		this.cadence;	
+
+		this.xPos = x;
+		this.yPos = y;
+
 		this.upgradeExp;
 		this.upgradeOption;
 	}
 
 	preUpdate(){
-		//this.element.bringOnTop();
+
 	}
 
 	setUpgradeOption(opt){
@@ -31,7 +36,15 @@ export default class TowerInterface extends GObject {
 
 			return true;
 		}
-		console.log("You need more experiencie!");
+		console.log("Need more experiencie to upgrade this structure!");
 		return false;
+	}
+
+	getXPos(){
+		return this.xPos;
+	}
+
+	getYPos(){
+		return this.yPos;
 	}
 }
