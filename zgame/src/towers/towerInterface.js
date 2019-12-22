@@ -1,23 +1,39 @@
 import GObject from "../gObject.js";
+import Shots from "./shots.js";
 
 export default class TowerInterface extends Phaser.GameObjects.Sprite{
 	constructor(state, object, x, y){
 		super(state, x, y);	
 		this.st = state;
 		this.element = object;	
-		this.damage;
-		this.range;
-		this.cadence;	
+		this.damage = 0;
+
+		this.range = 150;
+		this.cadence = 70;
+		this.timeFromLastShot = 0;	
 
 		this.xPos = x;
 		this.yPos = y;
+		this.xRelPos;
+		this.yRelPos;
 
+		this.towerShot;
 		this.upgradeExp;
 		this.upgradeOption;
+
+		this.st.add.existing(this);
 	}
 
+	//state, x, y, texture, damage, xEnemyPoint, yEnemyPoint
 	preUpdate(){
-
+		if(this.towerShot != undefined && this.timeFromLastShot > this.cadence){			
+			this.st.enemyGroup.children.iterate(enem=>{
+				if(this.xPos + this.range < enem.getXPos() && this.yPos + this.range < enem.getYPos() && this.timeFromLastShot > this.cadence){									
+					this.st.newShot(new Shots(this.st, this.xRelPos, this.yRelPos, ""+this.towerShot, this.damage, enem.getXPos(), enem.getYPos()));
+					this.timeFromLastShot = 0;				
+				}
+			});
+		}else this.timeFromLastShot++;				
 	}
 
 	setUpgradeOption(opt){

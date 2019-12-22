@@ -5,17 +5,18 @@ export default class EnemyBase extends GObject {
 		super(state, x, y, texture);
 		this.damage;
 		this.hp;
-
-		this.animation = animation;
-
-		this.stats = enemyStats;
-		this.velocity = new Phaser.Geom.Point(1, 0)
+		this.stats = enemyStats;		
+		this.velocity = new Phaser.Geom.Point(1, 0);
 
 		//Resistances
 		this.poisonRes;	
 		this.iceRes;	
 		this.fireRes;
 		this.thunderRes;
+
+		this.exp;
+
+		this.animation = animation;
 
 		this.enemyConfigCreation();		
 	}
@@ -28,18 +29,31 @@ export default class EnemyBase extends GObject {
 		this.iceRes = this.stats[3];
 		this.fireRes = this.stats[4];
 		this.thunderRes = this.stats[5];
+		this.exp = this.stats[6];
 	}
 	
 	movement(){	
 		this.xPos += this.velocity.x;	
 
-		if(this!=undefined){
+		if(this != undefined){
 			this.setPosition(this.xPos, this.yPos);
 		}
 	}
 
 	attack(other){
 		other.substractHp(this.damage);		
+		this.clearEnemy();
+	}
+
+	enemySubstractHp(howMany){
+		if(this.hp - howMany > 0){
+			this.hp -= howMany;			
+		}else this.clearEnemy();		
+	}
+
+	clearEnemy(){
+		console.log("Enemy killed. Adding exp: "+this.exp);		
+		this.st.addAccumulatedExp(this.exp);
 		this.st.removeEnemy(this);
 		this.destroy();
 	}

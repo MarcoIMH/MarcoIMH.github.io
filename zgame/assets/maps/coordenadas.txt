@@ -1,0 +1,36 @@
+MAPA 1	
+
+torre 1: 415,512
+torre 2: 670,235
+torre 3: 985,520
+estrella bichitos: 15,400
+castillo:1320,400
+
+MAPA 2
+
+torre 1: 250,180
+torre 2: 260,570
+torre 3: 550,385
+torre 3: 865,190
+torre 3: 865,570
+estrella bichitos 1: 30,258
+estrella bichitos 2: 25,485
+castillo:1320,400
+
+MAPA 3
+
+torre 1: 290,490
+torre 2: 520,490
+torre 3: 760,560
+torre 4: 1025,515
+torre 5: 1260,550
+torre 6: 1170,430
+torre 7: 1125,250
+torre 8: 810,185
+torre 9: 625,240
+torre 10: 335,170
+estrella bichitos 1: 80,462
+estrella bichitos 2: 355,350
+estrella bichitos 2: 118,245
+castillo:1320,400
+

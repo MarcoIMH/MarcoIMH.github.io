@@ -7,6 +7,8 @@ import TowerBase from "./towers/towerBase.js";
 import TowerA from "./towers/towerA.js";
 import TowerB from "./towers/towerB.js";
 
+import Shots from "./towers/shots.js";
+
 import EnemyFactory from "./enemies/enemyFactory.js";
 import LigthEnemy from "./enemies/lightEnemy.js";
 import MiddleEnemy from "./enemies/middleEnemy.js";
@@ -19,6 +21,7 @@ import HeavyUnit from "./units/heavyUnit.js";
 
 
 var pointer;
+let test = 0; //BORRAR VARIABLE, ES SOLO PARA TESTEAR!!!!
 
 export default class Game extends Phaser.Scene {
 	constructor(){
@@ -33,7 +36,7 @@ export default class Game extends Phaser.Scene {
 		this.enemyConfig;
 
 		//About Exp
-		this.expAccumulated = 1150;
+		this.expAccumulated = 150;
 		this.expMarker;	
 
 		//About waves
@@ -50,9 +53,9 @@ export default class Game extends Phaser.Scene {
 
 	preload(){
 		//Backgrounds assets
-		this.load.image("bg1", "./assets/maps/mapa1.jpg");
-		this.load.image("bg2", "./assets/maps/mapa2.jpg");
-		this.load.image("bg3", "./assets/maps/mapa3.jpg");
+		this.load.image("bg1", "./assets/maps/map1.png");
+		this.load.image("bg2", "./assets/maps/map2.png");
+		this.load.image("bg3", "./assets/maps/map3.png");
 
 		//Nexus asset
 		this.load.image("nexus", "./assets/towers/nexus.png");
@@ -65,6 +68,11 @@ export default class Game extends Phaser.Scene {
 		this.load.image("towerAA", "./assets/towers/towerAA.png");	
 		this.load.image("towerB", "./assets/towers/towerB.png");
 		this.load.image("towerBB", "./assets/towers/towerBB.png");
+
+		//Shots assets
+		this.load.image("shotBase", "./assets/shots/towerBase/keyframes/1.png");
+		this.load.image("shotA", "./assets/shots/towerA/keyframes/1.png");
+		this.load.image("shotB", "./assets/shots/towerB/keyframes/1.png");
 
 		//Enemy assets
 		this.load.image("lightEnemyPool", "./assets/enemy/ligthEnemy.png", 	 { frameWidth: 36.2, frameHeight: 35 });
@@ -92,8 +100,11 @@ export default class Game extends Phaser.Scene {
 
 		//Groups
 		this.towerGroup = this.add.group();		
-		this.unitGroup = this.add.group();
+		this.unitGroup  = this.add.group();
+
+		//Dynamic groups
 		this.enemyGroup = this.physics.add.group();
+		this.shotGroup  = this.physics.add.group();
 
 		//Arrays
 		this.towerPointArray = [];
@@ -106,7 +117,7 @@ export default class Game extends Phaser.Scene {
 		//Get enemy config from enemy factory
 		this.enemyFactory = new EnemyFactory(this, this.stage);
 
-		//Set enemy summon time
+		//Initial enemy summon time
 		this.randomTimeToEnemySummon = Phaser.Math.Between(this.minTimeToEnemySummon, this.maxtimeToEnemySummon);
 
 		//Enemy animations
@@ -114,16 +125,20 @@ export default class Game extends Phaser.Scene {
 	}
 
 	update(){
-		this.newEnemy(this.stage);		
+		//New enemies
+		this.newEnemy();		
 
-		//Collissions - Nexus / Enemies
+		//Collissions with anonymous function - Nexus / Enemies
 		this.physics.add.collider(this.nexus, this.enemyGroup, (nex, enem) =>{enem.attack(nex);});
+
+		//Collisions with anonymous function - Shots / Enemies
+		this.physics.add.collider(this.shotGroup, this.enemyGroup, (shot, enem) =>{ shot.attack(enem);});
 
 		//Update markers
 		this.markers();
 
 		//Check endgame
-		if(this.endGame == true) this.scene.start('menuend')
+		if(this.endGame == true) this.scene.start('menuend');
 	}
 
 
@@ -162,10 +177,10 @@ export default class Game extends Phaser.Scene {
 	}
 
 	/*-----------------------------------------------
-					ENEMY CREATION 
-			    DEPENDS OF TYPE AND STAGE
+			   INDEPENDENT OBJECT CREATION 
+			      DEPENDS OF TYPE 
 	------------------------------------------------*/
-	newEnemy(mapSel){
+	newEnemy(){
 		//Check time to enemy summon
 		if(this.timeFromLastEnemy >= this.randomTimeToEnemySummon){	
 
@@ -173,15 +188,15 @@ export default class Game extends Phaser.Scene {
 			
 			switch(enemyType){
 				case 0:{
-					this.enemyGroup.add(new LigthEnemy(this, 0, 400, this.enemyFactory.getEnemyConfig("light")));
+					this.enemyGroup.add(new LigthEnemy(this, 200, 400, this.enemyFactory.getEnemyConfig("light")));
 					break;
 				}
 				case 1:{
-					this.enemyGroup.add(new MiddleEnemy(this, 0, 400, this.enemyFactory.getEnemyConfig("middle")));
+					this.enemyGroup.add(new MiddleEnemy(this, 200, 400, this.enemyFactory.getEnemyConfig("middle")));
 					break;
 				}
 				case 2:{
-					this.enemyGroup.add(new HeavyEnemy(this,  0, 400, this.enemyFactory.getEnemyConfig("heavy")));	
+					this.enemyGroup.add(new HeavyEnemy(this,  200, 400, this.enemyFactory.getEnemyConfig("heavy")));	
 					break;
 				}
 			}
@@ -190,6 +205,9 @@ export default class Game extends Phaser.Scene {
 		}else this.timeFromLastEnemy++;
 	}
 
+	newShot(object){
+		this.shotGroup.add(object);
+	}
 	/*-------------------------------------------------
 					ANIMATIONS
 	---------------------------------------------------*/
@@ -209,6 +227,10 @@ export default class Game extends Phaser.Scene {
 		this.enemyGroup.remove(enemy);
 	}
 
+	removeShot(shot){
+		this.shotGroup.remove(shot);
+	}
+
 	/*--------------------------------------------
 		GETTERS, SETTERS && OTHERS AUXILIAR FUNCTIONS 
 		THAT DON'T NEED ADDITIONAL EXPLANATIONS
@@ -222,7 +244,8 @@ export default class Game extends Phaser.Scene {
 	}
 
 	addAccumulatedExp(howMany){
-		this.expAccumulated += howMany;
+		this.expAccumulated = this.expAccumulated+howMany;
+		console.log(this.expAccumulated);
 	}
 
 	setEndGame(bool){
