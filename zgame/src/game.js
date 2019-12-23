@@ -25,6 +25,17 @@ import LightUnit from "./units/lightUnit.js";
 import MiddleUnit from "./units/middleUnit.js";
 import HeavyUnit from "./units/heavyUnit.js";
 
+//Const for music
+const musicConfig = {
+    mute: false,
+    volume: 1,
+    rate: 1,
+    detune: 0,
+    seek: 0,
+    loop: true,
+    delay: 0
+};
+
 //Declare it as global var to use it in the rest of class without asking for it
 var pointer;
 
@@ -86,11 +97,29 @@ export default class Game extends Phaser.Scene {
 		this.load.image("heavyUnit1", "./assets/units/race7.png");
 		this.load.image("heavyUnit2", "./assets/units/race8.png");
 		this.load.image("heavyUnit3", "./assets/units/race9.png");
+
+		//Music
+		this.load.audio('gameMusic', './assets/music/gamemusic_noCopyRight_FreeUse.mp3');
+
+		//Button back
+		this.load.image("back", "./assets/buttons/buttonMap.png");
 	}
 
 	create(){	
+		//Music
+		this.musicSound = this.sound.add('gameMusic', musicConfig);
+		this.musicSound.play();
+
 		pointer = this.input.activePointer;	
 		this.input.mouse.disableContextMenu();
+
+
+		//Button
+    	this.buttonBack = this.add.image(1200, 730, "back").setScale(0.5).setInteractive();
+    	this.buttonBack.on('pointerdown', pointer=>{
+    		this.scene.start('menumap');
+    	});
+
 
 		this.endGame = false;
 
@@ -183,6 +212,7 @@ export default class Game extends Phaser.Scene {
 		if(this.unitsWave == 20 && this.wave == 4){
 			setVictoryTrue();
 			this.resetGameConfig();
+			this.musicSound.stop();
 			this.scene.start('menuend');
 		}
 
@@ -208,6 +238,8 @@ export default class Game extends Phaser.Scene {
 		//Check endgame
 		if(this.endGame == true) {
 			setVictoryFalse();
+			this.resetGameConfig();
+			this.musicSound.stop();
 			this.scene.start('menuend');
 		}
 	}
