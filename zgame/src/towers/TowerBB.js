@@ -4,7 +4,7 @@ export default class TowerBB extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
 
-		this.damage = 250;
+		this.damage = 90;
 		this.range = 170;
 		this.cadence = 65;
 

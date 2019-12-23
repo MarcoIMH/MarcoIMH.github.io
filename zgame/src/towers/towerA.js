@@ -5,7 +5,7 @@ export default class TowerA extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);		
 
-		this.damage = 150;
+		this.damage = 55;
 		this.range = 250;
 		this.cadence = 45;
 

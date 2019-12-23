@@ -37,7 +37,7 @@ export default class Game extends Phaser.Scene {
 		this.enemyConfig;
 
 		//About Exp
-		this.expAccumulated = 1500;
+		this.expAccumulated = 75;
 		this.expMarker;	
 
 		//About waves
