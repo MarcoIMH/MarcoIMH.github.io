@@ -53,8 +53,8 @@ export default class Game extends Phaser.Scene {
 		this.nexus;
 
 		//About units
-		this.unitTimeLastSummon = 0;
-		this.unitTimeSummon = 1;
+		this.unitTimeLastSummon = 1;
+		this.nextTimeUnitSummon = 0;
 	}
 
 	preload(){
@@ -143,10 +143,15 @@ export default class Game extends Phaser.Scene {
 	    //Get unit config from enemy factory
 	    this.unitFact = new UnitFactory(this, this.stage);
 
+	    //Summon units bar atributes
+		this.thicknessBar = 25;
+		this.maxBarSize = 135;		
+		this.actualBarSize = 135;
+
 	    //Initial units
 	    this.newUnitPool(1);
 	    this.newUnitPool(2);
-	    this.newUnitPool(3);
+	    this.newUnitPool(3);	    
 	}
 
 	update(){
@@ -167,6 +172,9 @@ export default class Game extends Phaser.Scene {
 
 		//Update markers
 		this.markers();
+
+		//Update summon time bar
+		this.unitTimeBar();
 
 		//Check endgame
 		if(this.endGame == true) this.scene.start('menuend');
@@ -272,7 +280,7 @@ export default class Game extends Phaser.Scene {
 		this.unitConfig = this.unitFact.getUniConfig();
 
 		object.on('pointerdown', pointer => {
-			if(this.unitTimeSummon > this.unitTimeLastSummon){
+			if(this.unitTimeLastSummon >= this.nextTimeUnitSummon){
 				if(txt == "lightUnit1" || txt == "lightUnit2" || txt == "lightUnit3"){
 					this.unitGroup.add(new LightUnit(this, 1100, 400, this.unitConfig, txt));
 				}
@@ -282,8 +290,9 @@ export default class Game extends Phaser.Scene {
 				else{
 					this.unitGroup.add(new HeavyUnit(this, 1100, 400, this.unitConfig, txt));
 				}
-				this.unitTimeSummon = this.unitConfig[5];
+				this.nextTimeUnitSummon = this.unitConfig[5];
 				this.unitTimeLastSummon = 0;
+				this.actualBarSize = this.maxBarSize;
 				this.newUnitPool(slot);
 			}	
 	    });
@@ -293,7 +302,25 @@ export default class Game extends Phaser.Scene {
 					UNITS TIME BAR
 	---------------------------------------------------*/
 	unitTimeBar(){
-		
+		//Graphics
+		this.graphics = this.add.graphics();	
+
+		if(this.unitTimeLastSummon < this.nextTimeUnitSummon )
+			this.unitTimeLastSummon++;
+
+		//The percentage of secons that the summons has consumed
+		let percentage = ((this.unitTimeLastSummon * 100) / this.nextTimeUnitSummon);	
+
+		//Then applies to hp bar
+		this.actualBarSize = ((this.maxBarSize * percentage) / 100);
+
+		//Bottom hp bar
+        this.graphics.fillStyle(0xF01316, 1);
+        this.graphics.fillRect(675, 650, 25, this.maxBarSize);	
+
+        //Top hp bar
+        this.graphics.fillStyle(0xDF6A18, 1);	
+        this.graphics.fillRect(675, 650, 25, this.actualBarSize);
 	}
 
 	/*-------------------------------------------------

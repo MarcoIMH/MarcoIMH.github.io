@@ -62,39 +62,39 @@ export default class UnitFactory{
 		------------------------------------------------------------------------------------------------------------*/
 		switch(this.unitType){
 			case 1: {
-				this.unitSettings = [125,7,0,0,0, 500];
+				this.unitSettings = [125,7,0,0,0, 200];
 				break;
 			}
 			case 2:{
-				this.unitSettings = [220,0,0,14,0, 1000];
+				this.unitSettings = [220,0,0,14,0, 300];
 				break;
 			}
 			case 3:{
-				this.unitSettings = [310,25,10,0,0, 2000];
+				this.unitSettings = [310,25,10,0,0, 400];
 				break;
 			}
 			case 4:{
-				this.unitSettings = [155,0,0,18,0, 750];
+				this.unitSettings = [155,0,0,18,0, 300];
 				break;
 			}
 			case 5:{
-				this.unitSettings = [250,0,0,23,0, 1250];
+				this.unitSettings = [250,0,0,23,0, 400];
 				break;
 			}
 			case 6:{
-				this.unitSettings = [600,0,0,35,0, 2250];
+				this.unitSettings = [600,0,0,35,0, 500];
 				break;
 			}
 			case 7:{
-				this.unitSettings = [220,0,16,0,0, 1000];
+				this.unitSettings = [220,0,16,0,0, 400];
 				break;
 			}
 			case 8:{
-				this.unitSettings = [410,0,0,0,25, 1500];
+				this.unitSettings = [410,0,0,0,25, 500];
 				break;
 			}
 			case 9:{
-				this.unitSettings = [900,0,35,0,0, 2500];
+				this.unitSettings = [900,0,35,0,0, 600];
 				break;
 			}	
 		}
