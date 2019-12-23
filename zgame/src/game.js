@@ -35,31 +35,9 @@ export default class Game extends Phaser.Scene {
 		  These elements are declared here for greater visibility
 		---------------------------------------------------------*/
 		this.background;
-		this.endGame = false;
 		this.stage;
 		this.mapConfig;
 		this.enemyConfig;
-
-		//About Exp
-		this.expAccumulated = 75;
-		this.expMarker;	
-
-		//About waves
-		this.wave = 1;	
-		this.unitsWave = 0;
-		this.maxUnitsWave = 15;
-		this.waveMarker;
-		this.maxtimeToEnemySummon = 200;
-		this.minTimeToEnemySummon = 100;
-		this.randomTimeToEnemySummon;
-		this.timeFromLastEnemy = 0;
-
-		//About nexus
-		this.nexus;
-
-		//About units
-		this.unitTimeLastSummon = 1;
-		this.nextTimeUnitSummon = 0;
 	}
 
 	preload(){
@@ -113,8 +91,30 @@ export default class Game extends Phaser.Scene {
 		pointer = this.input.activePointer;	
 		this.input.mouse.disableContextMenu();
 
-		//Get actual stage
+		this.endGame = false;
+
+		//Get actual stage and set it		
 		this.stage = getMapSelector();
+
+		//About Exp
+		this.expAccumulated = 75;
+		this.expMarker;	
+
+		//About waves
+		this.wave = 1;	
+		this.unitsWave = 0;
+		this.waveMarker;
+		this.maxtimeToEnemySummon = 200;
+		this.minTimeToEnemySummon = 100;
+		this.randomTimeToEnemySummon;
+		this.timeFromLastEnemy = 0;
+
+		//About nexus
+		this.nexus;
+
+		//About units
+		this.unitTimeLastSummon = 1;
+		this.nextTimeUnitSummon = 0;
 
 		//Setting background depends of mapSelector
 		console.log("Loading background. MapSelector: "+this.stage);
@@ -166,19 +166,22 @@ export default class Game extends Phaser.Scene {
 		//New enemies
 		this.newEnemy();	
 
-		if(this.unitsWave == 10 && this.wave == 1){
+		if(this.unitsWave == 15 && this.wave == 1){
 			this.unitsWave = 0;
 			this.wave++;
 		}
-		if(this.unitsWave == 15 && this.wave == 2){
+		if(this.unitsWave == 20 && this.wave == 2){
 			this.unitsWave = 0;
 			this.wave++;
 		}
-		if(this.unitsWave == 20 && this.wave == 3){
+		if(this.unitsWave == 15 && this.wave == 3){
 			this.unitsWave = 0;
-			this.wave++;
-			this.endGame = true;
+			this.wave++;			
+		}
+		if(this.unitsWave == 20 && this.wave == 4){
 			setVictoryTrue();
+			this.resetGameConfig();
+			this.scene.start('menuend');
 		}
 
 
@@ -242,7 +245,7 @@ export default class Game extends Phaser.Scene {
 		
 		//Wave Marker
 		if(this.waveMarker!=undefined) this.waveMarker.destroy();
-		this.waveMarker = this.add.text(1230, 28, this.wave+ " / 3", {font: "45px Arial", fill: "#F4EBE5"});
+		this.waveMarker = this.add.text(1230, 28, this.wave+ " / 4", {font: "45px Arial", fill: "#F4EBE5"});
 	}
 
 	/*-----------------------------------------------
@@ -271,7 +274,7 @@ export default class Game extends Phaser.Scene {
 					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("heavy")));	
 					break;
 				}
-				case 3:{
+				default:{
 					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("heavy")));	
 					break;
 				}

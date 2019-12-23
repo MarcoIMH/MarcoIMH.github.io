@@ -18,9 +18,9 @@ export default class EnemyFactory{
 		------------------------------------------------------------------------------------------------------------*/
 		switch(this.ms){
 			case 1: {
-				if     (this.type == "light")	this.enemySettings = [100,100,0,0,0,0,5];
-				else if(this.type == "middle")	this.enemySettings = [200,250,5,0,0,10,10];
-				else if(this.type == "heavy")	this.enemySettings = [400,500,10,0,0,20,25];
+				if     (this.type == "light")	this.enemySettings = [140,100,0,0,0,0,7];
+				else if(this.type == "middle")	this.enemySettings = [170,250,5,0,0,10,8];
+				else if(this.type == "heavy")	this.enemySettings = [300,500,10,0,0,20,25];
 				break;
 			}
 			case 2:{
