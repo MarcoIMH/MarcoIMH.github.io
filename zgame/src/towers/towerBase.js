@@ -38,10 +38,12 @@ export default class TowerBase extends TowerInterface {
 		});
 	}
 
+	//Control panel to upgrade tower base
 	openOptions(){
 		//Tower user option
 		this.opt = this.st.add.image(this.xRelPos, this.yRelPos - 100, "option");
 
+		//Option upgrade = Tower A. 
 		this.optA = this.st.add.image(this.xRelPos - 35, this.yRelPos - 105, "towerAicon").setScale(0.5).setInteractive();
 		this.optA.on('pointerdown', pointer=>{			
 			if(this.checkUpgrade() == true) {
@@ -52,6 +54,7 @@ export default class TowerBase extends TowerInterface {
 			else this.clearOptions();
 		});
 		
+		//Option upgrade = Tower B
 		this.optB = this.st.add.image(this.xRelPos + 35, this.yRelPos - 105, "towerBicon").setScale(0.5).setInteractive();
 		this.optB.on('pointerdown', pointer=>{
 			if(this.checkUpgrade() == true) {
@@ -63,6 +66,7 @@ export default class TowerBase extends TowerInterface {
 		});
 	}
 
+	//Clear options. Its needed to close the option panel
 	clearOptions(){
 		this.opt.destroy();
 		this.optA.destroy();

@@ -1,31 +1,32 @@
+//States imports and map configurations
 import {getMapSelector} from "./states/menuMap.js";
 import {setVictoryFalse} from "./states/menuEnd.js";
 import {setVictoryTrue} from "./states/menuEnd.js";
 import MapFactory from "./maps/mapFactory.js";
 
+//Towers imports
 import Nexus from "./towers/nexus.js";
 import TowerPoint from "./towers/towerPoint.js";
 import TowerBase from "./towers/towerBase.js";
 import TowerA from "./towers/towerA.js";
 import TowerB from "./towers/towerB.js";
 
-
 import Shots from "./towers/shots.js";
 
+//Enemies imports
 import EnemyFactory from "./enemies/enemyFactory.js";
 import LigthEnemy from "./enemies/lightEnemy.js";
 import MiddleEnemy from "./enemies/middleEnemy.js";
 import HeavyEnemy from "./enemies/heavyEnemy.js";
 
-import UnitFactory from "./units/UnitFactory.js";
+//Units imports
+import UnitFactory from "./units/unitFactory.js";
 import LightUnit from "./units/lightUnit.js";
 import MiddleUnit from "./units/middleUnit.js";
 import HeavyUnit from "./units/heavyUnit.js";
 
-
-
+//Declare it as global var to use it in the rest of class without asking for it
 var pointer;
-let test = 0; //BORRAR VARIABLE, ES SOLO PARA TESTEAR!!!!
 
 export default class Game extends Phaser.Scene {
 	constructor(){
@@ -166,6 +167,7 @@ export default class Game extends Phaser.Scene {
 		//New enemies
 		this.newEnemy();	
 
+		//Wave control
 		if(this.unitsWave == 15 && this.wave == 1){
 			this.unitsWave = 0;
 			this.wave++;
@@ -289,6 +291,7 @@ export default class Game extends Phaser.Scene {
 		this.shotGroup.add(object);
 	}
 
+	//Make a new unit in the select slot bar
 	newUnitPool(slot){
 		this.textureName = this.unitFact.newRandomUnit();
 		console.log(this.textureName);
@@ -307,9 +310,12 @@ export default class Game extends Phaser.Scene {
 		}			
 	}	
 
+	//Add action at new unitt in the slot bar
 	unitAction(object, slot, txt){
+		//Get unit config
 		this.unitConfig = this.unitFact.getUniConfig();
 
+		//Set interactive image, on click, if possible make a new unit in the game
 		object.on('pointerdown', pointer => {
 			if(this.unitTimeLastSummon >= this.nextTimeUnitSummon){
 				if(txt == "lightUnit1" || txt == "lightUnit2" || txt == "lightUnit3"){
@@ -321,6 +327,7 @@ export default class Game extends Phaser.Scene {
 				else{
 					this.unitGroup.add(new HeavyUnit(this, 1100, 400, this.unitConfig, txt));
 				}
+				//Update control unit summon vars
 				this.nextTimeUnitSummon = this.unitConfig[5];
 				this.unitTimeLastSummon = 0;
 				this.actualBarSize = this.maxBarSize;
@@ -381,6 +388,7 @@ export default class Game extends Phaser.Scene {
 	       frames: this.anims.generateFrameNumbers("heavyEnemyPool", { start: 1, end: 4})	       
 	    });
 	}
+
 	/*-------------------------------------------------
 					REMOVE GROUPS ACTIONS
 	---------------------------------------------------*/
