@@ -46,7 +46,8 @@ export default class TowerInterface extends Phaser.GameObjects.Sprite{
 		return false;
 	}
 
-	preUpdate(){		
+	preUpdate(){	
+		this.st.bringTop(this);	
 		if(this.shootingMode == true && this.range != 0 && this.towerShot != undefined && this.timeFromLastShot > this.cadence){			
 			this.st.enemyGroup.children.iterate(enem=>{
 				//Calculate absolute distance between enemy and this tower

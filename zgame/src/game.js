@@ -7,6 +7,7 @@ import TowerBase from "./towers/towerBase.js";
 import TowerA from "./towers/towerA.js";
 import TowerB from "./towers/towerB.js";
 
+
 import Shots from "./towers/shots.js";
 
 import EnemyFactory from "./enemies/enemyFactory.js";
@@ -66,7 +67,10 @@ export default class Game extends Phaser.Scene {
 		//Nexus asset
 		this.load.image("nexus", "./assets/towers/nexus.png");
 
-		//Towers assets		
+		//Towers assets	
+		this.load.image("option", "./assets/towers/options.png");
+		this.load.image("towerAicon", "./assets/towers/towerAicon.png");	
+		this.load.image("towerBicon", "./assets/towers/towerBicon.png");
 		this.load.image("towerPoint1", "./assets/towers/towerPoint1.png");
 		this.load.image("towerPoint2", "./assets/towers/towerPoint2.png");
 		this.load.image("towerBase", "./assets/towers/towerBase.png");	
@@ -328,13 +332,28 @@ export default class Game extends Phaser.Scene {
 	---------------------------------------------------*/
 	enemyAnimations(){
 		this.anims.create({
+	       key: 'lightEnemyAnimation',
+	       frameRate: 5,
+	       repeat: -1,
+	       frames: this.anims.generateFrameNumbers("lightEnemyPool", { start: 1, end: 4})	       
+	    });
+	}
+	enemyAnimations(){
+		this.anims.create({
 	       key: 'middleEnemyAnimation',
 	       frameRate: 5,
 	       repeat: -1,
-	       frames: this.anims.generateFrameNumbers("middleEnemy", { start: 1, end: 4})	       
+	       frames: this.anims.generateFrameNumbers("middleEnemyPool", { start: 1, end: 4})	       
 	    });
 	}
-
+	enemyAnimations(){
+		this.anims.create({
+	       key: 'heavyEnemyAnimation',
+	       frameRate: 5,
+	       repeat: -1,
+	       frames: this.anims.generateFrameNumbers("heavyEnemyPool", { start: 1, end: 4})	       
+	    });
+	}
 	/*-------------------------------------------------
 					REMOVE GROUPS ACTIONS
 	---------------------------------------------------*/

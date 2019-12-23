@@ -6,6 +6,10 @@ export default class TowerBase extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
 
+		this.opt;
+		this.optA;
+		this.optB;
+
 		this.damage = 35;
 		this.range = 150;
 		this.cadence = 50;
@@ -29,14 +33,40 @@ export default class TowerBase extends TowerInterface {
 
 		//Set action
 		this.element.on('pointerdown', pointer=>{	
-			//PONER CÓDIGO AQUÍ PARA MOSTRAR LAS DOS OPCIONES DE MEJORA DE TORRE	
-
-			//Check that the tower can be improved, in this case do it
-			this.upgradeOption = "towerB";
-			if(this.checkUpgrade() == true){
-				if(this.upgradeOption == "towerA") this.element = new TowerA(this.st, this.element, this.xPos, this.yPos);
-				else this.element = new TowerB(this.st, this.element, this.xPos, this.yPos);
-			}			
+			//Check that the tower can be improved, in this case open options panel
+			this.openOptions();
 		});
 	}
+
+	openOptions(){
+		//Tower user option
+		this.opt = this.st.add.image(this.xRelPos, this.yRelPos - 100, "option");
+
+		this.optA = this.st.add.image(this.xRelPos - 35, this.yRelPos - 105, "towerAicon").setScale(0.5).setInteractive();
+		this.optA.on('pointerdown', pointer=>{			
+			if(this.checkUpgrade() == true) {
+				console.log("entra en A");
+				this.clearOptions();
+				this.element = new TowerA(this.st, this.element, this.xPos, this.yPos);	
+			}
+			else this.clearOptions();
+		});
+		
+		this.optB = this.st.add.image(this.xRelPos + 35, this.yRelPos - 105, "towerBicon").setScale(0.5).setInteractive();
+		this.optB.on('pointerdown', pointer=>{
+			if(this.checkUpgrade() == true) {
+				console.log("entra en B");
+				this.clearOptions();
+				this.element = new TowerB(this.st, this.element, this.xPos, this.yPos);
+			}
+			else this.clearOptions();
+		});
+	}
+
+	clearOptions(){
+		this.opt.destroy();
+		this.optA.destroy();
+		this.optB.destroy();
+	}
+		
 }
