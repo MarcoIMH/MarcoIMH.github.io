@@ -7,8 +7,8 @@ export default class TowerBase extends TowerInterface {
 		super(state, object, x, y);
 
 		this.damage = 90;
-		this.range = 16;
-		//this.cadence = 1.75;
+		this.range = 150;
+		this.cadence = 50;
 		this.upgradeExp = 80;	
 
 		this.createTowerBase();			
@@ -16,15 +16,15 @@ export default class TowerBase extends TowerInterface {
 
 	createTowerBase(){
 		//This +100 / +60 its needed to places tower in the correct position.
-		this.xRelPos = this.xPos + 100;;
+		this.xRelPos = this.xPos + 100;
 		this.yRelPos = this.yPos + 60;
 
-		console.log("Upgrading towerPoint to towerBase at: "+this.xPos+","+this.yPos);
+		console.log("Upgrading towerPoint to towerBase");
 
 		//Set shot type
 		this.towerShot = "shotBase";
 
-		//Set image. 
+		//Set image
 		this.element = this.st.add.image(this.xRelPos, this.yRelPos, "towerBase").setScale(0.2).setInteractive();
 
 		//Set action

@@ -58,7 +58,6 @@ export default class EnemyBase extends GObject {
 	}
 
 	preUpdate(){
-		//this.st.children.moveDown(this);	
 		this.st.objectMoveDown(this);	
 		this.movement();
 	}

@@ -5,18 +5,26 @@ export default class TowerB extends TowerInterface {
 	constructor(state, object, x, y){
 		super(state, object, x, y);
 
-		this.damage = 65;
-		this.range = 14;
-		this.cadence = 1.5;
+		this.damage = 190;
+		this.range = 160;
+		this.cadence = 60;
+
 		this.upgradeExp = 120;
 
 		this.creatTowerB();	
 	}
 
 	creatTowerB(){
-		console.log("Upgrading towerBase to towerB at: "+this.xPos+","+this.yPos);
-		//Set image. This +105 / +35 its needed to places tower in the correct position.
-		this.element = this.st.add.image(this.xPos + 105, this.yPos + 35, "towerB").setScale(0.15).setInteractive();
+		console.log("Upgrading towerBase to towerB");
+
+		//This +105 / +35 its needed to places tower in the correct position.
+		this.xRelPos = this.xPos + 105;
+		this.yRelPos = this.yPos + 35;
+
+		this.element = this.st.add.image(this.xRelPos, this.yRelPos, "towerB").setScale(0.15).setInteractive();
+
+		//Set shot type
+		this.towerShot = "shotB";
 
 		//Set action
 		this.element.on('pointerdown', pointer=>{			

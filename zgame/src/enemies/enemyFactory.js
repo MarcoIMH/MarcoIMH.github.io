@@ -32,7 +32,7 @@ export default class EnemyFactory{
 			case 3: {
 				if     (this.type == "light")	this.enemySettings = [400,200,10,0,0,20,25];
 				else if(this.type == "middle")	this.enemySettings = [800,400,15,0,0,30,70];
-				else if(this.type == "heavy")	this.enemySettings = [1500,820,20,0,0,40,165];
+				else if(this.type == "heavy")	this.enemySettings = [1200,850,20,0,0,40,165];
 				break;
 			}
 		}			

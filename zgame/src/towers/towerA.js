@@ -3,21 +3,29 @@ import TowerAA from "./towerAA.js";
 
 export default class TowerA extends TowerInterface {
 	constructor(state, object, x, y){
-		super(state, object, x, y);
-		
-		this.damage = 55;
-		this.range = 18;
-		this.cadence = 0.9;
+		super(state, object, x, y);		
+
+		this.damage = 150;
+		this.range = 250;
+		this.cadence = 45;
+
 		this.upgradeExp = 120;	
 
 		this.createTowerA();	
 	}
 
 	createTowerA(){
-		console.log("Upgrading towerBase to towerA at: "+this.xPos+","+this.yPos);
-		//Set image. This +90 / +35 its needed to places tower in the correct position.
-		this.element = this.st.add.image(this.xPos + 90, this.yPos + 35, "towerA").setScale(0.1).setInteractive();
+		console.log("Upgrading towerBase to towerA");
 
+		//This +90 / +35 its needed to places tower in the correct position.
+		this.xRelPos = this.xPos + 90;
+		this.yRelPos = this.yPos + 35;
+
+		this.element = this.st.add.image(this.xRelPos, this.yRelPos, "towerA").setScale(0.1).setInteractive();
+
+		//Set shot type
+		this.towerShot = "shotA";
+		
 		//Set action
 		this.element.on('pointerdown', pointer=>{			
 			//Check that the tower can be improved

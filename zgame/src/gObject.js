@@ -11,10 +11,10 @@ export default class GObject extends Phaser.Physics.Arcade.Sprite{
 	}
 	
 	getXPos(){
-		return this.xPos;
+		return this.x;
 	}
 
 	getYPos(){
-		return this.yPos;
+		return this.y;
 	}
 }

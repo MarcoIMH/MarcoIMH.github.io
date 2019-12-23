@@ -37,7 +37,7 @@ export default class Game extends Phaser.Scene {
 		this.enemyConfig;
 
 		//About Exp
-		this.expAccumulated = 150;
+		this.expAccumulated = 1500;
 		this.expMarker;	
 
 		//About waves
@@ -249,8 +249,7 @@ export default class Game extends Phaser.Scene {
 	}
 
 	addAccumulatedExp(howMany){
-		this.expAccumulated = this.expAccumulated+howMany;
-		console.log(this.expAccumulated);
+		this.expAccumulated += howMany;
 	}
 
 	setEndGame(bool){
