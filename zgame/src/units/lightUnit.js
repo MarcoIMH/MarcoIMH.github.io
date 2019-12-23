@@ -1,6 +1,7 @@
 import UnitBase from "./unitBase.js";
 
 export default class LightUnit extends UnitBase {
-  constructor() {
-  }
+	constructor(state, x, y, unitStats, texture){
+		super(state, x, y, unitStats, texture, "lightUnitAnimation");
+	} 
 }

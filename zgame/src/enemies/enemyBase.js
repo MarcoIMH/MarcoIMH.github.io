@@ -44,10 +44,25 @@ export default class EnemyBase extends GObject {
 		this.clearEnemy();
 	}
 
+	attackUnit(other){
+		other.unitSubstractHp(this.damage);	
+	}
+
 	enemySubstractHp(howMany){
 		if(this.hp - howMany > 0){
 			this.hp -= howMany;			
 		}else this.clearEnemy();		
+	}
+
+	enemySubstractHpWithResisTances(pAt, iAt, fAt, tAt){
+		console.log(pAt, iAt, fAt, tAt);
+		if(this.poisonRes < pAt)  this.hp -= (pAt - this.poisonRes);
+		if(this.iceRes < iAt)  this.hp -= (iAt - this.iceRes);
+		if(this.fireRes < fAt)  this.hp -= (fAt - this.fireRes);
+		if(this.thunderRes < tAt)  this.hp -= (tAt - this.thunderRes);
+
+		console.log(this.hp);
+		if(this.hp < 0) this.clearEnemy();
 	}
 
 	clearEnemy(){

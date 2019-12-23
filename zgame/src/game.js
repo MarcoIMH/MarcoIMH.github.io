@@ -14,6 +14,7 @@ import LigthEnemy from "./enemies/lightEnemy.js";
 import MiddleEnemy from "./enemies/middleEnemy.js";
 import HeavyEnemy from "./enemies/heavyEnemy.js";
 
+import UnitFactory from "./units/UnitFactory.js";
 import LightUnit from "./units/lightUnit.js";
 import MiddleUnit from "./units/middleUnit.js";
 import HeavyUnit from "./units/heavyUnit.js";
@@ -25,7 +26,7 @@ let test = 0; //BORRAR VARIABLE, ES SOLO PARA TESTEAR!!!!
 
 export default class Game extends Phaser.Scene {
 	constructor(){
-		super({ key: 'game'});this.stage;
+		super({ key: 'game'});
 
 		/*--------------------------------------------------------
 		  These elements are declared here for greater visibility
@@ -41,7 +42,7 @@ export default class Game extends Phaser.Scene {
 		this.expMarker;	
 
 		//About waves
-		this.wave = 0;	
+		this.wave = 1;	
 		this.waveMarker;
 		this.maxtimeToEnemySummon = 200;
 		this.minTimeToEnemySummon = 100;
@@ -50,6 +51,10 @@ export default class Game extends Phaser.Scene {
 
 		//About nexus
 		this.nexus;
+
+		//About units
+		this.unitTimeLastSummon = 0;
+		this.unitTimeSummon = 1;
 	}
 
 	preload(){
@@ -76,13 +81,24 @@ export default class Game extends Phaser.Scene {
 		this.load.image("shotB", "./assets/shots/towerB/keyframes/1.png");
 
 		//Enemy assets
-		this.load.image("lightEnemyPool", "./assets/enemy/ligthEnemy.png", 	 { frameWidth: 36.2, frameHeight: 35 });
-		this.load.image("middleEnemyPool", "./assets/enemy/middleEnemy.png", { frameWidth: 36.2, frameHeight: 35 });
-		this.load.image("heavyEnemyPool", "./assets/enemy/heavyEnemy.png", 	 { frameWidth: 36.2, frameHeight: 35 });
+		this.load.spritesheet("lightEnemyPool", "./assets/enemy/ligthEnemy.png",   { frameWidth: 36.2, frameHeight: 35 });
+		this.load.spritesheet("middleEnemyPool", "./assets/enemy/middleEnemy.png", { frameWidth: 36.2, frameHeight: 35 });
+		this.load.spritesheet("heavyEnemyPool", "./assets/enemy/heavyEnemy.png",   { frameWidth: 36.2, frameHeight: 35 });
 
 		this.load.image("lightEnemy", "./assets/enemy/ligthEnemyIndividual.png");
 		this.load.image("middleEnemy", "./assets/enemy/middleEnemyIndividual.png");
 		this.load.image("heavyEnemy", "./assets/enemy/heavyEnemyIndividual.png");
+
+		//Units assets
+		this.load.image("lightUnit1", "./assets/units/race1.png");
+		this.load.image("lightUnit2", "./assets/units/race2.png");
+		this.load.image("lightUnit3", "./assets/units/race3.png");
+		this.load.image("middleUnit1", "./assets/units/race4.png");
+		this.load.image("middleUnit2", "./assets/units/race5.png");
+		this.load.image("middleUnit3", "./assets/units/race6.png");
+		this.load.image("heavyUnit1", "./assets/units/race7.png");
+		this.load.image("heavyUnit2", "./assets/units/race8.png");
+		this.load.image("heavyUnit3", "./assets/units/race9.png");
 	}
 
 	create(){	
@@ -123,6 +139,14 @@ export default class Game extends Phaser.Scene {
 
 		//Enemy animations
 	    //this.enemyAnimations();
+
+	    //Get unit config from enemy factory
+	    this.unitFact = new UnitFactory(this, this.stage);
+
+	    //Initial units
+	    this.newUnitPool(1);
+	    this.newUnitPool(2);
+	    this.newUnitPool(3);
 	}
 
 	update(){
@@ -134,6 +158,12 @@ export default class Game extends Phaser.Scene {
 
 		//Collisions with anonymous function - Shots / Enemies
 		this.physics.add.collider(this.shotGroup, this.enemyGroup, (shot, enem) =>{ shot.attack(enem);});
+
+		//Collisions with anonymous function - Units / Enemies
+		this.physics.add.collider(this.unitGroup, this.enemyGroup, (unit, enem) =>{ 
+			unit.attack(enem); 
+			enem.attackUnit(unit);
+		});
 
 		//Update markers
 		this.markers();
@@ -173,11 +203,11 @@ export default class Game extends Phaser.Scene {
 	markers(){
 		//Experiencie marker
 		if(this.expMarker!=undefined) this.expMarker.destroy();
-		this.expMarker = this.add.text(40, 50, this.expAccumulated, {font: "50px Arial", fill: "#1C180E"});
+		this.expMarker = this.add.text(160, 30, this.expAccumulated, {font: "45px Arial", fill: "#F4EBE5"});
 		
 		//Wave Marker
 		if(this.waveMarker!=undefined) this.waveMarker.destroy();
-		this.waveMarker = this.add.text(900, 50, this.wave, {font: "50px Arial", fill: "#1C180E"});
+		this.waveMarker = this.add.text(1230, 28, this.wave+ " / 3", {font: "45px Arial", fill: "#F4EBE5"});
 	}
 
 	/*-----------------------------------------------
@@ -188,20 +218,26 @@ export default class Game extends Phaser.Scene {
 		//Check time to enemy summon
 		if(this.timeFromLastEnemy >= this.randomTimeToEnemySummon){	
 
-			let enemyType = Phaser.Math.Between(0, 2);
+			let enemyType = Phaser.Math.Between(0, this.wave);
 			let summ = Phaser.Math.Between(0, this.enemyPathArray.length-1);
+
+			let yVar = Phaser.Math.Between(-20, 15);
 			
 			switch(enemyType){
 				case 0:{
-					this.enemyGroup.add(new LigthEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("light")));
+					this.enemyGroup.add(new LigthEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("light")));
 					break;
 				}
 				case 1:{
-					this.enemyGroup.add(new MiddleEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("middle")));
+					this.enemyGroup.add(new MiddleEnemy(this, this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("middle")));
 					break;
 				}
 				case 2:{
-					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y, this.enemyFactory.getEnemyConfig("heavy")));	
+					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("heavy")));	
+					break;
+				}
+				case 3:{
+					this.enemyGroup.add(new HeavyEnemy(this,  this.enemyPathArray[summ].x, this.enemyPathArray[summ].y + yVar, this.enemyFactory.getEnemyConfig("heavy")));	
 					break;
 				}
 			}
@@ -213,6 +249,53 @@ export default class Game extends Phaser.Scene {
 	newShot(object){
 		this.shotGroup.add(object);
 	}
+
+	newUnitPool(slot){
+		this.textureName = this.unitFact.newRandomUnit();
+		console.log(this.textureName);
+		if(slot == 1){
+			if(this.unitBar1 != undefined) this.unitBar1.destroy();
+			this.unitBar1 = this.add.image(155, 715, this.textureName).setScale(2).setInteractive();	
+			this.unitAction(this.unitBar1, slot, this.textureName);						
+		}else if(slot == 2){
+			if(this.unitBar2 != undefined) this.unitBar2.destroy();
+			this.unitBar2 = this.add.image(340, 715, this.textureName).setScale(2).setInteractive();	
+			this.unitAction(this.unitBar2, slot, this.textureName);			
+		}else{
+			if(this.unitBar3 != undefined) this.unitBar3.destroy();
+			this.unitBar3 = this.add.image(525, 715, this.textureName).setScale(2).setInteractive();
+			this.unitAction(this.unitBar3, slot, this.textureName);			
+		}			
+	}	
+
+	unitAction(object, slot, txt){
+		this.unitConfig = this.unitFact.getUniConfig();
+
+		object.on('pointerdown', pointer => {
+			if(this.unitTimeSummon > this.unitTimeLastSummon){
+				if(txt == "lightUnit1" || txt == "lightUnit2" || txt == "lightUnit3"){
+					this.unitGroup.add(new LightUnit(this, 1100, 400, this.unitConfig, txt));
+				}
+				else if (txt == "middleUnit1" || txt == "middleUnit2" || txt == "middleUnit3"){	
+					this.unitGroup.add(new MiddleUnit(this, 1100, 400, this.unitConfig, txt));
+				}
+				else{
+					this.unitGroup.add(new HeavyUnit(this, 1100, 400, this.unitConfig, txt));
+				}
+				this.unitTimeSummon = this.unitConfig[5];
+				this.unitTimeLastSummon = 0;
+				this.newUnitPool(slot);
+			}	
+	    });
+	}
+
+	/*-------------------------------------------------
+					UNITS TIME BAR
+	---------------------------------------------------*/
+	unitTimeBar(){
+		
+	}
+
 	/*-------------------------------------------------
 					ANIMATIONS
 	---------------------------------------------------*/
@@ -234,6 +317,10 @@ export default class Game extends Phaser.Scene {
 
 	removeShot(shot){
 		this.shotGroup.remove(shot);
+	}
+
+	removeUnit(unit){
+		this.unitGroup.remove(unit);
 	}
 
 	/*--------------------------------------------
