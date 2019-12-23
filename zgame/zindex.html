@@ -49,7 +49,7 @@
                     backgroundColor: 'transparent',
                     input: {gamepad: true},
                     scale: {mode: Phaser.Scale.FIT,},
-                    scene: [ Game, MenuMap, Menu, Info, MenuEnd ],
+                    scene: [ Menu, MenuEnd, MenuMap, Game, Info],
                     physics: { default: 'arcade', arcade: { debug: false } }
                 };
                 new Phaser.Game(setup);

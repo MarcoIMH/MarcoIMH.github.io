@@ -1,8 +1,12 @@
 import GObject from "../gObject.js";
 
-export default class Icon extends GObject{
+export default class Icon extends Phaser.GameObjects.Sprite{
 	constructor(state, object, x, y, iconNumber){
 		super(state, object, x, y);	
+		this.st = state;
+		this.element = object;	
+		this.xPos = x;
+		this.yPos = y;		
 		this.p = iconNumber;
 		this.createIcon();
 	}
@@ -18,5 +22,13 @@ export default class Icon extends GObject{
 
 	getIconNumber(){
 		return this.p;
+	}
+
+	getXPos(){
+		return this.xPos;
+	}
+
+	getYPos(){
+		return this.yPos;
 	}
 }

@@ -6,6 +6,7 @@ export default class Menu extends Phaser.Scene {
     }
 
     preload(){
+        this.load.image("bgm", "./assets/states/bgmap.jpg");
         this.load.image("buttonNewGameOut", "./assets/buttons/buttonNewGameOut.png");
     	this.load.image("buttonNewGameIn", "./assets/buttons/buttonNewGameIn.png");    	
         this.load.image("buttonInfoOut","./assets/buttons/buttonInfoOut.png");
@@ -15,6 +16,9 @@ export default class Menu extends Phaser.Scene {
     create(){
     	let pointer = this.input.activePointer;
     	this.input.mouse.disableContextMenu();
+
+        //Background
+        this.add.image(0,0,"bgm").setOrigin(0);
     	
         //this.buttonPlay = new MenuButton(this, "Game", 700, 300, "buttonPlayOut", "buttonPlayIn");
         this.buttonPlay = this.add.image(700, 300, "buttonNewGameOut").setInteractive();

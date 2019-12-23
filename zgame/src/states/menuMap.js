@@ -2,13 +2,13 @@ import Selector from "../icons/iconSelector.js";
 import Icon from "../icons/icon.js";
 
 var ms = 1;
+var unlockedStages = 1;
 
 export default class MenuMap extends Phaser.Scene {
 	constructor(){
 		super({ key: 'menumap'});
 		this.currentStage = 1;
 		this.maxStage = 3;	
-		this.unlockedStages = 3;
 		this.mapSelector = 0;	
 		this.defaultIcon;
 		this.selector;
@@ -16,7 +16,7 @@ export default class MenuMap extends Phaser.Scene {
 
 	preload(){
 		//Background
-		this.load.image("backgroundMap", "./assets/states/backgroundMap.jpg");
+		this.load.image("backgroundMap", "./assets/states/backgroundmap.jpg");
 
 		//Buttons
 		this.load.image("buttonBackIn", "./assets/buttons/buttonBackIn.png");
@@ -39,8 +39,8 @@ export default class MenuMap extends Phaser.Scene {
 		this.add.image(0,0, "backgroundMap").setOrigin(0);
 
 		//Buttons
-		this.buttonBack = this.add.image(1200,750, "buttonBackOut").setScale(0.5).setInteractive();
-		this.buttonPlay = this.add.image(170, 750, "buttonPlayOut").setScale(0.5).setInteractive();
+		this.buttonBack = this.add.image(1200,760, "buttonBackOut").setScale(0.5).setInteractive();
+		this.buttonPlay = this.add.image(270, 760, "buttonPlayOut").setScale(0.5).setInteractive();
 		
 		//Array for icons
 		this.iconArray = this.add.group();
@@ -50,7 +50,7 @@ export default class MenuMap extends Phaser.Scene {
 	update(){
 		this.buttonBack.on('pointerover', pointer=>{
 			this.buttonBack.destroy();
-			this.buttonBack = this.add.image(1200,750, "buttonBackIn").setScale(0.5).setInteractive();
+			this.buttonBack = this.add.image(1200,760, "buttonBackIn").setScale(0.5).setInteractive();
 			this.buttonBack.on('pointerdown', pointer=>{
 				this.scene.start('menumain');
 			});			
@@ -58,7 +58,7 @@ export default class MenuMap extends Phaser.Scene {
 
 		this.buttonPlay.on('pointerover', pointer=>{
 			this.buttonPlay.destroy();
-			this.buttonPlay = this.add.image(170, 750, "buttonPlayIn").setScale(0.5).setInteractive();
+			this.buttonPlay = this.add.image(270, 760, "buttonPlayIn").setScale(0.5).setInteractive();
 			this.buttonPlay.on('pointerdown', pointer=>{
 				if(this.mapSelector!=0){
 					this.mapSelector = 0;					
@@ -70,8 +70,8 @@ export default class MenuMap extends Phaser.Scene {
 
 	//Crate icons based on unlockstage
 	createIcons(){
-		console.log("Unlocked stages: "+this.unlockedStages);
-		for(let x=1;x<=this.unlockedStages && x<=this.maxStage;x++){	
+		console.log("Unlocked stages: "+ unlockedStages);
+		for(let x=1;x<=unlockedStages && x<=this.maxStage;x++){	
 			let newIcon;		
 			switch(x){
 				case 1:{
@@ -108,4 +108,8 @@ export default class MenuMap extends Phaser.Scene {
 
 export function getMapSelector(){
 	return ms;
+}
+
+export function increaseUnlockedStages(){
+	unlockedStages++;
 }

@@ -1,4 +1,6 @@
 import {getMapSelector} from "./states/menuMap.js";
+import {setVictoryFalse} from "./states/menuEnd.js";
+import {setVictoryTrue} from "./states/menuEnd.js";
 import MapFactory from "./maps/mapFactory.js";
 
 import Nexus from "./towers/nexus.js";
@@ -44,6 +46,8 @@ export default class Game extends Phaser.Scene {
 
 		//About waves
 		this.wave = 1;	
+		this.unitsWave = 0;
+		this.maxUnitsWave = 15;
 		this.waveMarker;
 		this.maxtimeToEnemySummon = 200;
 		this.minTimeToEnemySummon = 100;
@@ -160,7 +164,23 @@ export default class Game extends Phaser.Scene {
 
 	update(){
 		//New enemies
-		this.newEnemy();		
+		this.newEnemy();	
+
+		if(this.unitsWave == 10 && this.wave == 1){
+			this.unitsWave = 0;
+			this.wave++;
+		}
+		if(this.unitsWave == 15 && this.wave == 2){
+			this.unitsWave = 0;
+			this.wave++;
+		}
+		if(this.unitsWave == 20 && this.wave == 3){
+			this.unitsWave = 0;
+			this.wave++;
+			this.endGame = true;
+			setVictoryTrue();
+		}
+
 
 		//Collissions with anonymous function - Nexus / Enemies
 		this.physics.add.collider(this.nexus, this.enemyGroup, (nex, enem) =>{enem.attack(nex);});
@@ -181,7 +201,10 @@ export default class Game extends Phaser.Scene {
 		this.unitTimeBar();
 
 		//Check endgame
-		if(this.endGame == true) this.scene.start('menuend');
+		if(this.endGame == true) {
+			setVictoryFalse();
+			this.scene.start('menuend');
+		}
 	}
 
 
@@ -253,6 +276,7 @@ export default class Game extends Phaser.Scene {
 					break;
 				}
 			}
+			this.unitsWave++;
 			this.timeFromLastEnemy = 0;
 			this.randomTimeToEnemySummon = Phaser.Math.Between(this.minTimeToEnemySummon, this.maxtimeToEnemySummon);
 		}else this.timeFromLastEnemy++;

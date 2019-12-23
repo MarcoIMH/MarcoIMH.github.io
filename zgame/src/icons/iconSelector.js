@@ -1,8 +1,12 @@
 import GObject from "../gObject.js";
 
-export default class Selector extends GObject{
-	constructor(state, object, x, y){
-		super(state, object, x, y);
+export default class Selector extends Phaser.GameObjects.Sprite{
+	constructor(state, object, x, y, iconNumber){
+		super(state, object, x, y);	
+		this.st = state;
+		this.element = object;	
+		this.xPos = x;
+		this.yPos = y;	
 		this.createIconSelector();
 	}
 	
